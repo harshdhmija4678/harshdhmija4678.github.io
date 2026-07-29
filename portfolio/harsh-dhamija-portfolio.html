@@ -1,831 +1,544 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Harsh Dhamija — AI Performance Marketer</title>
-<meta name="description" content="Harsh Dhamija is an AI Performance Marketer from Delhi NCR — data-driven campaigns across Meta &amp; Google, AI-assisted creative ops and analytics that turn attention into measurable growth. Open to full-time roles.">
-<meta name="keywords" content="AI performance marketing, growth marketing, Meta Ads, Google Ads, lead generation, GA4, AI-assisted marketing, Delhi NCR">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23191712'/%3E%3Ccircle cx='45' cy='19' r='6' fill='%23e14d0f'/%3E%3Ctext x='30' y='43' font-family='Georgia' font-weight='700' font-size='26' fill='%23f4f1ea' text-anchor='middle'%3EHD%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Paper №3 · Season 2 — The Dhamija Times</title>
+<meta name="description" content="The Dhamija Times — a broadsheet about Harsh Dhamija, AI Performance Marketer, Delhi NCR. Read it like a newspaper: turn the page.">
+<meta name="theme-color" content="#f2eee2">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23f2eee2'/%3E%3Crect x='10' y='12' width='44' height='40' fill='none' stroke='%23191b20' stroke-width='3.5'/%3E%3Cpath d='M14 20h36M14 27h36M14 34h20M14 41h20' stroke='%23191b20' stroke-width='3'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;0,6..72,800;1,6..72,400;1,6..72,600&display=swap" rel="stylesheet">
 <style>
-/* ─────────────────────────────────────────────────────────────
-   HARSH DHAMIJA — DIGITAL MARKETER · "RACK-FOCUS" EDITION
-   Editorial, readable, conversion-first. Scroll = a camera
-   pulling each section into perfect focus.
-   ───────────────────────────────────────────────────────────── */
-
+/* ═════════ №3 THE PAPER · SEASON 2 · SINGLE FILE ═════════
+   Concept: a broadsheet you READ, not scroll. Six pages,
+   three leaves, turned by click, keys or swipe.             */
 :root{
-  --paper:#f2eee6;
-  --card:#faf7f0;
-  --ink:#191712;
-  --muted:#6e6757;
-  --faint:#a49c8a;
-  --line:rgba(25,23,18,.14);
-  --accent:#e14d0f;
-  --accent-deep:#b93c07;
-  --green:#1d9e53;
-  --shadow:0 30px 70px rgba(74,58,32,.14),0 4px 14px rgba(74,58,32,.08);
+  --paper:#f2eee2; --paper2:#ebe6d6; --edge:#e0d9c5;
+  --ink:#191b20; --mut:#5c584e; --faint:#8b8577;
+  --ox:#7a1f1f; --rule:rgba(25,27,32,.85); --hair:rgba(25,27,32,.22);
+  --disp:'Bebas Neue',sans-serif; --news:'Newsreader',serif;
+  --face:url('../portrait.jpg');
+  --ease:cubic-bezier(.36,.72,.2,1);
+  --bookH:82svh;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:#dcd6c4}
+body{background:#dcd6c4;color:var(--ink);font:400 1rem/1.52 var(--news);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100svh}
+::selection{background:var(--ox);color:var(--paper)}
+a{color:inherit}
+img{display:block;max-width:100%}
+.faceico{background-image:var(--face);background-size:cover;background-position:50% 18%;background-repeat:no-repeat;
+  filter:grayscale(.9) contrast(1.12)}
 
-  --serif:'Fraunces',Georgia,serif;
-  --sans:'Inter',system-ui,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
+/* newsroom carpet backdrop */
+#room{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+   radial-gradient(90% 70% at 50% 8%,rgba(255,255,255,.5),transparent 55%),
+   repeating-linear-gradient(90deg,transparent 0 118px,rgba(25,27,32,.05) 118px 119px),
+   #dcd6c4}
 
-  --pw:clamp(230px,29vmin,300px);   /* portrait width (hero state) */
-  --ease:cubic-bezier(.16,1,.3,1);
-}
+/* ══ RUN BAR (top) ══ */
+#runbar{position:fixed;top:0;left:0;right:0;z-index:90;display:flex;align-items:center;gap:.7rem;
+  padding:.45rem .9rem;background:rgba(242,238,226,.95);border-bottom:2px solid var(--rule);
+  font:400 .72rem var(--news);letter-spacing:.06em;backdrop-filter:blur(6px)}
+#runbar .bl{display:flex;align-items:center;gap:.55rem;font:400 .92rem var(--disp);letter-spacing:.18em;white-space:nowrap}
+#runbar .bl .av{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ox)}
+#runbar .bl em{font-style:normal;color:var(--ox)}
+#runbar .rchips{margin-left:auto;display:flex;gap:.45rem;align-items:center;font-style:italic;color:var(--mut)}
+.rchip{border:1.5px solid var(--hair);border-radius:999px;padding:.24rem .7rem;white-space:nowrap;
+  font-style:normal;font-size:.68rem;letter-spacing:.1em;background:var(--paper)}
+.rchip a{text-decoration:none} .rchip a:hover{color:var(--ox)}
+#fdate{font-variant-numeric:tabular-nums}
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  background:var(--paper);color:var(--ink);
-  font:400 1rem/1.7 var(--sans);
-  overflow-x:hidden;-webkit-font-smoothing:antialiased;
-}
-::selection{background:var(--accent);color:var(--paper)}
-a{color:inherit;text-decoration:none}
-.mono{font-family:var(--mono)}
-em{font-style:italic}
-::-webkit-scrollbar{width:10px}
-::-webkit-scrollbar-track{background:var(--paper)}
-::-webkit-scrollbar-thumb{background:#cfc8b8;border-radius:99px}
-::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+/* ══ THE DESK + BOOK ══ */
+#desk{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;padding:62px 2vw 84px}
+#book{position:relative;width:min(1240px,94vw);height:var(--bookH);perspective:2400px;
+  filter:drop-shadow(0 30px 50px rgba(25,27,32,.35))}
+.base{position:absolute;top:0;bottom:0;width:50%;background:var(--paper);border:1.5px solid rgba(25,27,32,.5)}
+.base.left{left:0;border-right:none}
+.base.right{right:0;border-left:none}
+.pg{position:absolute;inset:0;background:var(--paper);overflow:hidden}
+.pg::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(rgba(25,27,32,.09) .6px,transparent .7px);
+  background-size:7px 7px}
+.pin{position:relative;height:100%;padding:1.05rem 1.2rem 2.2rem;display:flex;flex-direction:column}
+.leaf{position:absolute;top:0;left:50%;width:50%;height:100%;transform-style:preserve-3d;
+  transition:transform .9s var(--ease);transform-origin:left center;will-change:transform}
+.leaf.flip{transform:rotateY(-180deg)}
+.leaf.turning{z-index:40!important}
+.face{position:absolute;inset:0;backface-visibility:hidden;overflow:hidden;background:var(--paper);
+  border:1.5px solid rgba(25,27,32,.5)}
+.face.front{border-left:none}
+.face.back{transform:rotateY(180deg);border-right:none}
+.face.front::after{content:'';position:absolute;top:0;bottom:0;left:0;width:46px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(25,27,32,.18),transparent)}
+.face.back::before{content:'';position:absolute;top:0;bottom:0;right:0;width:46px;pointer-events:none;z-index:1;
+  background:linear-gradient(270deg,rgba(25,27,32,.16),transparent)}
 
-/* paper grain — barely there, just realism */
-.paper{
-  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60}
-.progress span{display:block;height:100%;width:0;background:var(--accent)}
+/* corner peel cue on right-hand pages */
+.peel{position:absolute;right:-2px;bottom:-2px;width:0;height:0;z-index:5;
+  border-style:solid;border-width:0 0 44px 44px;border-color:transparent transparent var(--edge) transparent;
+  filter:drop-shadow(-3px -3px 3px rgba(25,27,32,.18));transition:border-width .35s var(--ease)}
+.leaf:not(.flip):hover .peel{border-width:0 0 62px 62px}
+body.rm .peel{display:none}
 
-/* out-of-focus background words → depth without noise */
-.depth-type{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.depth-type span{
-  position:absolute;top:0;left:var(--x);
-  font:italic 600 clamp(5rem,17vw,15rem)/1 var(--serif);
-  color:var(--ink);opacity:.045;filter:blur(9px);white-space:nowrap;
-  will-change:transform;
-}
+/* ══ NEWSPAPER FURNITURE ══ */
+.kicker{font:400 .78rem var(--disp);letter-spacing:.3em;color:var(--ox);text-transform:uppercase}
+.rule2{border-top:2.5px solid var(--rule);padding-top:.45rem}
+.hair{border-top:1px solid var(--hair)}
+.hd{font:400 2.6rem/.95 var(--disp);letter-spacing:.005em;text-transform:uppercase}
+.hd.big{font-size:clamp(2.2rem,4.6vw,3.8rem)}
+.hd.mid{font-size:clamp(1.7rem,3vw,2.4rem)}
+.standfirst{font:italic 600 1.02rem/1.45 var(--news);color:var(--ink)}
+.cols{columns:2;column-gap:1.1rem;column-rule:1px solid var(--hair);font-size:.8rem;text-align:justify;hyphens:auto}
+.cols3{columns:3;column-gap:1rem;column-rule:1px solid var(--hair);font-size:.74rem;text-align:justify;hyphens:auto}
+.drop::first-letter{font:400 3.2rem/.78 var(--disp);float:left;padding:.34rem .5rem 0 0;color:var(--ox)}
+.byline{font:italic 600 .74rem var(--news);color:var(--mut);letter-spacing:.04em}
+.jumpline{margin-top:auto;font:400 .8rem var(--disp);letter-spacing:.2em;color:var(--ox);text-align:right}
+.folio{position:absolute;bottom:.55rem;font:400 .72rem var(--disp);letter-spacing:.24em;color:var(--mut)}
+.folio.l{left:1.2rem}.folio.r{right:1.2rem}
+.fig{margin:.45rem 0;border:1.5px solid var(--rule);padding:.35rem;background:var(--paper2)}
+.fig img{width:100%;aspect-ratio:8/5;object-fit:cover;filter:grayscale(.95) contrast(1.15);display:block}
+.fig .halftone{position:relative;overflow:hidden}
+.fig .halftone::after{content:'';position:absolute;inset:0;mix-blend-mode:multiply;opacity:.35;
+  background-image:radial-gradient(rgba(0,0,0,.55) .9px,transparent 1px);background-size:4px 4px}
+.fig figcaption{font:italic 400 .66rem var(--news);color:var(--mut);padding-top:.25rem}
+.secbar{display:flex;align-items:baseline;justify-content:space-between;border-top:2.5px solid var(--rule);
+  border-bottom:1px solid var(--rule);padding:.2rem 0;margin-bottom:.5rem}
+.secbar h3{font:400 1.15rem var(--disp);letter-spacing:.24em}
+.secbar span{font:italic 400 .7rem var(--news);color:var(--mut)}
+.brief{padding:.4rem 0;border-bottom:1px dashed var(--hair)}
+.brief:last-of-type{border-bottom:none}
+.brief h4{font:400 1.05rem var(--disp);letter-spacing:.06em}
+.brief h4 span{color:var(--ox)}
+.dateline{font:600 .7rem var(--news);letter-spacing:.12em;color:var(--ox);text-transform:uppercase}
+.brief p{font-size:.78rem;color:#33343a}
+.brief p b{color:var(--ink)}
+.pull{border-top:2.5px solid var(--rule);border-bottom:1px solid var(--rule);margin:.5rem 0;
+  padding:.38rem 0;text-align:center}
+.pull b{font:400 1.1rem/1.15 var(--disp);letter-spacing:.04em;display:block}
+.pull i{font:italic 600 .7rem var(--news);color:var(--mut)}
+.adbox{border:2px solid var(--rule);padding:.55rem;text-align:center;margin-top:.5rem;background:var(--paper2)}
+.adbox .h{font:400 1rem var(--disp);letter-spacing:.18em}
+.adbox p{font-size:.74rem;color:var(--mut)}
+.adbox a{color:var(--ox);text-decoration:none;font-weight:600}
+.adbox a:hover{text-decoration:underline}
+.desk{width:100%;border-collapse:collapse;font-size:.78rem}
+.desk th{font:400 .8rem var(--disp);letter-spacing:.2em;text-align:left;border-bottom:2px solid var(--rule);padding:.22rem .3rem}
+.desk td{border-bottom:1px solid var(--hair);padding:.24rem .3rem;vertical-align:top}
+.desk td b{font-weight:600}
+.desk .up{color:var(--ox);font-weight:600}
+.letter{margin-bottom:.55rem}
+.letter h4{font:italic 600 .95rem var(--news);margin-bottom:.2rem}
+.letter p{font-size:.84rem;color:#33343a;text-align:justify}
+.letter .sig{font:italic 600 .72rem var(--news);color:var(--mut);text-align:right;display:block;margin-top:.2rem}
+.notice{border:1.5px solid var(--hair);padding:.45rem .7rem;margin-bottom:.45rem;background:rgba(255,255,255,.25)}
+.notice h4{font:400 1rem var(--disp);letter-spacing:.12em}
+.notice p{font-size:.78rem;color:var(--mut);margin-top:.15rem}
+.classified{border:2.5px double var(--rule);padding:.7rem 1rem;text-align:center;background:var(--paper2);
+  margin:.6rem 0}
+.classified .h{font:400 1.6rem var(--disp);letter-spacing:.2em}
+.classified .sub{font:italic 600 .85rem var(--news);margin:.3rem 0}
+.classified p{font-size:.8rem;color:#33343a;max-width:400px;margin:0 auto}
+.stamp{display:inline-block;margin-top:.8rem;border:2.5px solid var(--ox);color:var(--ox);border-radius:8px;
+  padding:.3rem .8rem;font:400 .9rem var(--disp);letter-spacing:.26em;transform:rotate(-5deg)}
+.btx{margin-top:.55rem;display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;text-decoration:none;font:400 .8rem var(--disp);
+  letter-spacing:.18em;border:2px solid var(--rule);padding:.6rem 1.1rem;cursor:pointer;background:var(--paper);color:var(--ink);transition:.2s}
+.btn.pri{background:var(--ink);color:var(--paper)}
+.btn:hover{background:var(--ox);border-color:var(--ox);color:var(--paper)}
+.colophon{text-align:center;font:italic 400 .78rem var(--news);color:var(--mut);margin-top:auto}
+.colophon b{font:400 .9rem var(--disp);letter-spacing:.24em;font-style:normal;color:var(--ink)}
+.colophon a{color:var(--ox);text-decoration:none}
+.masthead{text-align:center;border-bottom:3px double var(--rule);padding-bottom:.35rem}
+.masthead .t1{font:400 clamp(2.2rem,5.4vw,3.9rem)/0.98 var(--disp);letter-spacing:.04em}
+.masthead .t2{font:italic 600 .78rem var(--news);color:var(--mut);margin-top:.15rem}
+.topstrip{display:flex;justify-content:space-between;gap:.6rem;font:400 .66rem var(--disp);
+  letter-spacing:.16em;color:var(--mut);border-top:2.5px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:.22rem 0;margin:.35rem 0 .5rem;flex-wrap:wrap}
+.topstrip b{color:var(--ox)}
+.two{display:grid;grid-template-columns:1.9fr 1fr;gap:1.2rem}
+.pface{width:86px;height:86px;border-radius:50%;border:2px solid var(--ox);margin:0 auto}
 
-/* ── nav ───────────────────────────────────────────────────── */
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:50;
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;
-  padding:.9rem clamp(1rem,3vw,2.2rem);
-  background:rgba(242,238,230,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--line);
-}
-.logo{font:700 1.02rem var(--serif);letter-spacing:-.01em}
-.logo sup{color:var(--accent);font-size:.6em}
-.nav-links{display:flex;gap:1.7rem;font-size:.86rem;font-weight:500}
-.nav-links a{color:var(--muted);transition:color .25s}
-.nav-links a:hover{color:var(--ink)}
-.nav-cta{
-  font:600 .8rem var(--sans);background:var(--ink);color:var(--paper);
-  padding:.55rem 1.2rem;border-radius:99px;transition:background .25s,transform .25s var(--ease);
-}
-.nav-cta:hover{background:var(--accent);transform:translateY(-1px)}
+/* ══ FOLIO BAR (controls) ══ */
+#foliobar{position:fixed;left:0;right:0;bottom:0;z-index:90;display:flex;align-items:center;justify-content:center;
+  gap:.9rem;padding:.55rem 1rem;background:rgba(242,238,226,.96);border-top:2px solid var(--rule);
+  font:400 .8rem var(--disp);letter-spacing:.2em;backdrop-filter:blur(6px)}
+#foliobar button{font:400 .78rem var(--disp);letter-spacing:.2em;border:2px solid var(--rule);background:var(--paper);
+  padding:.4rem .9rem;cursor:pointer;transition:.2s;border-radius:0}
+#foliobar button:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+#foliobar button:disabled{opacity:.32;cursor:default}
+#foliolabel{min-width:220px;text-align:center;color:var(--mut)}
+body.rm #foliobar{display:none}
 
-/* fixed readout — bottom left */
-.where{
-  position:fixed;left:clamp(1rem,3vw,2.2rem);bottom:1.4rem;z-index:45;
-  font-size:.6rem;letter-spacing:.22em;color:var(--faint);
-  display:flex;align-items:center;gap:.7rem;
-}
-.where::before{content:"";width:34px;height:1px;background:var(--faint)}
-.where #whereSec{color:var(--accent);font-weight:600}
-
-/* ── portrait (hero-center → corner dock) ──────────────────── */
-.pwrap{
-  position:fixed;left:50%;top:50%;z-index:40;pointer-events:none;
-  transform:translate(-50%,-50%);
-  will-change:transform;
-}
-.pframe{
-  position:relative;width:var(--pw);height:calc(var(--pw)*1.22);
-  border-radius:20px;overflow:hidden;background:#ddd;
-  box-shadow:var(--shadow);
-  will-change:transform;
-  transform-style:preserve-3d;
-}
-.pframe img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block}
-.pframe::after{ /* inner hairline + soft top light for realism */
-  content:"";position:absolute;inset:0;border-radius:20px;
-  box-shadow:inset 0 0 0 1px rgba(25,23,18,.12),inset 0 40px 60px rgba(255,255,255,.10);
-}
-.pshadow{
-  position:absolute;left:50%;bottom:-26px;width:72%;height:30px;transform:translateX(-50%);
-  background:radial-gradient(ellipse,rgba(74,58,32,.35),transparent 70%);
-  filter:blur(8px);border-radius:50%;z-index:-1;
-}
-.dock-tag{
-  position:absolute;right:0;bottom:-40px;display:flex;align-items:center;gap:.5rem;
-  font-size:.58rem;letter-spacing:.14em;color:var(--muted);white-space:nowrap;
-  background:rgba(250,247,240,.9);border:1px solid var(--line);border-radius:99px;
-  padding:.4rem .8rem;opacity:0;transform:translateY(6px);
-  transition:opacity .4s var(--ease),transform .4s var(--ease);
-}
-.dock-tag.show{opacity:1;transform:translateY(0)}
-.status-dot{
-  width:8px;height:8px;border-radius:50%;background:var(--green);flex:0 0 auto;
-  box-shadow:0 0 0 0 rgba(29,158,83,.5);animation:pulse 2s infinite;
-}
-@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(29,158,83,0)}100%{box-shadow:0 0 0 0 rgba(29,158,83,0)}}
-
-/* ── hero ──────────────────────────────────────────────────── */
-main{position:relative;z-index:2}
-.hero{
-  min-height:148vh;position:relative;
-  display:flex;flex-direction:column;align-items:center;text-align:center;
-  padding:19vh 1.2rem 0;
-}
-.hero-kicker{font-size:.62rem;letter-spacing:.3em;color:var(--accent);margin-bottom:2.2rem}
-.hero-name{
-  display:flex;align-items:center;justify-content:center;
-  font:700 clamp(3rem,10.5vw,8.6rem)/1 var(--serif);letter-spacing:-.03em;
-}
-.hero-name .hero-gap{width:calc(var(--pw) + 26px);flex:0 0 auto}
-.hero-name span:last-child{font-style:italic;color:var(--accent)}
-.hero-line{font:italic 600 clamp(1.25rem,2.6vw,1.8rem) var(--serif);margin-top:2.6rem}
-.hero-line em{color:var(--accent)}
-.hero-sub{max-width:520px;color:var(--muted);margin-top:.9rem;font-size:.98rem}
-.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;margin-top:2rem}
-.btn{
-  font:600 .84rem var(--sans);padding:.85rem 1.6rem;border-radius:99px;
-  transition:transform .3s var(--ease),background .3s,color .3s,border-color .3s;
-}
-.btn:hover{transform:translateY(-2px)}
-.btn-solid{background:var(--ink);color:var(--paper)}
-.btn-solid:hover{background:var(--accent)}
-.btn-line{border:1px solid var(--line);color:var(--ink);background:transparent}
-.btn-line:hover{border-color:var(--ink)}
-.hero-stats{
-  display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:1.4rem;
-  width:min(880px,100%);margin-top:9vh;padding-top:2rem;border-top:1px solid var(--line);
-}
-.hero-stats b{display:block;font:700 clamp(1.5rem,2.6vw,2.1rem)/1.1 var(--serif)}
-.hero-stats span{font-size:.55rem;letter-spacing:.16em;color:var(--faint)}
-
-.scroll-cue{
-  position:absolute;left:50%;bottom:6vh;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:.6rem;
-  font-size:.55rem;letter-spacing:.3em;color:var(--faint);white-space:nowrap;
-  transition:opacity .5s;
-}
-.scroll-cue.hidden{opacity:0}
-.scroll-cue i{width:1px;height:38px;background:var(--faint);animation:cue 1.8s var(--ease) infinite;transform-origin:top}
-@keyframes cue{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
-
-/* reveal-on-load choreography (hero) */
-.rv{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0)*90ms + 250ms)}
-.in .rv{opacity:1;transform:translateY(0)}
-
-/* ── panels : the rack-focus stage ─────────────────────────── */
-.panel{position:relative;min-height:112vh;display:grid;place-items:center;padding:14vh 1.2rem}
-.focus{will-change:transform,opacity,filter}
-.wrap{width:min(720px,100%)}
-.wrap-wide{width:min(900px,100%)}
-.wrap-center{text-align:center}
-.kicker{font-size:.62rem;letter-spacing:.3em;color:var(--accent);margin-bottom:1.3rem}
-.h2{
-  font:700 clamp(2rem,4.6vw,3.4rem)/1.08 var(--serif);letter-spacing:-.02em;
-  margin-bottom:1.6rem;
-}
-.h2 em{color:var(--accent)}
-.h2-xl{font-size:clamp(2.6rem,7vw,5rem)}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem;color:var(--muted)}
-.cols b{color:var(--ink)}
-.pills{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.8rem}
-.pills span{
-  font-size:.56rem;letter-spacing:.14em;color:var(--muted);
-  border:1px solid var(--line);border-radius:99px;padding:.38rem .75rem;
-  transition:all .25s;
-}
-.pills span:hover{color:var(--paper);background:var(--ink);border-color:var(--ink)}
-.avail{display:flex;align-items:center;gap:.6rem;margin-top:1.6rem;font-size:.86rem;font-weight:500}
-
-/* services */
-.services{list-style:none;border-top:1px solid var(--line)}
-.svc{
-  display:grid;grid-template-columns:64px 1fr auto;gap:1.4rem;align-items:start;
-  padding:1.4rem .4rem;border-bottom:1px solid var(--line);
-  transition:background .3s,padding-left .3s var(--ease);
-}
-.svc:hover{background:rgba(25,23,18,.03);padding-left:1rem}
-.svc-no{font-size:.6rem;letter-spacing:.14em;color:var(--faint);padding-top:.35rem}
-.svc-main b{display:block;font:700 1.18rem var(--serif);letter-spacing:-.01em}
-.svc-main p{color:var(--muted);font-size:.9rem;margin-top:.3rem;max-width:46ch}
-.svc-tags{font-size:.54rem;letter-spacing:.16em;color:var(--faint);padding-top:.5rem;text-align:right;white-space:nowrap}
-
-/* results */
-.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.4rem}
-.case{
-  background:var(--card);border:1px solid var(--line);border-radius:16px;
-  padding:1.35rem;box-shadow:0 12px 34px rgba(74,58,32,.07);
-  transition:transform .35s var(--ease),box-shadow .35s;
-}
-.case:hover{transform:translateY(-5px);box-shadow:0 26px 54px rgba(74,58,32,.13)}
-.case header{display:flex;flex-direction:column;gap:.25rem;margin-bottom:.7rem}
-.case header b{font:700 1.12rem var(--serif)}
-.case header span{font-size:.54rem;letter-spacing:.16em;color:var(--accent)}
-.case>p{color:var(--muted);font-size:.85rem;min-height:3.4em}
-.metrics{display:grid;grid-template-columns:1fr;gap:.7rem;border-top:1px dashed var(--line);padding-top:.9rem;margin-top:.9rem}
-.metrics b{display:block;font:700 1.55rem/1 var(--serif);color:var(--ink)}
-.metrics b::after{content:""}
-.metrics span{font-size:.52rem;letter-spacing:.14em;color:var(--faint)}
-
-/* timeline */
-.timeline{list-style:none;border-top:1px solid var(--line)}
-.tl{display:grid;grid-template-columns:150px 1fr;gap:1.4rem;padding:1.3rem .4rem;border-bottom:1px solid var(--line)}
-.tl-when{font-size:.58rem;letter-spacing:.18em;color:var(--accent);padding-top:.3rem}
-.tl b{display:block;font:700 1.08rem var(--serif);letter-spacing:-.01em}
-.tl p{color:var(--muted);font-size:.88rem;margin-top:.25rem}
-
-/* testimonials */
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-.quotes blockquote{
-  background:var(--card);border:1px solid var(--line);border-radius:16px;
-  padding:1.5rem;box-shadow:0 12px 34px rgba(74,58,32,.07);
-  display:flex;flex-direction:column;gap:1.1rem;
-}
-.quotes blockquote::before{
-  content:"“";font:700 3rem/0.6 var(--serif);color:var(--accent);height:.6rem;
-}
-.quotes p{font:italic 400 1.02rem/1.65 var(--serif);color:var(--ink);flex:1}
-.quotes footer{font-size:.55rem;letter-spacing:.16em;color:var(--faint)}
-
-/* contact */
-.contact .mail{
-  display:inline-block;font:italic 700 clamp(1.15rem,3vw,1.8rem) var(--serif);
-  border-bottom:2px solid var(--accent);padding-bottom:.15rem;margin:.4rem 0 1.6rem;
-  transition:color .3s,border-color .3s;
-}
-.contact .mail:hover{color:var(--accent)}
-.contact-sub{color:var(--muted);margin-bottom:1.4rem}
-.contact .hero-cta{justify-content:center;margin-bottom:2rem}
-.socials{display:flex;gap:1.6rem;justify-content:center;font-size:.6rem;letter-spacing:.18em}
-.socials a{color:var(--muted);transition:color .25s}
-.socials a:hover{color:var(--accent)}
-.footer{
-  display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;
-  width:100%;max-width:1100px;margin:8vh auto 0;padding:1.6rem 0 0;
-  border-top:1px solid var(--line);
-  font-size:.55rem;letter-spacing:.2em;color:var(--faint);
-}
-.contact{padding-bottom:4vh}
-
-/* ── section entrance : crisp stagger, no blur ────────────── */
-html.js .panel .wrap > *,
-html.js .panel .wrap-wide > *,
-html.js .panel .wrap-center > *{
-  opacity:0;transform:translateY(18px);
-  transition:opacity .7s var(--ease),transform .7s var(--ease);
-}
-html.js .panel.on .wrap > *,
-html.js .panel.on .wrap-wide > *,
-html.js .panel.on .wrap-center > *{opacity:1;transform:translateY(0)}
-.panel .wrap > *:nth-child(2),.panel .wrap-wide > *:nth-child(2),.panel .wrap-center > *:nth-child(2){transition-delay:.07s}
-.panel .wrap > *:nth-child(3),.panel .wrap-wide > *:nth-child(3),.panel .wrap-center > *:nth-child(3){transition-delay:.14s}
-.panel .wrap > *:nth-child(4),.panel .wrap-wide > *:nth-child(4),.panel .wrap-center > *:nth-child(4){transition-delay:.21s}
-.panel .wrap > *:nth-child(5),.panel .wrap-wide > *:nth-child(5),.panel .wrap-center > *:nth-child(5){transition-delay:.28s}
-.panel .wrap > *:nth-child(6),.panel .wrap-wide > *:nth-child(6),.panel .wrap-center > *:nth-child(6){transition-delay:.35s}
-
-html.js .panel .svc,
-html.js .panel .case,
-html.js .panel .tl,
-html.js .panel .quotes blockquote{
-  opacity:0;transform:translateY(14px);
-  transition:opacity .65s var(--ease),transform .65s var(--ease);
-}
-html.js .panel.on .svc,
-html.js .panel.on .case,
-html.js .panel.on .tl,
-html.js .panel.on .quotes blockquote{opacity:1;transform:translateY(0)}
-.panel .svc:nth-child(2),.panel .case:nth-child(2),.panel .tl:nth-child(2),.panel .quotes blockquote:nth-child(2){transition-delay:.15s}
-.panel .svc:nth-child(3),.panel .case:nth-child(3),.panel .tl:nth-child(3),.panel .quotes blockquote:nth-child(3){transition-delay:.25s}
-.panel .svc:nth-child(4),.panel .tl:nth-child(4){transition-delay:.35s}
-.panel .svc:nth-child(5){transition-delay:.45s}
-
-/* ── the section in focus announces itself ─────────────────── */
-.panel .kicker{
-  display:inline-flex;align-items:center;gap:.7rem;
-  transition:letter-spacing .5s var(--ease);
-}
-.panel .kicker::before{
-  content:"";width:0;height:1px;background:var(--accent);
-  transition:width .6s var(--ease);
-}
-.panel.is-focus .kicker{letter-spacing:.36em}
-.panel.is-focus .kicker::before{width:32px}
-
-/* ── responsive ────────────────────────────────────────────── */
-@media (max-width:940px){
-  :root{--pw:clamp(170px,44vw,220px)}
-  .nav-links{display:none}
-  .where{display:none}
-  .hero-name{font-size:clamp(2.5rem,13vw,4.4rem)}
-  .hero-stats{grid-template-columns:repeat(2,1fr);gap:1.6rem}
-  .cols{grid-template-columns:1fr}
-  .cases,.quotes{grid-template-columns:1fr}
-  .svc{grid-template-columns:1fr;gap:.4rem}
-  .svc-tags{text-align:left;padding-top:.2rem}
-  .tl{grid-template-columns:1fr;gap:.3rem}
-  .depth-type span{font-size:22vw}
-  .dock-tag{display:none}
+/* ══ REDUCED MOTION / PRINT: the paper unbound ══ */
+body.rm #desk{padding-top:70px;display:block}
+body.rm #book{height:auto;width:min(760px,94vw);perspective:none;filter:none;margin:0 auto}
+body.rm .base{display:none}
+body.rm .leaf{position:static;width:100%;height:auto;transform:none!important}
+body.rm .face{position:static;transform:none!important;backface-visibility:visible;margin-bottom:1.4rem;
+  border:1.5px solid rgba(25,27,32,.5);height:auto;overflow:visible}
+body.rm .pin{height:auto;min-height:60vh}
+@media print{
+  #runbar,#foliobar,#room{display:none}
+  body{background:#fff}
+  #desk{padding:0;display:block}
+  #book{height:auto;width:100%;perspective:none;filter:none}
+  .base{display:none}
+  .leaf{position:static;width:100%;height:auto;transform:none!important}
+  .face{position:static;transform:none!important;backface-visibility:visible;border:none;
+    page-break-after:always;overflow:visible;height:auto}
+  .pin{height:auto}
 }
 
-/* reduced-motion: portrait becomes a quiet in-flow photo */
-body.rm .pwrap{
-  position:absolute;top:24vh;left:50%;transform:none;
-  margin-left:calc(var(--pw) / -2);
+@media (max-width:860px){
+  .hidm{display:none}
+  #book{width:92vw}
+  .leaf{left:0;width:100%}
+  .leaf.flip{transform:translateX(100%) rotateY(-180deg)}
+  #bookw{overflow:hidden}
+  .base{display:none}
+  .cols3{columns:2}
+  .two{grid-template-columns:1fr}
+  #desk{padding:60px 3vw 84px}
+  #foliolabel{min-width:0}
 }
-body.rm .dock-tag,body.rm .scroll-cue i{display:none}
-
-/* reduced-motion / no-animation fallback: everything simply visible */
-body.rm .panel .wrap > *,
-body.rm .panel .wrap-wide > *,
-body.rm .panel .wrap-center > *,
-body.rm .panel .svc,
-body.rm .panel .case,
-body.rm .panel .tl,
-body.rm .panel .quotes blockquote{opacity:1 !important;transform:none !important}
-
-/* ── reduced motion ────────────────────────────────────────── */
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.15s !important}
-  .rv{opacity:1;transform:none}
-  .focus{transform:none !important;filter:none !important;opacity:1 !important}
-  .panel .wrap > *,.panel .svc,.panel .case,.panel .tl,.panel .quotes blockquote{opacity:1 !important;transform:none !important}
-}
-
-
-.svc-ico{float:left;display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;
- border-radius:13px;border:1.5px solid var(--line,rgba(23,19,13,.16));color:var(--accent,#c2541f);
- background:rgba(194,84,31,.06);margin:1px 14px 6px 0}
-.svc-ico svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 </style>
+<noscript><style>
+#book{height:auto;width:min(760px,94vw);perspective:none;filter:none}
+.base{display:none}.leaf{position:static;width:100%;transform:none!important}
+.face{position:static;transform:none!important;backface-visibility:visible;margin-bottom:1.4rem}
+.pin{height:auto}#foliobar{display:none}
+</style></noscript>
 </head>
 <body>
+<div id="room" aria-hidden="true"></div>
 
-<div class="paper" aria-hidden="true"></div>
-<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
-
-<!-- out-of-focus background type → pure depth, zero noise -->
-<div class="depth-type" aria-hidden="true">
-  <span style="--s:.10; --y:4vh;   --x:-6vw">growth</span>
-  <span style="--s:.18; --y:26vh;  --x:52vw">seo</span>
-  <span style="--s:.26; --y:52vh;  --x:-10vw">roi</span>
-  <span style="--s:.14; --y:70vh;  --x:46vw">funnels</span>
-  <span style="--s:.22; --y:88vh;  --x:2vw">analytics</span>
-  <span style="--s:.30; --y:110vh; --x:55vw">brand</span>
-</div>
-
-<!-- ── Nav ─────────────────────────────────────────────────── -->
-<header class="nav">
-  <a class="logo" href="#hero"><img src="../portrait.jpg" alt="" style="width:26px;height:26px;border-radius:50%;object-fit:cover;object-position:50% 18%;vertical-align:-7px;margin-right:.5rem">Harsh&nbsp;Dhamija<sup>®</sup></a>
-  <nav class="nav-links" aria-label="Primary">
-    <a href="#about">About</a>
-    <a href="#expertise">Expertise</a>
-    <a href="#results">Results</a>
-    <a href="#experience">Experience</a>
-    <a href="#contact">Contact</a>
-  </nav>
-  <a class="nav-cta" href="mailto:harshdhmija4678@gmail.com">Hire me</a>
+<header id="runbar">
+  <span class="bl"><span class="av faceico" role="img" aria-label="Harsh Dhamija"></span>THE DHAMIJA TIMES <em>· №3 · THE PAPER · SEASON 2</em></span>
+  <div class="rchips">
+    <span id="fdate">DELHI NCR · LATE EDITION</span>
+    <span class="rchip hidm">PRICE: ONE HONEST LOOK</span>
+    <span class="rchip"><a href="../index.html">← PADDOCK</a></span>
+  </div>
 </header>
 
-<!-- fixed side readout -->
-<div class="where mono" aria-hidden="true"><span id="whereSec">00</span> — <span id="whereLabel">HELLO</span></div>
+<div id="desk">
+<div id="bookw">
+<div id="book">
 
-<!-- ── The portrait: hero-center → docks to corner ─────────── -->
-<div class="pwrap" id="pwrap" aria-hidden="true">
-  <figure class="pframe" id="pframe">
-    <img src="../portrait.jpg" alt="">
-  </figure>
-  <span class="pshadow" id="pshadow"></span>
-  <div class="dock-tag" id="dockTag">
-    <span class="status-dot"></span>
-    <span class="mono">Harsh Dhamija · Open to work</span>
+  <!-- under-sheets: endpaper & back page -->
+  <div class="base left"><div class="pg"><div class="pin" style="justify-content:center;text-align:center">
+    <div>
+      <p class="kicker">This copy belongs to</p>
+      <p style="font:400 1.5rem var(--disp);letter-spacing:.2em;margin:.5rem 0">THE READER</p>
+      <p class="byline">You opened it. That already says something about your scouting instincts.</p>
+      <div class="stamp">LATE CITY EDITION</div>
+    </div>
+  </div></div></div>
+  <div class="base right"><div class="pg"><div class="pin" style="justify-content:center;text-align:center">
+    <div class="colophon">
+      <b>THE DHAMIJA TIMES</b><br>
+      <span style="font:400 clamp(2rem,4.6vw,3.4rem)/1 var(--disp);letter-spacing:.1em;display:block;margin:1rem 0;color:var(--ink)">THE END.</span>
+      <span style="letter-spacing:.3em;color:var(--faint)">✦ ✦ ✦</span><br><br>
+      Set in Bebas Neue &amp; Newsreader.<br>
+      Printed on recycled pixels, in your browser.<br>
+      No cookies · no trackers · no exaggerated metrics.<br><br>
+      © MMXXVI · a world of theharshdhamija<br><br>
+      <a href="../index.html">← ALL WORLDS</a> &nbsp;·&nbsp; <a href="../garden/harsh-dhamija-garden.html">NEXT ISSUE → №4 THE GARDEN</a>
+    </div>
+  </div></div></div>
+
+  <!-- ══ LEAF 1 : PAGE 1 | PAGE 2 ══ -->
+  <div class="leaf" id="lf0">
+    <div class="face front"><div class="pg"><div class="pin">
+      <div class="masthead">
+        <div class="t1">The Dhamija Times</div>
+        <div class="t2">"All the growth that's fit to print."</div>
+      </div>
+      <div class="topstrip">
+        <span>VOL. II · №3</span><span>SEASON 2 EDITION</span><span data-fdate>DELHI NCR, TUESDAY</span>
+        <span><b>WEATHER:</b> CONVERSION FRONT MOVING IN</span>
+      </div>
+      <div class="two" style="flex:1;min-height:0">
+        <div style="display:flex;flex-direction:column">
+          <p class="kicker">PERFORMANCE DESK · LEAD STORY</p>
+          <h1 class="hd big" style="margin:.2rem 0 .35rem">Local marketer compounds attention into revenue</h1>
+          <p class="standfirst">AI Performance Marketer Harsh Dhamija, Delhi NCR, ships like a small team —
+            one internship, 40+ creatives, 15+ builds, 10+ analyses — and the business pages are taking notes.</p>
+          <div class="cols drop" style="margin-top:.6rem">
+            He plans it, writes it, builds it and reads the telemetry after. Multi-objective paid campaigns across
+            Meta &amp; Google, shipped with AI doing the drafting and a human keeping the strategy — that was one
+            flight at DigiMark Media. The claim is modest and checkable: care about the business metric behind
+            every marketing metric. Reach is nice. Revenue is better.
+            Before dashboards there were people: a front-line education on Apple's customer process taught him how
+            buyers actually decide. Strategy stints taught him where to aim. Real-estate closing taught him what
+            happens after the lead. It is an unusual route to a media plan — which is precisely the point.
+          </div>
+          <p class="byline" style="margin-top:.5rem">Continued — CAREER DESPATCH, page 2 · OPINION, page 4 · CLASSIFIEDS, page 6</p>
+          <p class="jumpline">TURN THE PAGE ▶</p>
+        </div>
+        <div style="display:flex;flex-direction:column;min-width:0">
+          <figure class="fig">
+            <div class="halftone"><img id="face" src="../portrait.jpg" alt="Harsh Dhamija — staff photo"></div>
+            <figcaption>The subject, photographed declining to call impressions "impact". — STAFF PHOTO</figcaption>
+          </figure>
+          <div class="brief">
+            <p class="kicker">DATA DESK</p>
+            <h4>40+ creatives <span>in one flight</span></h4>
+            <p>Variants shipped, tested and culled by the numbers — 20+ posts alongside. Creative as a system, not a lottery.</p>
+          </div>
+          <div class="brief">
+            <p class="kicker">WIRE ROOM</p>
+            <h4>8 AI tools, <span>one operator</span></h4>
+            <p>"AI doesn't replace the marketer," the subject insists. "It replaces the bottlenecks."</p>
+          </div>
+        </div>
+      </div>
+      <span class="folio l">THE DHAMIJA TIMES</span><span class="folio r">PAGE 1</span>
+      <i class="peel" aria-hidden="true"></i>
+    </div></div></div>
+
+    <div class="face back"><div class="pg"><div class="pin">
+      <div class="secbar"><h3>CAREER DESPATCH</h3><span>where he grew things — filed from four desks</span></div>
+      <div class="two" style="flex:1;min-height:0">
+        <div>
+          <div class="brief">
+            <span class="dateline">DIGIMARK MEDIA · APR–JUN 2026</span>
+            <h4>AI Performance Marketing Intern</h4>
+            <p>Multi-objective paid campaigns across <b>Meta &amp; Google</b>, end to end: structure, audiences, budgets,
+              AI-assisted copy. Legacy: <b>40+ creatives, 20+ posts, 10+ competitor analyses, 15+ site &amp; prototype builds</b> — one flight.</p>
+          </div>
+          <div class="brief">
+            <span class="dateline">PROPSALT LANDBASE · BUSINESS DEVELOPMENT EXECUTIVE</span>
+            <h4>The desk where leads become revenue</h4>
+            <p>Owned the real-estate lead journey end to end: generation → consultation → site visits → negotiation →
+              closure, with <b>CRM discipline</b>. Most marketers stop at CPL. This one stood at the stall where deals close.</p>
+          </div>
+        </div>
+        <div>
+          <div class="brief">
+            <span class="dateline">AGILE CAPITAL SERVICES · MARKETING &amp; STRATEGY INTERN</span>
+            <h4>Research before rupees</h4>
+            <p>University outreach &amp; sponsorship campaigns, go-to-market plans and market-landscape decks for
+              portfolio companies. <b>Elevation before execution.</b></p>
+          </div>
+          <div class="brief">
+            <span class="dateline">TELEPERFORMANCE · APPLE PROCESS · CUSTOMER CARE (SALES)</span>
+            <h4>Where the obsession began</h4>
+            <p>Objection handling, retention and upsell at Apple-process scale — the origin of the
+              <b>"why do people buy"</b> fixation that still runs every campaign.</p>
+          </div>
+        </div>
+      </div>
+      <div class="pull"><b>"Reach is nice. Revenue is better."</b><i>— the subject, on being asked what he optimises</i></div>
+      <span class="folio l">PAGE 2</span><span class="folio r">CAREER DESPATCH</span>
+    </div></div></div>
   </div>
+
+  <!-- ══ LEAF 2 : PAGE 3 | PAGE 4 ══ -->
+  <div class="leaf" id="lf1">
+    <div class="face front"><div class="pg"><div class="pin">
+      <div class="secbar"><h3>THE MARKET DESK</h3><span>instruments &amp; holdings — prices in outcomes</span></div>
+      <table class="desk" style="margin-bottom:.7rem">
+        <tr><th style="width:31%">INSTRUMENT</th><th style="width:47%">HOLDINGS</th><th>NOTE</th></tr>
+        <tr><td><b>Paid Media</b></td><td>Meta Ads · Google Ads · Audience Targeting · Optimisation</td><td class="up">CORE ▲</td></tr>
+        <tr><td><b>Analytics</b></td><td>GA4 · SEMrush · Campaign Reporting · Conversion Tracking</td><td class="up">DAILY ▲</td></tr>
+        <tr><td><b>Research</b></td><td>Market Mapping · Competitor Teardowns · Segmentation · GTM</td><td class="up">10+ FILED ▲</td></tr>
+        <tr><td><b>Build Floor</b></td><td>Wix · Landing Pages · Conversion-first Prototypes</td><td class="up">15+ LIVE ▲</td></tr>
+        <tr><td><b>The AI Floor</b></td><td>ChatGPT · Claude · Gemini · Perplexity · Emergent · Lovable · Stitch · Replit</td><td class="up">8 LISTED ▲</td></tr>
+        <tr><td><b>The Index</b></td><td>Portfolio worlds live, counting this paper</td><td class="up">8 WORLDS ▲</td></tr>
+      </table>
+      <div class="secbar"><h3>WHAT HE CAN OWN FOR YOUR TEAM</h3><span>five seats, one hire</span></div>
+      <div class="cols" style="font-size:.8rem">
+        <b>S·01 Performance Marketing.</b> Multi-objective paid campaigns across Meta &amp; Google — structure, creative testing, audience science.<br>
+        <b>S·02 Growth Strategy &amp; Research.</b> Competitor teardowns, market mapping, go-to-market plans grounded in real outreach.<br>
+        <b>S·03 AI-Assisted Creative Ops.</b> AI drafts the variants; humans keep the strategy and judgment. Internship-proven speed.<br>
+        <b>S·04 Analytics &amp; CRO.</b> GA4, clean tracking, structured tests. Decisions from data, not vibes.<br>
+        <b>S·05 Web &amp; Landing Builds.</b> Conversion-first pages and prototypes shipped with AI builders — 15+ and counting.
+      </div>
+      <div class="adbox">
+        <p class="h">FROM THE SAME PUBLISHER</p>
+        <p>The universe keeps eight editions. Readers also opened:
+          <a href="../impression/harsh-dhamija-impression.html">№1 The Impression</a> ·
+          <a href="../atlas/harsh-dhamija-atlas.html">№2 The Atlas</a> ·
+          <a href="../ad/harsh-dhamija-ad.html">№7 The Ad</a></p>
+      </div>
+      <span class="folio l">PAGE 3</span><span class="folio r">THE MARKET DESK</span>
+      <i class="peel" aria-hidden="true"></i>
+    </div></div></div>
+
+    <div class="face back"><div class="pg"><div class="pin">
+      <div class="secbar"><h3>OPINION · LETTERS TO THE EDITOR</h3><span>three rules he refuses to break</span></div>
+      <div class="letter">
+        <h4>Data over opinions</h4>
+        <p>Sir — Taste starts the test; numbers end the argument. If a thing can't be measured yet, first build the
+          way to measure it. Every dashboard I keep was once an argument somebody lost politely. — <i>H.D.</i></p>
+        <span class="sig">Delhi NCR</span>
+      </div>
+      <div class="letter">
+        <h4>The customer is the channel</h4>
+        <p>Sir — Platforms change weekly; people change slowly. Understand one person with a Tuesday, and every
+          auction on every network gets easier. Market from the territory, never from the legend. — <i>H.D.</i></p>
+        <span class="sig">Delhi NCR</span>
+      </div>
+      <div class="letter">
+        <h4>Everything is an experiment</h4>
+        <p>Sir — Small bets, fast loops, honest reads. This newspaper itself is one experiment among many in the
+          same portfolio: read it, judge it, correct it. The charts apologise when the terrain disagrees. — <i>H.D.</i></p>
+        <span class="sig">Delhi NCR</span>
+      </div>
+      <div class="pull" style="margin-top:.4rem"><b>"Principles outlive algorithms. Trends decay; principles compound."</b><i>— editorial stance</i></div>
+      <span class="folio l">PAGE 4</span><span class="folio r">OPINION</span>
+    </div></div></div>
+  </div>
+
+  <!-- ══ LEAF 3 : PAGE 5 | PAGE 6 ══ -->
+  <div class="leaf" id="lf2">
+    <div class="face front"><div class="pg"><div class="pin">
+      <div class="secbar"><h3>NOTICES &amp; CREDENTIALS</h3><span>filed, stamped, verifiable</span></div>
+      <div class="notice"><h4>MBA — INTERNATIONAL BUSINESS</h4>
+        <p>Post-graduate · marketing strategy core. The long game, formally studied.</p></div>
+      <div class="notice"><h4>McKINSEY.ORG FORWARD</h4>
+        <p>Structured problem-solving, the McKinsey way — graduate in good standing.</p></div>
+      <div class="notice"><h4>AI PERFORMANCE MARKETING — DIGIMARK</h4>
+        <p>Certified · paid media × AI workflows, practised in the field, not just the classroom.</p></div>
+      <div class="notice"><h4>BBA — UNDERGRADUATE</h4>
+        <p>The foundation stone, business first.</p></div>
+      <div class="pull" style="margin:.5rem 0"><b>"Currently: exploring AI applications in performance marketing;
+        building theharshdhamija around AI × marketing × growth; documenting real campaign learnings."</b>
+        <i>— current bearing, filed this week</i></div>
+      <div class="adbox">
+        <p class="h">CORRECTIONS</p>
+        <p>An earlier draft understated nothing. No metric in this paper was exaggerated: 40+/20+/10+/15+ are
+          shipment counts, publicly checkable. Client-specific numbers stay with the Ads Managers — confidentiality
+          is the job, not a gap. We stand by every line.</p>
+      </div>
+      <span class="folio l">PAGE 5</span><span class="folio r">NOTICES</span>
+      <i class="peel" aria-hidden="true"></i>
+    </div></div></div>
+
+    <div class="face back"><div class="pg"><div class="pin">
+      <div class="secbar"><h3>CLASSIFIED</h3><span>situations vacant · one listing only</span></div>
+      <div style="display:flex;justify-content:center;margin-top:.6rem"><div class="pface faceico" role="img" aria-label="Harsh Dhamija"></div></div>
+      <div class="classified">
+        <p class="h">SITUATION VACANT</p>
+        <p class="sub">Wanted: one team worth growing.</p>
+        <p>On offer: an AI Performance Marketer — MBA, McKinsey-trained, four desks deep, ships like a small team.
+          On-site or remote. Delhi NCR · replies within 24 hours.<br>Quote <b>BOX № HD-03</b> in your reply.</p>
+        <div class="btx">
+          <a class="btn pri" href="mailto:harshdhmija4678@gmail.com?subject=Re%3A%20Box%20%E2%84%96%20HD-03%20%E2%80%94%20The%20Dhamija%20Times">WRITE TO BOX № HD-03 →</a>
+          <a class="btn" href="https://www.linkedin.com/in/harsh-dhamija-063897194" target="_blank" rel="noopener">LINKEDIN ↗</a>
+        </div>
+      </div>
+      <p class="byline" style="text-align:center"> harshdhmija4678@gmail.com · OPEN TO WORK ●</p>
+      <div class="colophon" style="margin-top:.9rem">
+        <a href="../index.html">← ALL WORLDS</a> &nbsp;·&nbsp; close the paper when ready — it will keep.
+      </div>
+      <span class="folio l">PAGE 6</span><span class="folio r">CLASSIFIED</span>
+    </div></div></div>
+  </div>
+
+</div>
+</div>
 </div>
 
-<main>
-
-  <!-- 00 · HERO -->
-  <section class="hero" id="hero" data-label="HELLO">
-    <p class="hero-kicker mono rv" style="--i:0">AI PERFORMANCE MARKETING — DELHI NCR · GMT+5:30</p>
-    <h1 class="hero-name">
-      <span class="rv" style="--i:1">Harsh</span>
-      <span class="hero-gap" aria-hidden="true"></span>
-      <span class="rv" style="--i:2">Dhamija</span>
-    </h1>
-    <p class="hero-line rv" style="--i:3">I turn <em>attention</em> into <em>measurable growth</em>.</p>
-    <p class="hero-sub rv" style="--i:4">
-      Data-driven campaigns across Meta &amp; Google, AI-assisted creative
-      ops and analytics built to compound attention into growth.
-    </p>
-    <div class="hero-cta rv" style="--i:5">
-      <a class="btn btn-solid" href="mailto:harshdhmija4678@gmail.com">Hire me →</a>
-      <a class="btn btn-line" href="#results">See the numbers</a>
-    </div>
-    <div class="hero-stats rv" style="--i:6">
-      <div><b class="num" data-count="40" data-suffix="+">0</b><span class="mono">CREATIVES SHIPPED</span></div>
-      <div><b class="num" data-count="15" data-suffix="+">0</b><span class="mono">SITES &amp; PROTOTYPES</span></div>
-      <div><b class="num" data-count="8">0</b><span class="mono">AI TOOLS IN STACK</span></div>
-      <div><b class="num" data-count="2">0</b><span class="mono">DEGREES &amp; COUNTING</span></div>
-    </div>
-    <div class="scroll-cue mono" id="scrollCue"><span>SCROLL — EVERYTHING COMES INTO FOCUS</span><i></i></div>
-  </section>
-
-  <!-- 01 · ABOUT -->
-  <section class="panel" id="about" data-label="ABOUT">
-    <div class="focus"><div class="wrap">
-      <p class="kicker mono">[ 01 ] — ABOUT</p>
-      <h2 class="h2">A marketer who reads<br><em>dashboards</em> like novels.</h2>
-      <div class="cols">
-        <p>
-          I'm Harsh — an AI performance marketer from Delhi NCR. Fresh
-          out of my MBA (International Business · Marketing), I spent my agency
-          internship running multi-objective campaigns across Meta &amp; Google,
-          shipping 40+ creatives and building 15+ sites — in one flight.
-        </p>
-        <p>
-          My edge is simple: I care about the <b>business metric</b> behind
-          every marketing metric. Reach is nice. Revenue is better.
-        </p>
-      </div>
-      <div class="pills mono">
-        <span>META ADS</span><span>GOOGLE ADS</span><span>GA4</span><span>SEMRUSH</span>
-        <span>CHATGPT</span><span>CLAUDE</span><span>GEMINI</span><span>PERPLEXITY</span>
-        <span>WIX</span><span>REPLIT</span>
-      </div>
-      <p class="avail rv-line"><span class="status-dot"></span> Currently open to full-time growth &amp; performance marketing roles</p>
-    </div></div>
-  </section>
-
-  <!-- 02 · EXPERTISE -->
-  <section class="panel" id="expertise" data-label="EXPERTISE">
-    <div class="focus"><div class="wrap wrap-wide">
-      <p class="kicker mono">[ 02 ] — EXPERTISE</p>
-      <h2 class="h2">What I can own<br>for your <em>team</em>.</h2>
-      <ol class="services">
-        <li class="svc">
-          <span class="svc-no mono">S·01</span>
-          <div class="svc-main"><span class="svc-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg></span><b>Performance Marketing</b><p>Multi-objective paid campaigns across Meta &amp; Google — structure, creative testing, audience science.</p></div>
-          <span class="svc-tags mono">META · GOOGLE · LEAD GEN</span>
-        </li>
-        <li class="svc">
-          <span class="svc-no mono">S·02</span>
-          <div class="svc-main"><span class="svc-ico"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.6"/><path d="M15.6 15.6 21 21"/></svg></span><b>Growth Strategy &amp; Research</b><p>Competitor teardowns, market mapping and go-to-market plans grounded in real outreach.</p></div>
-          <span class="svc-tags mono">RESEARCH · GTM · POSITIONING</span>
-        </li>
-        <li class="svc">
-          <span class="svc-no mono">S·03</span>
-          <div class="svc-main"><span class="svc-ico"><svg viewBox="0 0 24 24"><path d="M12 2.5l2.1 6.9 6.9 2.1-6.9 2.1L12 20.5l-2.1-6.9-6.9-2.1 6.9-2.1Z"/><path d="M18.5 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9Z" opacity=".55"/></svg></span><b>AI-Assisted Creative Ops</b><p>AI drafts the variants; humans keep the strategy and judgment. Internship-proven speed.</p></div>
-          <span class="svc-tags mono">COPY · VARIANTS · SPEED</span>
-        </li>
-        <li class="svc">
-          <span class="svc-no mono">S·04</span>
-          <div class="svc-main"><span class="svc-ico"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><rect x="5.5" y="12" width="3" height="6.5"/><rect x="11" y="6.5" width="3" height="12"/><rect x="16.5" y="15" width="3" height="3.5"/></svg></span><b>Analytics &amp; CRO</b><p>GA4, clean tracking, structured tests. Decisions from data, not vibes.</p></div>
-          <span class="svc-tags mono">GA4 · FUNNELS · A/B TESTS</span>
-        </li>
-        <li class="svc">
-          <span class="svc-no mono">S·05</span>
-          <div class="svc-main"><span class="svc-ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.4"/><path d="M3 9.2h18"/><circle cx="6.3" cy="7.1" r=".7" fill="currentColor" stroke="none"/><circle cx="9.3" cy="7.1" r=".7" fill="currentColor" stroke="none"/></svg></span><b>Web &amp; Landing Builds</b><p>Conversion-first pages and prototypes shipped with AI builders — 15+ and counting.</p></div>
-          <span class="svc-tags mono">WIX · REPLIT · LANDING</span>
-        </li>
-      </ol>
-    </div></div>
-  </section>
-
-  <!-- 03 · RESULTS -->
-  <section class="panel" id="results" data-label="RESULTS">
-    <div class="focus"><div class="wrap wrap-wide">
-      <p class="kicker mono">[ 03 ] — RESULTS</p>
-      <h2 class="h2">Numbers first.<br><em>Stories</em> second.</h2>
-
-      <div class="cases">
-          <article class="case">
-          <header><b>AI-Assisted Campaign Ops</b><span class="mono">DIGIMARK MEDIA · INTERNSHIP</span></header>
-          <p>Planned &amp; executed multi-objective campaigns across Meta and Google — AI-drafted copy, human strategy.</p>
-          <div class="metrics">
-            <div><b class="num" data-count="40" data-suffix="+">0</b><span class="mono">CREATIVES SHIPPED</span></div>
-            <div><b class="num" data-count="20" data-suffix="+">0</b><span class="mono">POSTS PUBLISHED</span></div>
-            <div><b class="num" data-count="10" data-suffix="+">0</b><span class="mono">COMPETITOR ANALYSES</span></div>
-          </div>
-        </article>
-        <article class="case">
-          <header><b>The Build Engine</b><span class="mono">WEBSITES &amp; PROTOTYPES · AI TOOLS</span></header>
-          <p>Conversion-first pages and prototypes shipped with AI builders — including the portfolio universe you are reading now.</p>
-          <div class="metrics">
-            <div><b class="num" data-count="15" data-suffix="+">0</b><span class="mono">SITES &amp; PROTOTYPES</span></div>
-            <div><b class="num" data-count="8">0</b><span class="mono">AI TOOLS IN STACK</span></div>
-            <div><b class="num" data-count="7">0</b><span class="mono">PORTFOLIO WORLDS LIVE</span></div>
-          </div>
-        </article>
-        <article class="case">
-          <header><b>The Learning Curve</b><span class="mono">MBA · McKINSEY · CERTIFIED</span></header>
-          <p>MBA in International Business (Marketing), McKinsey.org Forward graduate, certified in AI Performance Marketing.</p>
-          <div class="metrics">
-            <div><b class="num" data-count="1">0</b><span class="mono">MBA — INT’L BUSINESS</span></div>
-            <div><b class="num" data-count="1">0</b><span class="mono">BBA — UNDERGRAD</span></div>
-            <div><b class="num" data-count="2">0</b><span class="mono">KEY CERTIFICATIONS</span></div>
-          </div>
-        </article>
-      </div>
-    </div></div>
-  </section>
-
-  <!-- 04 · EXPERIENCE -->
-  <section class="panel" id="experience" data-label="EXPERIENCE">
-    <div class="focus"><div class="wrap">
-      <p class="kicker mono">[ 04 ] — EXPERIENCE</p>
-      <h2 class="h2">Where I've<br><em>grown</em> things.</h2>
-      <ol class="timeline">
-        <li class="tl">
-          <span class="tl-when mono">APR — JUN 2026</span>
-          <div><b>AI Performance Marketing Intern — DigiMark Media</b><p>Multi-objective campaigns across Meta &amp; Google: 40+ creatives, 20+ posts, 10+ competitor analyses and 15+ site &amp; prototype builds — one flight.</p></div>
-        </li>
-        <li class="tl">
-          <span class="tl-when mono">EARLIER</span>
-          <div><b>Business Development Executive — Propsalt Landbase</b><p>Owned the real-estate lead journey end to end: generation → consultation → site visits → negotiation → closure, with CRM discipline.</p></div>
-        </li>
-        <li class="tl">
-          <span class="tl-when mono">ALSO</span>
-          <div><b>Marketing &amp; Strategy Intern — Agile Capital Services</b><p>University outreach &amp; sponsorship campaigns; go-to-market plans and market landscape decks for portfolio companies.</p></div>
-        </li>
-        <li class="tl">
-          <span class="tl-when mono">FIRST DESK</span>
-          <div><b>Customer Care Executive (Sales) — Teleperformance · Apple Process</b><p>Objection handling, retention and upsell at Apple-process scale — where the “why do people buy” obsession began.</p></div>
-        </li>
-        <li class="tl">
-          <span class="tl-when mono">EDUCATION</span>
-          <div><b>MBA — International Business (specialisation Marketing + IB)</b><p>Undergrad: BBA. Credentials: McKinsey.org Forward · AI Performance Marketing Training (DigiMark Media).</p></div>
-        </li>
-      </ol>
-    </div></div>
-  </section>
-
-  <!-- 05 · TESTIMONIALS -->
-  <section class="panel" id="testimonials" data-label="PRINCIPLES">
-    <div class="focus"><div class="wrap wrap-wide">
-      <p class="kicker mono">[ 05 ] — PRINCIPLES</p>
-      <h2 class="h2">No reviews yet —<br>so here are my <em>rules</em>.</h2>
-      <div class="quotes">
-        <blockquote>
-          <p>“Curiosity first. Principles over trends. <em>Experiments</em> over opinions.”</p>
-          <footer class="mono">HARSH DHAMIJA — OPERATING RULE №01</footer>
-        </blockquote>
-        <blockquote>
-          <p>“Every rupee of ad spend is a tiny employee. <em>Hire</em> a strict manager.”</p>
-          <footer class="mono">HARSH DHAMIJA — OPERATING RULE №02</footer>
-        </blockquote>
-        <blockquote>
-          <p>“Data + customer insight + continuous <em>experimentation</em> — that’s the whole machine.”</p>
-          <footer class="mono">HARSH DHAMIJA — OPERATING RULE №03</footer>
-        </blockquote>
-      </div>
-    </div></div>
-  </section>
-
-  <!-- 06 · CONTACT -->
-  <section class="panel contact" id="contact" data-label="CONTACT">
-    <div class="focus"><div class="wrap wrap-center">
-      <p class="kicker mono">[ 06 ] — CONTACT</p>
-      <h2 class="h2 h2-xl">Have a brand<br>to <em>grow</em>?</h2>
-      <p class="contact-sub">Tell me where you are and where you want the graph to go.<br>I'll reply with a plan — not a pitch deck.</p>
-      <!-- EDIT: swap in your real email -->
-      <a class="mail" href="mailto:harshdhmija4678@gmail.com">harshdhmija4678@gmail.com</a>
-      <div class="hero-cta">
-        <a class="btn btn-solid" href="mailto:harshdhmija4678@gmail.com">Start a project →</a>
-        <a class="btn btn-line" href="#" onclick="return false">Download résumé ↓</a>
-      </div>
-      <nav class="socials mono" aria-label="Social links">
-        <a href="https://www.linkedin.com/in/harsh-dhamija-063897194" target="_blank" rel="noopener">LINKEDIN ↗</a>
-        <a href="mailto:harshdhmija4678@gmail.com">EMAIL ↗</a>
-        <a href="../index.html">ALL 7 WORLDS ↺</a>
-      </nav>
-    </div></div>
-    <footer class="footer mono">
-      <span>© 2026 HARSH DHAMIJA — DELHI NCR, INDIA</span>
-      <span>AI PERFORMANCE MARKETER · OPEN TO WORK</span>
-    </footer>
-  </section>
-
-</main>
+<nav id="foliobar" aria-label="Page controls">
+  <button id="prevB" type="button">◀ PREV</button>
+  <span id="foliolabel">FRONT PAGE · 1 OF 6</span>
+  <button id="nextB" type="button">TURN PAGE ▶</button>
+</nav>
 
 <script>
-/* ─────────────────────────────────────────────────────────────
-   RACK-FOCUS ENGINE — Harsh Dhamija · AI Performance Marketer
-   Scroll is the camera. Every section glides in and snaps into
-   perfect focus. The portrait leads, then politely docks aside.
-   ───────────────────────────────────────────────────────────── */
-(() => {
-  'use strict';
+(function(){
+'use strict';
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id), qa=(s,r)=>[...(r||document).querySelectorAll(s)];
 
-  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-  const lerp  = (a, b, t) => a + (b - a) * t;
-  const smooth = t => t * t * (3 - 2 * t);
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const body       = document.body;
-  const progressEl = document.getElementById('progressBar');
-  const pwrap      = document.getElementById('pwrap');
-  const pframe     = document.getElementById('pframe');
-  const pshadow    = document.getElementById('pshadow');
-  const dockTag    = document.getElementById('dockTag');
-  const whereSec   = document.getElementById('whereSec');
-  const whereLabel = document.getElementById('whereLabel');
-  const cue        = document.getElementById('scrollCue');
-  const hero       = document.getElementById('hero');
-  const depthSpans = Array.from(document.querySelectorAll('.depth-type span'));
-
-  /* bulletproof: if any mount is missing (ad-blockers, partial loads, odd parsers),
-     fall back to a calm, fully-readable static page — never zeros, never a stuck portrait */
-  const mounts=[progressEl,pwrap,pframe,pshadow,dockTag,whereSec,whereLabel,cue,hero];
-  if(mounts.some(m=>!m)){
-    body.classList.add('rm');
-    if(hero)hero.classList.add('in');
-    document.querySelectorAll('.num[data-count]').forEach(el=>{
-      el.textContent=(el.dataset.prefix||'')+(+el.dataset.count).toFixed(+(el.dataset.dec||0))+(el.dataset.suffix||'');
-    });
-    document.querySelectorAll('.panel, .hero').forEach(s=>s.classList.add('on'));
-    return;
-  }
-
-  /* ── geometry cache ─────────────────────────────────────── */
-  let panels = [], vw = innerWidth, vh = innerHeight, pw = 300, dockSize = 96, dockMargin = 22;
-
-  function cache() {
-    vw = innerWidth; vh = innerHeight;
-    pw = pframe.offsetWidth;
-    dockSize   = vw < 940 ? 74 : 96;
-    dockMargin = vw < 940 ? 14 : 24;
-    panels = Array.from(document.querySelectorAll('.panel')).map(el => ({
-      el,
-      focus: el.querySelector('.focus'),
-      label: el.dataset.label || '',
-      center: el.offsetTop + el.offsetHeight / 2,
-      on: false,
-      last: { blur: -1, op: -1 },
-    }));
-  }
-
-  /* depth-type spans: read speeds/base-Y from CSS vars */
-  let depth = [];
-  function cacheDepth() {
-    depth = depthSpans.map(el => {
-      const cs = getComputedStyle(el);
-      const yv = parseFloat(cs.getPropertyValue('--y')) || 0;
-      const sp = parseFloat(cs.getPropertyValue('--s')) || 0.1;
-      return { el, base: yv * vh / 100, s: sp };
-    });
-  }
-
-  /* ── counters (decimals + prefix + suffix aware) ────────── */
-  function runCounters(root) {
-    root.querySelectorAll('.num[data-count]').forEach(el => {
-      if (el.dataset.done) return;
-      el.dataset.done = '1';
-      const end  = parseFloat(el.dataset.count);
-      const dec  = +(el.dataset.dec || 0);
-      const pre  = el.dataset.prefix || '';
-      const suf  = el.dataset.suffix || '';
-      const t0 = performance.now(), dur = 1300;
-      (function step(now) {
-        const k = clamp((now - t0) / dur, 0, 1);
-        const e = 1 - Math.pow(1 - k, 3);
-        el.textContent = pre + (end * e).toFixed(dec) + suf;
-        if (k < 1) requestAnimationFrame(step);
-        else el.textContent = pre + end.toFixed(dec) + suf;
-      })(t0);
-    });
-  }
-
-  /* ── reduced-motion fallback: calm, static, complete ────── */
-  if (reduceMotion) {
-    body.classList.add('rm');
-    hero.classList.add('in');
-    const io = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) runCounters(e.target);
-    }), { threshold: 0.3 });
-    document.querySelectorAll('.panel, .hero').forEach(s => io.observe(s));
-    addEventListener('scroll', () => {
-      const doc = document.documentElement;
-      const p = clamp(scrollY / Math.max(1, doc.scrollHeight - vh), 0, 1);
-      progressEl.style.width = (p * 100).toFixed(2) + '%';
-      cue.classList.toggle('hidden', scrollY > 60);
-    }, { passive: true });
-    return;
-  }
-
-  /* ── interactive state ──────────────────────────────────── */
-  const S = {
-    sm: scrollY,            // smoothed scroll position
-    tiltX: 0, tiltY: 0, ttX: 0, ttY: 0,
-  };
-
-  addEventListener('pointermove', e => {
-    if (e.pointerType === 'touch') return;
-    S.ttY = (e.clientX / vw - 0.5) * 7;
-    S.ttX = (0.5 - e.clientY / vh) * 5.5;
-  }, { passive: true });
-
-  addEventListener('resize', () => { cache(); cacheDepth(); });
-
-  function tick(now) {
-    S.sm = lerp(S.sm, scrollY, 0.11);
-    S.tiltX = lerp(S.tiltX, S.ttX, 0.07);
-    S.tiltY = lerp(S.tiltY, S.ttY, 0.07);
-    const y = S.sm;
-
-    /* progress bar + cue (use real scroll for accuracy) */
-    const doc = document.documentElement;
-    const p = clamp(scrollY / Math.max(1, doc.scrollHeight - vh), 0, 1);
-    progressEl.style.width = (p * 100).toFixed(3) + '%';
-    cue.classList.toggle('hidden', scrollY > 60);
-
-    /* — portrait: hero-center → corner dock — */
-    const dockE = smooth(clamp(y / (vh * 1.05), 0, 1));
-    const s  = lerp(1, dockSize / pw, dockE);
-    const dx = lerp(0, (vw / 2 - dockMargin - dockSize / 2), dockE);
-    const dy = lerp(0, (vh / 2 - dockMargin - dockSize / 2), dockE);
-    pwrap.style.transform =
-      `translate(-50%,-50%) translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0) scale(${s.toFixed(4)})`;
-
-    const sway = Math.sin(now * 0.0008) * 2.2;
-    const bobX = Math.cos(now * 0.0006) * 1.4;
-    pframe.style.transform =
-      `rotateY(${(S.tiltY + sway).toFixed(2)}deg) rotateX(${(S.tiltX + bobX).toFixed(2)}deg)`;
-    pshadow.style.transform = `translateX(calc(-50% + ${(-S.tiltY * 1.5).toFixed(1)}px))`;
-    dockTag.classList.toggle('show', dockE > 0.82);
-
-    /* — background depth words drift at their own speeds — */
-    for (const dEl of depth) {
-      dEl.el.style.transform = `translate3d(0, ${(dEl.base - y * dEl.s).toFixed(1)}px, 0)`;
-    }
-
-    /* — rack focus on every panel —
-       Visibility is driven by RAW scroll, so content is always clear
-       exactly where the reader is. Blur is just a whisper at the edges. */
-    let best = null, bestE = 0.45;
-    for (const pn of panels) {
-      const d = (scrollY + vh * 0.5 - pn.center) / vh;   // 0 = perfectly centered
-      let e;
-      if (d <= 0) {
-        // entering from below → become fully clear EARLY (by d = -0.24)
-        e = 1 - smooth(clamp((-d - 0.24) / 0.55, 0, 1));
-      } else {
-        // leaving upward → stay readable, fade gently and partially
-        e = 1 - smooth(clamp((d - 0.14) / 0.8, 0, 1)) * 0.9;
-      }
-      const ec = clamp(e, 0, 1);
-      if (ec > bestE) { bestE = ec; best = pn; }
-
-      const blur = d <= 0 ? (1 - ec) * 5 : (1 - ec) * 3;
-      const op   = d <= 0 ? 0.06 + 0.94 * ec : 0.15 + 0.85 * ec;
-      const ty   = d <= 0 ? -d * 26 : -d * 16;
-      const sc   = 0.97 + 0.03 * ec;
-
-      if (Math.abs(blur - pn.last.blur) > 0.05 || Math.abs(op - pn.last.op) > 0.005) {
-        pn.focus.style.transform = `translate3d(0, ${ty.toFixed(1)}px, 0) scale(${sc.toFixed(4)})`;
-        pn.focus.style.filter = blur > 0.3 ? `blur(${blur.toFixed(2)}px)` : 'none';
-        pn.focus.style.opacity = op.toFixed(3);
-        pn.last.blur = blur; pn.last.op = op;
-      }
-      if (ec > 0.5 && !pn.on) {
-        pn.on = true;
-        pn.el.classList.add('on');
-        runCounters(pn.el);
-      }
-    }
-    /* highlight the section currently in focus */
-    panels.forEach(pn => pn.el.classList.toggle('is-focus', pn === best));
-
-    /* — readout — */
-    if (best) {
-      const idx = String(panels.indexOf(best) + 1).padStart(2, '0');
-      if (whereSec.textContent !== idx) whereSec.textContent = idx;
-      if (whereLabel.textContent !== best.label) whereLabel.textContent = best.label;
-    }
-    if (scrollY < vh * 0.4) {
-      if (whereSec.textContent !== '00') { whereSec.textContent = '00'; whereLabel.textContent = 'HELLO'; }
-    }
-
-    requestAnimationFrame(tick);
-  }
-
-  /* ── boot ───────────────────────────────────────────────── */
-  cache(); cacheDepth();
-  requestAnimationFrame(tick);
-  setTimeout(() => hero.classList.add('in'), 150);
-  setTimeout(() => runCounters(hero), 500);
-  addEventListener('load', () => { cache(); cacheDepth(); });
+/* real dateline */
+(function(){
+  const d=new Date();
+  const days=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+  const mon=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const line='DELHI NCR · '+days[d.getDay()]+', '+mon[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+  const fd=$('fdate'); if(fd)fd.textContent=line;
+  qa('[data-fdate]').forEach(e=>e.textContent=days[d.getDay()]+', '+mon[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear()+' · LATE EDITION');
 })();
 
+const leaves=qa('.leaf');
+const LABELS=['FRONT PAGE · 1 OF 6','PAGES 2–3 OF 6','PAGES 4–5 OF 6','PAGE 6 · CLASSIFIED'];
+const N=leaves.length;
+let cur=0;
+
+function render(){
+  leaves.forEach((lf,i)=>{
+    lf.classList.toggle('flip', i<cur);
+    lf.style.zIndex = i<cur ? (i+1) : (N-i+2);
+  });
+  const lb=$('foliolabel'); if(lb)lb.textContent=LABELS[cur];
+  if($('prevB'))$('prevB').disabled = (cur===0);
+  if($('nextB'))$('nextB').disabled = (cur>=N);
+}
+function retop(){ try{ scrollTo({top:0,behavior:'smooth'}); }catch(_){ scrollTo(0,0); } }
+function next(){ if(cur>=N)return; const lf=leaves[cur]; lf.classList.add('turning');
+  cur++; render(); retop(); setTimeout(()=>lf.classList.remove('turning'),950); }
+function prev(){ if(cur<=0)return; const lf=leaves[cur-1]; lf.classList.add('turning');
+  cur--; render(); retop(); setTimeout(()=>lf.classList.remove('turning'),950); }
+
+/* fit the book to its tallest page */
+function fitBook(){
+  const book=$('book'); if(!book)return;
+  let need=560;
+  qa('.pin').forEach(p=>{ need=Math.max(need, p.scrollHeight); });
+  /* never clip a page — if content needs more than the viewport,
+     the desk scrolls a touch instead of swallowing columns */
+  need=Math.min(need, 2600);
+  book.style.setProperty('--bookH', need+'px');
+}
+
+function staticMode(){
+  document.body.classList.add('rm');
+  qa('.leaf').forEach(lf=>lf.classList.remove('flip'));
+}
+try{
+  fitBook();
+  addEventListener('load',fitBook);
+  addEventListener('resize',()=>{fitBook();render();});
+  setTimeout(fitBook,600); setTimeout(fitBook,1800);
+  if(RM){ staticMode(); }
+  else{
+    render();
+    $('nextB').addEventListener('click',next);
+    $('prevB').addEventListener('click',prev);
+    addEventListener('keydown',e=>{
+      if(e.key==='ArrowRight')next();
+      else if(e.key==='ArrowLeft')prev();
+      else if(e.key==='0'||e.key==='Escape')location.href='../index.html';
+    });
+    /* click pages to turn, like a reader */
+    const book=$('book');
+    book.addEventListener('click',e=>{
+      if(e.target.closest('a,button'))return;
+      const r=book.getBoundingClientRect();
+      (e.clientX > r.left + r.width/2) ? next() : prev();
+    });
+    /* swipe */
+    let sx=null;
+    book.addEventListener('pointerdown',e=>{sx=e.clientX;});
+    book.addEventListener('pointerup',e=>{
+      if(sx===null)return; const dx=e.clientX-sx; sx=null;
+      if(Math.abs(dx)>48){ dx<0?next():prev(); }
+    });
+  }
+}catch(err){
+  try{console.error(err)}catch(_){}
+  staticMode();
+}
+})();
 </script>
 </body>
 </html>
