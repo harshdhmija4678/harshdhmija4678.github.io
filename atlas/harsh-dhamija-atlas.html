@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Atlas of Attention — Harsh Dhamija · AI Performance Marketer</title>
+<meta name="description" content="A portfolio charted as an expedition map. Sail from the Port of First Questions to the AI Frontier — the charted career of Harsh Dhamija, AI Performance Marketer, Delhi NCR.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23f1e9d7'/%3E%3Cpath d='M32 8 L37 32 L32 56 L27 32 Z' fill='%23b3451c'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%232e2820'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f1e9d7; --paper2:#e9dfc9; --vellum:#f7f1e2;
+  --ink:#2e2820; --mut:#6f6552; --dim:#a09477;
+  --terra:#b3451c; --sea:#2c6e7f; --sea2:#8fb8c4; --gold:#c08423;
+  --line:rgba(46,40,32,.18);
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:400 1rem/1.75 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--terra);color:var(--vellum)}
+a{color:inherit;text-decoration:none}
+.mono{font-family:var(--mono)}
+.aged{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 .06'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.edge-burn{position:fixed;inset:0;z-index:59;pointer-events:none;
+  box-shadow:inset 0 0 140px rgba(58,44,20,.28)}
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--terra);z-index:70}
+
+/* HUD */
+.hud{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;gap:.7rem;
+  padding:.7rem clamp(.9rem,2.5vw,1.6rem);background:rgba(241,233,215,.82);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);font:600 .56rem var(--mono);letter-spacing:.14em}
+.hud .lg{font:700 .72rem var(--serif);font-style:italic}
+.hud .mid{color:var(--dim)}
+.hud .mid b{color:var(--terra)}
+.hud .right{margin-left:auto;display:flex;gap:.5rem}
+.hbtn{border:1px solid var(--line);border-radius:99px;padding:.42rem .85rem;color:var(--mut);cursor:pointer;background:none;transition:.25s;font:inherit}
+.hbtn:hover{color:var(--ink);border-color:var(--mut)}
+.hbtn.acc{background:var(--terra);color:var(--vellum);border-color:var(--terra)}
+.hbtn.acc:hover{filter:brightness(1.1)}
+
+/* fixed compass */
+.compass{position:fixed;right:clamp(.8rem,2.5vw,1.6rem);bottom:1.2rem;z-index:54;width:86px;height:86px;pointer-events:none;opacity:.9}
+.compass svg{width:100%;height:100%}
+.compass .ncc{font:700 8px var(--mono);fill:var(--terra);letter-spacing:2px}
+
+/* ── the map ─────────────────────────────────────────────── */
+.mapwrap{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#atlas{position:absolute;inset:-8%;width:116%;height:116%}
+.coordTag{position:fixed;left:clamp(.9rem,2.5vw,1.6rem);bottom:1.2rem;z-index:54;
+  font:600 .55rem var(--mono);letter-spacing:.18em;color:var(--mut);
+  background:rgba(247,241,226,.8);border:1px solid var(--line);border-radius:8px;padding:.45rem .8rem}
+.coordTag b{color:var(--terra)}
+#atlas .terr{opacity:0;transition:opacity .5s}
+#atlas .terr.on{opacity:1}
+#atlas .halo{fill:url(#haloG);opacity:calc(var(--p,0)*.9)}
+/* rotating lighthouse beam */
+.beam{transform-box:fill-box;transform-origin:50% 100%;animation:sweep 7s linear infinite;opacity:calc(var(--p,0)*.85)}
+@keyframes sweep{to{transform:rotate(360deg)}}
+.flagpop{transform-box:fill-box;transform-origin:50% 100%;transform:scale(clamp(0, calc((var(--p,0) - var(--dl,0.2)) * 4), 1));opacity:clamp(0, calc((var(--p,0) - var(--dl,0.2)) * 4), 1)}
+.stall{opacity:clamp(.12, calc(var(--p,0) * 1.2), 1)}
+.stall.lit{opacity:clamp(0, calc((var(--p,0) - var(--dl,0.2)) * 4), 1)}
+.rival{stroke-dasharray:230;stroke-dashoffset:calc((1 - clamp(0, calc((var(--p,0) - var(--dl,0.1)) * 2.2), 1)) * 230)}
+.mist{opacity:calc(var(--p,0)*.55)}
+.cog{transform-box:fill-box;transform-origin:center;opacity:clamp(0, calc((var(--p,0) - var(--dl,0.2)) * 3), 1)}
+.twinkle{animation:tw 2.6s ease-in-out infinite}
+@keyframes tw{50%{opacity:.45}}
+
+/* ── text chapters ───────────────────────────────────────── */
+main{position:relative;z-index:2}
+.chapter{min-height:170vh;padding:16vh 6vw;display:flex}
+.chapter .ct{max-width:470px;margin:auto 0;background:var(--vellum);border:1px solid var(--line);border-radius:16px;
+  padding:1.8rem 1.7rem;box-shadow:0 24px 60px rgba(58,44,20,.16);position:relative}
+.chapter .ct::before{
+  content:"";position:absolute;inset:6px;border:1px dashed rgba(46,40,32,.22);border-radius:10px;pointer-events:none}
+.chapter:nth-child(odd) .ct{margin-left:auto}
+.chapter:nth-child(even) .ct{margin-right:auto}
+.ck{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--sea);margin-bottom:.7rem}
+.ck b{color:var(--terra)}
+.ct h2{font:700 clamp(1.8rem,4vw,2.7rem)/1.12 var(--serif);letter-spacing:-.02em;margin-bottom:.9rem}
+.ct h2 em{font-style:italic;color:var(--terra)}
+.pr{color:var(--mut);font-size:.94rem;max-width:48ch}
+.pr b{color:var(--ink)}
+.qline{margin-top:1rem;padding-left:.9rem;border-left:2px solid var(--terra);font:italic 400 .98rem var(--serif);color:var(--ink)}
+.ms{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.1rem}
+.ms span{font:600 .54rem var(--mono);letter-spacing:.12em;color:var(--sea);border:1px solid rgba(44,110,127,.35);border-radius:99px;padding:.32rem .65rem;background:rgba(44,110,127,.06)}
+.ms span.amb{color:var(--terra);border-color:rgba(179,69,28,.35);background:rgba(179,69,28,.06)}
+
+.rv{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:calc(var(--i,0)*80ms)}
+.on .rv{opacity:1;transform:none}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:15vh 1.2rem 10vh}
+.hero .pre{font:600 .62rem var(--mono);letter-spacing:.34em;color:var(--sea);margin-bottom:1.4rem}
+.hero h1{font:700 clamp(2.9rem,9vw,7rem)/1 var(--serif);letter-spacing:-.03em}
+.hero h1 em{font-style:italic;color:var(--terra)}
+.hero .sub{max-width:52ch;color:var(--mut);margin-top:1.4rem;font-size:.97rem}
+.hero .cta{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:2rem}
+.btn{font:600 .8rem var(--sans);padding:.85rem 1.5rem;border-radius:99px;cursor:pointer;border:none;background:none;transition:transform .3s var(--ease),filter .3s;display:inline-block}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn.solid{background:var(--ink);color:var(--vellum)}
+.btn.acc{background:var(--terra);color:var(--vellum)}
+.btn.line{border:1px solid var(--line);color:var(--ink)}
+.hero .creds{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:2.2rem}
+.hero .creds span{font:600 .53rem var(--mono);letter-spacing:.16em;color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:.4rem .75rem;background:rgba(247,241,226,.6)}
+.hero .hint{position:absolute;bottom:3.6vh;left:50%;transform:translateX(-50%);font:600 .55rem var(--mono);letter-spacing:.3em;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.hero .hint i{width:1px;height:32px;background:linear-gradient(var(--terra),transparent);animation:drop 1.8s var(--ease) infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* cartographer's code + log */
+.blk{max-width:1080px;margin:0 auto;padding:12vh 1.3rem;position:relative;z-index:2}
+.blk .ck2{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--terra);margin-bottom:.9rem}
+.blk h2{font:700 clamp(1.9rem,4.2vw,3rem)/1.12 var(--serif);letter-spacing:-.02em;margin-bottom:1.6rem}
+.blk h2 em{font-style:italic;color:var(--sea)}
+.code3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.c3{background:var(--vellum);border:1px solid var(--line);border-radius:14px;padding:1.4rem;box-shadow:0 16px 40px rgba(58,44,20,.1)}
+.c3 .pn{font:600 .54rem var(--mono);letter-spacing:.24em;color:var(--sea)}
+.c3 h3{font:italic 700 1.25rem var(--serif);margin:.45rem 0 .4rem}
+.c3 p{color:var(--mut);font-size:.85rem}
+
+details.doc{background:var(--vellum);border:1px solid var(--line);border-radius:14px;margin-bottom:.8rem;overflow:hidden;box-shadow:0 14px 34px rgba(58,44,20,.08)}
+details.doc summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:1.05rem 1.3rem;font:700 1rem var(--serif)}
+details.doc summary::-webkit-details-marker{display:none}
+details.doc summary .dm{font:600 .54rem var(--mono);letter-spacing:.2em;color:var(--sea);transition:transform .3s var(--ease)}
+details.doc[open] summary .dm{transform:rotate(45deg);color:var(--terra)}
+details.doc .db{padding:0 1.3rem 1.3rem}
+details.doc p{color:var(--mut);font-size:.87rem;max-width:70ch}
+.jrow{display:grid;grid-template-columns:150px 1fr;gap:1rem;padding:.85rem 0;border-top:1px dashed var(--line)}
+.jrow:first-child{border-top:none}
+.jrow .w{font:600 .55rem var(--mono);letter-spacing:.14em;color:var(--sea);padding-top:.25rem}
+.jrow b.t{display:block;font:600 .92rem var(--sans)}
+.jrow .o{font:600 .54rem var(--mono);letter-spacing:.12em;color:var(--terra);margin:.15rem 0 .5rem}
+.tagrow{display:flex;flex-wrap:wrap;gap:.35rem}
+.tagrow span{font:600 .54rem var(--mono);color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:.3rem .62rem}
+.subject{display:grid;grid-template-columns:130px 1fr;gap:1.1rem;align-items:start}
+.subject img{width:130px;height:158px;object-fit:cover;object-position:50% 18%;border-radius:10px;display:block;box-shadow:0 10px 26px rgba(58,44,20,.2)}
+.minirow{display:flex;justify-content:space-between;gap:.6rem;padding:.3rem 0;border-bottom:1px dashed var(--line);font:600 .56rem var(--mono);letter-spacing:.1em;color:var(--mut)}
+.minirow b{color:var(--ink);text-align:right}
+
+/* contact */
+.contact{position:relative;z-index:2;text-align:center;padding:26vh 1.2rem 12vh;min-height:140vh}
+.contact .star-tag{font:600 .6rem var(--mono);letter-spacing:.34em;color:var(--terra);margin-bottom:1.2rem}
+.contact h1{font:700 clamp(2.6rem,8vw,5.6rem)/1.06 var(--serif);letter-spacing:-.02em}
+.contact h1 em{font-style:italic;color:var(--sea)}
+.contact .pr{margin:1.2rem auto 0;max-width:48ch}
+.mail{display:inline-block;font:italic 700 clamp(1.1rem,3.2vw,1.8rem) var(--serif);border-bottom:2px solid var(--terra);padding-bottom:.12rem;margin:1rem 0 1.4rem;transition:color .3s}
+.mail:hover{color:var(--terra)}
+.meta{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;margin-bottom:1.6rem}
+.meta span{font:600 .56rem var(--mono);letter-spacing:.14em;color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:.45rem .9rem;background:rgba(247,241,226,.7)}
+footer{position:relative;z-index:2;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;padding:1.5rem clamp(1rem,3vw,2.2rem) 2rem;border-top:1px solid var(--line);font:600 .55rem var(--mono);letter-spacing:.2em;color:var(--dim)}
+
+@media (max-width:900px){
+  .mapwrap{opacity:.5}
+  .chapter{min-height:130vh;display:block;padding-top:16vh}
+  .chapter .ct{max-width:none;margin:0}
+  .code3{grid-template-columns:1fr}
+  .subject{grid-template-columns:1fr}
+  .hud .mid{display:none}
+  .compass{width:64px;height:64px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition-duration:.15s !important}
+  .rv{opacity:1 !important;transform:none !important}
+}
+@media print{
+  .hud,.mapwrap,.compass,.coordTag,.grain,.aged,.edge-burn,#prog,.hero .cta,.hero .hint{display:none !important}
+  body{background:#fff;color:#000}
+  .rv{opacity:1 !important;transform:none !important}
+  .chapter{min-height:0;padding:1.5vh 0}
+  .ct h2,.blk h2,.pr b,.c3 h3,.jrow b.t{color:#000}
+  .pr,.doc p,.c3 p{color:#333}
+}
+</style>
+</head>
+<body>
+<div class="aged" aria-hidden="true"></div>
+<div class="edge-burn" aria-hidden="true"></div>
+<div id="prog"></div>
+
+<div class="hud">
+  <span class="lg">The Atlas of Attention <b>✦</b></span>
+  <span class="mid" id="terrOut">TERRITORY — <b>OPEN SEA</b></span>
+  <div class="right">
+    <button class="hbtn" id="resumeBtn">EXPEDITION LOG ⇩</button>
+    <a class="hbtn acc" href="#contact">HIRE ME</a>
+  </div>
+</div>
+
+<div class="compass" aria-hidden="true">
+  <svg viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(46,40,32,.35)" stroke-width="1.5"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="rgba(46,40,32,.2)" stroke-width="1"/>
+    <g id="needle">
+      <path d="M60 18 L66 60 L60 54 L54 60 Z" fill="#b3451c"/>
+      <path d="M60 102 L66 60 L60 66 L54 60 Z" fill="rgba(44,110,127,.6)"/>
+    </g>
+    <circle cx="60" cy="60" r="4" fill="#2e2820"/>
+    <text class="ncc" x="60" y="14" text-anchor="middle">N</text>
+  </svg>
+</div>
+<div class="coordTag" id="coordTag">28.7041° N · 77.1025° E — <b>OPEN SEA</b></div>
+
+<div class="mapwrap" aria-hidden="true">
+<svg id="atlas" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="haloG"><stop offset="0%" stop-color="rgba(179,69,28,.16)"/><stop offset="100%" stop-color="rgba(179,69,28,0)"/></radialGradient>
+    <pattern id="wave" width="26" height="12" patternUnits="userSpaceOnUse">
+      <path d="M0,8 Q6.5,3 13,8 T26,8" fill="none" stroke="rgba(44,110,127,.16)" stroke-width="1.1"/>
+    </pattern>
+  </defs>
+
+  <g id="camG">
+    <!-- sea -->
+    <rect x="-400" y="-400" width="2400" height="1800" fill="#e9dfc9"/>
+    <rect x="-400" y="-400" width="2400" height="1800" fill="url(#wave)" opacity=".5"/>
+    <!-- lat/long -->
+    <g stroke="rgba(46,40,32,.08)" stroke-width="1">
+      <line x1="-400" y1="250" x2="2000" y2="250"/><line x1="-400" y1="500" x2="2000" y2="500"/><line x1="-400" y1="750" x2="2000" y2="750"/>
+      <line x1="400" y1="-400" x2="400" y2="1400"/><line x1="800" y1="-400" x2="800" y2="1400"/><line x1="1200" y1="-400" x2="1200" y2="1400"/>
+    </g>
+    <text x="60" y="120" font-family="Fraunces" font-style="italic" font-size="26" fill="rgba(46,40,32,.4)">the Sea of Scrolling</text>
+    <text x="1050" y="130" font-family="Fraunces" font-style="italic" font-size="24" fill="rgba(46,40,32,.38)">HERE BE CUSTOMERS ✦</text>
+    <text x="60" y="470" font-family="Fraunces" font-style="italic" font-size="20" fill="rgba(46,40,32,.3)">unclaimed reach</text>
+
+    <!-- landmass -->
+    <path id="land" fill="#e3d5b4" stroke="rgba(46,40,32,.55)" stroke-width="2"
+      d="M60,860 C120,760 200,700 260,640 C330,570 380,480 470,440 C560,400 600,470 660,530 C720,590 700,700 790,690 C890,680 860,540 950,520 C1040,500 1100,600 1180,640 C1260,680 1330,620 1330,540 C1330,460 1260,360 1300,280 C1330,220 1420,220 1460,300 C1500,380 1470,540 1430,660 C1390,780 1300,880 1180,900 C1000,930 760,940 560,910 C400,890 140,940 60,860 Z"/>
+    <path fill="none" stroke="rgba(46,40,32,.18)" stroke-width="1.2"
+      d="M110,845 C180,760 250,700 310,635 C380,560 430,490 500,465"/>
+    <path fill="none" stroke="rgba(46,40,32,.14)" stroke-width="1.2"
+      d="M990,880 C1130,860 1280,840 1380,720 C1450,640 1450,480 1410,360"/>
+    <circle cx="210" cy="520" r="34" fill="#e3d5b4" stroke="rgba(46,40,32,.5)" stroke-width="1.5"/>
+    <circle cx="1480" cy="700" r="26" fill="#e3d5b4" stroke="rgba(46,40,32,.5)" stroke-width="1.5"/>
+
+    <!-- the route -->
+    <path id="routeBase" d="M150,820 C250,760 300,640 400,540 C480,640 560,700 620,720 C660,600 720,500 790,440 C830,560 890,620 950,660 C1030,720 1100,740 1150,760 C1240,700 1330,520 1380,300"
+      fill="none" stroke="rgba(179,69,28,.28)" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round"/>
+    <path id="routeInk" d="M150,820 C250,760 300,640 400,540 C480,640 560,700 620,720 C660,600 720,500 790,440 C830,560 890,620 950,660 C1030,720 1100,740 1150,760 C1240,700 1330,520 1380,300"
+      fill="none" stroke="#b3451c" stroke-width="3" stroke-linecap="round" stroke-dasharray="2000" stroke-dashoffset="2000"/>
+    <g id="marker"><path d="M0,0 L0,-26" stroke="#2e2820" stroke-width="2.4"/><path d="M0,-26 L18,-20 L0,-14 Z" fill="#b3451c"/><circle r="4.5" cy="1" fill="#2e2820"/></g>
+
+    <!-- T1 · PORT OF FIRST QUESTIONS -->
+    <g class="terr" id="t1">
+      <circle class="halo" cx="150" cy="820" r="120"/>
+      <path d="M96,848 L150,760 L204,848" fill="none" stroke="rgba(46,40,32,.6)" stroke-width="1.6"/>
+      <rect x="162" y="742" width="14" height="64" fill="#e3d5b4" stroke="#2e2820" stroke-width="1.6"/>
+      <path d="M158,742 L180,742 L176,730 L162,730 Z" fill="#2e2820"/>
+      <path class="beam" d="M169,736 L116,706 L122,760 Z" fill="rgba(255,214,130,.5)"/>
+      <text x="150" y="882" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="19" fill="#2e2820">Port of First Questions</text>
+      <text x="150" y="900" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="2" fill="rgba(46,40,32,.6)">WHY DO PEOPLE BUY?</text>
+    </g>
+
+    <!-- T2 · RESEARCH RANGES -->
+    <g class="terr" id="t2">
+      <circle class="halo" cx="400" cy="540" r="130"/>
+      <path d="M300,620 L360,470 L420,620 Z" fill="none" stroke="rgba(46,40,32,.6)" stroke-width="1.6"/>
+      <path d="M370,620 L430,500 L490,620 Z" fill="none" stroke="rgba(46,40,32,.5)" stroke-width="1.4"/>
+      <path d="M330,585 L360,520 L390,585" fill="none" stroke="rgba(46,40,32,.3)" stroke-width="1"/>
+      <path d="M395,585 L425,545 L455,585" fill="none" stroke="rgba(46,40,32,.3)" stroke-width="1"/>
+      <g class="flagpop" style="--dl:.15"><line x1="360" y1="470" x2="360" y2="446" stroke="#2e2820" stroke-width="2"/><path d="M360,446 L380,452 L360,458 Z" fill="#b3451c"/></g>
+      <g class="flagpop" style="--dl:.35"><line x1="430" y1="500" x2="430" y2="478" stroke="#2e2820" stroke-width="2"/><path d="M430,478 L448,483 L430,488 Z" fill="#2c6e7f"/></g>
+      <text x="398" y="662" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="19" fill="#2e2820">Research Ranges</text>
+      <text x="398" y="680" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="2" fill="rgba(46,40,32,.6)">ELEVATION BEFORE EXECUTION</text>
+    </g>
+
+    <!-- T3 · FUNNEL VALLEY -->
+    <g class="terr" id="t3">
+      <circle class="halo" cx="620" cy="720" r="130"/>
+      <path d="M540,640 C580,700 600,760 610,820" fill="none" stroke="rgba(46,40,32,.55)" stroke-width="1.6"/>
+      <path d="M700,640 C660,700 640,760 630,820" fill="none" stroke="rgba(46,40,32,.55)" stroke-width="1.6"/>
+      <path d="M565,668 C595,716 606,760 613,800" fill="none" stroke="rgba(46,40,32,.28)" stroke-width="1"/>
+      <path d="M675,668 C645,716 634,760 627,800" fill="none" stroke="rgba(46,40,32,.28)" stroke-width="1"/>
+      <circle cx="620" cy="822" r="7" fill="#b3451c"/>
+      <text x="620" y="856" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="19" fill="#2e2820">Funnel Valley</text>
+      <text x="620" y="874" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="2" fill="rgba(46,40,32,.6)">ONE WAY THROUGH</text>
+    </g>
+
+    <!-- T4 · THE MARKETPLACE -->
+    <g class="terr" id="t4">
+      <circle class="halo" cx="790" cy="440" r="130"/>
+      <rect x="742" y="430" width="96" height="66" fill="none" stroke="rgba(46,40,32,.5)" stroke-width="1.5"/>
+      <g class="stall"><rect x="752" y="452" width="18" height="22" fill="rgba(44,110,127,.35)" stroke="#2e2820"/><path d="M750,452 h22 l-4,-8 h-14 Z" fill="#2c6e7f"/></g>
+      <g class="stall lit" style="--dl:.2"><rect x="776" y="452" width="18" height="22" fill="rgba(179,69,28,.4)" stroke="#2e2820"/><path d="M774,452 h22 l-4,-8 h-14 Z" fill="#b3451c"/></g>
+      <g class="stall lit" style="--dl:.4"><rect x="800" y="452" width="18" height="22" fill="rgba(44,110,127,.35)" stroke="#2e2820"/><path d="M798,452 h22 l-4,-8 h-14 Z" fill="#2c6e7f"/></g>
+      <circle class="stall lit" style="--dl:.55" cx="762" cy="486" r="3.4" fill="#2e2820"/>
+      <circle class="stall lit" style="--dl:.65" cx="786" cy="486" r="3.4" fill="#2e2820"/>
+      <circle class="stall lit" style="--dl:.7" cx="810" cy="486" r="3.4" fill="#2e2820"/>
+      <text x="790" y="530" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="19" fill="#2e2820">The Marketplace</text>
+      <text x="790" y="548" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="2" fill="rgba(46,40,32,.6)">TRADE SQUARE · CLOSED-WON</text>
+    </g>
+
+    <!-- T5 · DATA DELTA -->
+    <g class="terr" id="t5">
+      <circle class="halo" cx="950" cy="660" r="130"/>
+      <path class="rival" style="--dl:.05" d="M880,580 C920,610 930,640 900,690 C890,706 880,720 870,730" fill="none" stroke="#2c6e7f" stroke-width="2.4"/>
+      <path class="rival" style="--dl:.25" d="M900,586 C950,620 960,650 950,700 C948,716 946,724 944,734" fill="none" stroke="#4d8f9f" stroke-width="2.4"/>
+      <path class="rival" style="--dl:.45" d="M916,600 C980,630 1010,660 1030,706 C1036,720 1040,728 1042,736" fill="none" stroke="#6ba5b4" stroke-width="2.4"/>
+      <text x="862" y="752" font-family="JetBrains Mono" font-size="10" letter-spacing="1.6" fill="#2c6e7f">CTR</text>
+      <text x="932" y="758" font-family="JetBrains Mono" font-size="10" letter-spacing="1.6" fill="#2c6e7f">CPL</text>
+      <text x="1032" y="758" font-family="JetBrains Mono" font-size="10" letter-spacing="1.6" fill="#2c6e7f">ROAS</text>
+      <text x="950" y="800" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="19" fill="#2e2820">The Data Delta</text>
+    </g>
+
+    <!-- T6 · AI FRONTIER -->
+    <g class="terr" id="t6">
+      <circle class="halo" cx="1150" cy="760" r="140"/>
+      <rect class="mist" x="1050" y="690" width="200" height="120" rx="40" fill="rgba(255,196,90,.28)"/>
+      <path d="M1040,800 C1100,760 1180,780 1260,740" fill="none" stroke="rgba(46,40,32,.55)" stroke-width="1.6" stroke-dasharray="5 5"/>
+      <g class="cog" style="--dl:.1"><circle cx="1070" cy="792" r="8" fill="none" stroke="#b3451c" stroke-width="2"/><circle cx="1070" cy="792" r="2.6" fill="#b3451c"/></g>
+      <g class="cog" style="--dl:.25"><circle cx="1108" cy="776" r="8" fill="none" stroke="#c08423" stroke-width="2"/><circle cx="1108" cy="776" r="2.6" fill="#c08423"/></g>
+      <g class="cog" style="--dl:.4"><circle cx="1148" cy="772" r="8" fill="none" stroke="#b3451c" stroke-width="2"/><circle cx="1148" cy="772" r="2.6" fill="#b3451c"/></g>
+      <g class="cog" style="--dl:.55"><circle cx="1190" cy="764" r="8" fill="none" stroke="#c08423" stroke-width="2"/><circle cx="1190" cy="764" r="2.6" fill="#c08423"/></g>
+      <g class="cog" style="--dl:.7"><circle cx="1232" cy="748" r="8" fill="none" stroke="#b3451c" stroke-width="2"/><circle cx="1232" cy="748" r="2.6" fill="#b3451c"/></g>
+      <text x="1150" y="842" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="19" fill="#2e2820">The AI Frontier</text>
+      <text x="1150" y="860" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="2" fill="rgba(46,40,32,.6)">TERRA NOVA · CHARTED WEEKLY</text>
+    </g>
+
+    <!-- T7 · DUE NORTH -->
+    <g class="terr" id="t7">
+      <circle class="halo" cx="1380" cy="300" r="150"/>
+      <circle cx="1380" cy="300" r="66" fill="none" stroke="rgba(46,40,32,.4)" stroke-width="1.4"/>
+      <circle cx="1380" cy="300" r="50" fill="none" stroke="rgba(46,40,32,.22)" stroke-width="1"/>
+      <g class="twinkle"><path d="M1380,254 L1387,293 L1426,300 L1387,307 L1380,346 L1373,307 L1334,300 L1373,293 Z" fill="#b3451c"/></g>
+      <text x="1380" y="240" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="13" letter-spacing="4" fill="#b3451c">DUE NORTH</text>
+      <text x="1380" y="386" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="19" fill="#2e2820">Your Company</text>
+    </g>
+
+    <!-- cartouche -->
+    <g transform="translate(90,930)">
+      <rect x="-16" y="-26" width="330" height="52" fill="rgba(247,241,226,.85)" stroke="rgba(46,40,32,.4)" rx="6"/>
+      <text x="0" y="-4" font-family="Fraunces" font-style="italic" font-weight="700" font-size="16" fill="#2e2820">THE ATLAS OF ATTENTION</text>
+      <text x="0" y="14" font-family="JetBrains Mono" font-size="8.5" letter-spacing="2.4" fill="rgba(46,40,32,.65)">CHARTED BY H. DHAMIJA · MMXXVI · SCALE: 1 SCROLL = 1 CAREER</text>
+    </g>
+  </g>
+</svg>
+</div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero on" id="hero">
+    <p class="pre rv" style="--i:0">AN EXPEDITION IN SEVEN TERRITORIES</p>
+    <h1 class="rv" style="--i:1">The Atlas of<br><em>Attention.</em></h1>
+    <p class="sub rv" style="--i:2">Every marketer claims they can find growth. Few can read the map.
+    Charted here: the career of <b>Harsh Dhamija</b> — AI Performance Marketer, Delhi NCR —
+    from first customer conversation to the frontier of AI.</p>
+    <div class="cta rv" style="--i:3">
+      <a class="btn acc" href="#ch1">Begin the expedition ↓</a>
+      <a class="btn line" href="#log">Skip to the log</a>
+      <a class="btn solid" href="#contact">Set a coordinate →</a>
+    </div>
+    <div class="creds rv" style="--i:4">
+      <span>MBA · MARKETING &amp; INT'L BUSINESS</span><span>McKINSEY.ORG FORWARD</span>
+      <span>8 AI TOOLS IN STACK</span><span>FULL-FUNNEL SALES EXPERIENCE</span>
+    </div>
+    <p class="hint">SCROLL — FOLLOW THE INK<i></i></p>
+  </section>
+
+  <!-- T1 -->
+  <section class="chapter" id="ch1" data-t="t1">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">TERRITORY I — <b>PORT OF FIRST QUESTIONS</b></p>
+      <h2 class="rv" style="--i:1">Every voyage starts at<br>the <em>harbor of why.</em></h2>
+      <p class="pr rv" style="--i:2">Before campaigns, conversations. On the front line of <b>Apple's customer
+      process</b> I learned how people actually decide — what they want, what they fear, what finally
+      tips them. That harbor never leaves the map.</p>
+      <p class="qline rv" style="--i:3">"The customer isn't a segment. The customer is a person with a Tuesday."</p>
+      <div class="ms rv" style="--i:4"><span>SALES PSYCHOLOGY</span><span>CONSUMER BEHAVIOUR</span><span class="amb">CUSTOMER-FIRST INSTINCT</span></div>
+    </div>
+  </section>
+
+  <!-- T2 -->
+  <section class="chapter" id="ch2" data-t="t2">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">TERRITORY II — <b>RESEARCH RANGES</b></p>
+      <h2 class="rv" style="--i:1">Survey the terrain<br>before <em>building.</em></h2>
+      <p class="pr rv" style="--i:2">In strategy work I turned market fog into elevation: benchmarking,
+      competitor teardowns and audience maps that tell a team exactly where to climb. Flags on peaks —
+      each one a question answered before a rupee was risked.</p>
+      <p class="qline rv" style="--i:3">"Elevation before execution."</p>
+      <div class="ms rv" style="--i:4"><span>MARKET RESEARCH</span><span>COMPETITOR ANALYSIS</span><span class="amb">SEGMENTATION</span></div>
+    </div>
+  </section>
+
+  <!-- T3 -->
+  <section class="chapter" id="ch3" data-t="t3">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">TERRITORY III — <b>FUNNEL VALLEY</b></p>
+      <h2 class="rv" style="--i:1">A question with<br><em>one exit.</em></h2>
+      <p class="pr rv" style="--i:2">Down in the valley, distractions fall away. I design landing systems the
+      same way — <b>AI-assisted websites and prototypes</b> shaped around a single honest step forward.
+      Attention enters wide; intent exits narrow.</p>
+      <p class="qline rv" style="--i:3">"A landing page is a question with one obvious answer."</p>
+      <div class="ms rv" style="--i:4"><span>LANDING PAGES</span><span>FUNNEL THINKING</span><span class="amb">AI-ASSISTED BUILDS</span></div>
+    </div>
+  </section>
+
+  <!-- T4 -->
+  <section class="chapter" id="ch4" data-t="t4">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">TERRITORY IV — <b>THE MARKETPLACE</b></p>
+      <h2 class="rv" style="--i:1">Where marketing<br>meets <em>money.</em></h2>
+      <p class="pr rv" style="--i:2">Trade Square: <b>real-estate business development.</b> Consultation to
+      site visits to negotiation to closure — full-cycle, in person, with real consequences. Most
+      marketers stop at lead cost; I've stood at the stall where deals actually close.</p>
+      <p class="qline rv" style="--i:3">"A lead you can't close is an expensive name in a sheet."</p>
+      <div class="ms rv" style="--i:4"><span>CRM &amp; PIPELINE</span><span>NEGOTIATION</span><span class="amb">FULL-CYCLE CLOSURE</span></div>
+    </div>
+  </section>
+
+  <!-- T5 -->
+  <section class="chapter" id="ch5" data-t="t5">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">TERRITORY V — <b>THE DATA DELTA</b></p>
+      <h2 class="rv" style="--i:1">Reading where<br>rivers <em>split.</em></h2>
+      <p class="pr rv" style="--i:2">Every account is a delta of channels — CTR, CPL, ROAS branching and
+      rejoining. Optimisation isn't magic; it's hydrology. Watch the flow, open what converts,
+      dam what leaks, report honestly.</p>
+      <p class="qline rv" style="--i:3">"Data doesn't flatter. That's why it works."</p>
+      <div class="ms rv" style="--i:4"><span>CAMPAIGN REPORTING</span><span>CONVERSION TRACKING</span><span class="amb">CTR &amp; CPL ANALYSIS</span></div>
+    </div>
+  </section>
+
+  <!-- T6 -->
+  <section class="chapter" id="ch6" data-t="t6">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">TERRITORY VI — <b>THE AI FRONTIER</b></p>
+      <h2 class="rv" style="--i:1">Terra nova,<br>charted <em>weekly.</em></h2>
+      <p class="pr rv" style="--i:2">At DigiMark Media I ran <b>multi-objective paid campaigns across Meta and
+      Google</b> with AI threaded through the work — copy, creatives, research, builds. Eight AI tools,
+      one operator, shipping like a small team. This coastline redraws itself every week; I keep the charts.</p>
+      <p class="qline rv" style="--i:3">"AI doesn't replace the marketer. It replaces the bottlenecks."</p>
+      <div class="ms rv" style="--i:4"><span>META &amp; GOOGLE ADS</span><span>PROMPT ENGINEERING</span><span class="amb">8-TOOL AI STACK</span></div>
+    </div>
+  </section>
+
+  <!-- T7 -->
+  <section class="chapter" id="ch7" data-t="t7">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">TERRITORY VII — <b>DUE NORTH</b></p>
+      <h2 class="rv" style="--i:1">Compasses point<br>to <em>commitment.</em></h2>
+      <p class="pr rv" style="--i:2">Every map needs a fixed point. Mine isn't a metric — it's the next team
+      worth growing. MBA-trained strategy, McKinsey-forged discipline, and a habit of finishing what
+      I chart. That's what arrives with me.</p>
+      <p class="qline rv" style="--i:3">"All expeditions end at true north: yours."</p>
+      <div class="ms rv" style="--i:4"><span>MBA · MARKETING</span><span>McKINSEY FORWARD</span><span class="amb">OPEN TO WORK</span></div>
+    </div>
+  </section>
+
+  <!-- cartographer's code -->
+  <div class="blk" id="code">
+    <p class="ck2 rv" style="--i:0">THE CARTOGRAPHER'S CODE</p>
+    <h2 class="rv" style="--i:1">Three rules for<br>every <em>expedition.</em></h2>
+    <div class="code3">
+      <div class="c3 rv" style="--i:2"><p class="pn">RULE I</p><h3>Survey before you build.</h3><p>Taste starts the test; measurement ends the argument. If we can't track it, first we build the way to track it.</p></div>
+      <div class="c3 rv" style="--i:3"><p class="pn">RULE II</p><h3>The map is not the customer.</h3><p>Platforms change weekly; people change slowly. Visit the territory — never market from the legend alone.</p></div>
+      <div class="c3 rv" style="--i:4"><p class="pn">RULE III</p><h3>Redraw, don't drift.</h3><p>Small bets, fast loops, honest reads. When the terrain disagrees with the chart, the chart apologises.</p></div>
+    </div>
+  </div>
+
+  <!-- expedition log -->
+  <div class="blk" id="log">
+    <p class="ck2 rv" style="--i:0">THE EXPEDITION LOG — FOR NAVIGATORS IN A HURRY</p>
+    <h2 class="rv" style="--i:1">The whole voyage,<br><em>in the logbook.</em></h2>
+
+    <details class="doc rv" style="--i:2" open>
+      <summary>The cartographer <span class="dm">+</span></summary>
+      <div class="db subject">
+        <img src="../portrait.jpg" alt="Harsh Dhamija">
+        <div>
+          <div class="minirow"><span>NAME</span><b>HARSH DHAMIJA</b></div>
+          <div class="minirow"><span>CRAFT</span><b>AI PERFORMANCE MARKETER</b></div>
+          <div class="minirow"><span>PORT</span><b>DELHI NCR, IN</b></div>
+          <div class="minirow"><span>CHARTS</span><b>MBA · INT'L BUSINESS</b></div>
+          <div class="minirow"><span>ENSIGN</span><b>@theharshdhamija</b></div>
+          <div class="minirow"><span>STATUS</span><b style="color:var(--terra)">OPEN TO WORK ●</b></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="doc rv" style="--i:3">
+      <summary>Logged voyages — four postings <span class="dm">+</span></summary>
+      <div class="db">
+        <div class="jrow"><span class="w">2026</span><div><b class="t">AI Performance Marketing Intern</b><p class="o">DIGIMARK MEDIA</p>
+          <div class="tagrow"><span>META &amp; GOOGLE CAMPAIGNS</span><span>LEAD-GEN &amp; SALES OBJECTIVES</span><span>AD CREATIVES &amp; POSTS</span><span>COMPETITOR ANALYSES</span><span>AI-ASSISTED SITE BUILDS</span><span>AI COPY</span></div></div></div>
+        <div class="jrow"><span class="w">BDE</span><div><b class="t">Business Development Executive</b><p class="o">PROPSALT LANDBASE</p>
+          <div class="tagrow"><span>LEAD GENERATION</span><span>CONSULTATION</span><span>SITE VISITS</span><span>CRM</span><span>NEGOTIATION</span><span>DEAL CLOSURE</span></div></div></div>
+        <div class="jrow"><span class="w">INTERN</span><div><b class="t">Marketing &amp; Strategy Intern</b><p class="o">AGILE CAPITAL SERVICES</p>
+          <div class="tagrow"><span>MARKET RESEARCH</span><span>COMPETITOR ANALYSIS</span><span>STRATEGIC REPORTS</span><span>PRESENTATIONS</span></div></div></div>
+        <div class="jrow"><span class="w">CCE · SALES</span><div><b class="t">Customer Care Executive</b><p class="o">TELEPERFORMANCE · APPLE PROCESS</p>
+          <div class="tagrow"><span>CUSTOMER SUPPORT</span><span>PRODUCT CONSULTATION</span><span>SALES ASSISTANCE</span></div></div></div>
+      </div>
+    </details>
+
+    <details class="doc rv" style="--i:4">
+      <summary>Map legend — skills &amp; instruments <span class="dm">+</span></summary>
+      <div class="db">
+        <div class="tagrow">
+          <span>⌖ CONTOURS = ANALYTICS</span><span>≈ RIVERS = DATA CHANNELS</span><span>⚑ FLAGS = RESEARCH</span>
+          <span>⛺ STALLS = CLOSING</span><span>✦ STARS = STRATEGY</span>
+        </div>
+        <div class="tagrow" style="margin-top:.6rem">
+          <span>META ADS</span><span>GOOGLE ADS</span><span>AUDIENCE TARGETING</span><span>CAMPAIGN OPTIMISATION</span><span>LEAD GEN</span>
+          <span>GROWTH MARKETING</span><span>FUNNELS</span><span>MARKET RESEARCH</span><span>CAMPAIGN REPORTING</span><span>PROMPT ENGINEERING</span>
+          <span>AI WORKFLOWS</span><span>WIX</span><span>LANDING PAGES</span><span>CHATGPT</span><span>CLAUDE</span><span>GEMINI</span>
+          <span>PERPLEXITY</span><span>EMERGENT</span><span>LOVABLE</span><span>STITCH</span><span>REPLIT</span><span>SEMRUSH</span><span>GA4</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="doc rv" style="--i:5">
+      <summary>Credentials &amp; current bearing <span class="dm">+</span></summary>
+      <div class="db">
+        <div class="tagrow" style="margin-bottom:.8rem"><span>MBA — INTERNATIONAL BUSINESS</span><span>McKINSEY.ORG FORWARD</span><span>AI PERFORMANCE MARKETING — DIGIMARK</span></div>
+        <p><b style="color:var(--ink)">Current bearing:</b> exploring AI applications in performance marketing,
+        growing <b style="color:var(--ink)">theharshdhamija</b> around AI × marketing × growth, and documenting
+        real campaign learnings. Open to: performance marketing, growth, paid media &amp; AI-marketing roles.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- contact -->
+  <section class="contact" id="contact">
+    <p class="star-tag rv" style="--i:0">✦ FINAL COORDINATE ✦</p>
+    <h1 class="rv" style="--i:1">Every expedition needs<br>a <em>next coordinate.</em></h1>
+    <p class="pr rv" style="--i:2">Make it yours. One email sets the course — due diligence over coffee,
+    or a dashboard walk-through if you prefer evidence first.</p>
+    <!-- EDIT: replace with your real email -->
+    <br><a class="mail rv" style="--i:3" href="mailto:harshdhmija4678@gmail.com">harshdhmija4678@gmail.com</a>
+    <div class="meta rv" style="--i:4">
+      <a href="https://www.linkedin.com/in/harsh-dhamija-063897194" target="_blank" rel="noopener" style="border-bottom:1px dotted currentColor">LINKEDIN ↗ /in/harsh-dhamija-063897194</a><span>DELHI NCR, INDIA</span><span>REPLIES WITHIN 24H</span>
+    </div>
+    <div class="cta rv" style="--i:5;display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:1.6rem">
+      <a class="btn acc" href="mailto:harshdhmija4678@gmail.com">Set the course →</a>
+      <button class="btn line" id="resumeBtn2">Print the logbook ⇩</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>© MMXXVI HARSH DHAMIJA — THE ATLAS OF ATTENTION</span>
+  <span><a href="../ad/harsh-dhamija-ad.html" style="text-decoration:none;border-bottom:1px dotted currentColor">NEXT WORLD → №07 · THE AD</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="../index.html" style="text-decoration:none;border-bottom:1px dotted currentColor">ALL WORLDS ↺</a></span>
+</footer>
+
+<script>
+(() => {
+'use strict';
+/* ══════ ATLAS ENGINE — camera, route ink, compass ══════ */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v)), lerp=(a,b,t)=>a+(b-a)*t;
+const st01=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id);
+
+/* stations: scroll anchoring for camera keys */
+const KEYS={
+  hero:    {x:800, y:590, k:1.02},
+  ch1:{x:150,y:770,k:2.0}, ch2:{x:400,y:540,k:2.0}, ch3:{x:620,y:720,k:2.05},
+  ch4:{x:790,y:440,k:2.05}, ch5:{x:950,y:660,k:2.0}, ch6:{x:1150,y:760,k:1.95},
+  ch7:{x:1380,y:320,k:1.7},
+  code:{x:800,y:520,k:1.25}, log:{x:800,y:540,k:1.2}, contact:{x:1380,y:330,k:1.55},
+};
+const TERR={ch1:['I','PORT OF FIRST QUESTIONS','t1'],ch2:['II','RESEARCH RANGES','t2'],ch3:['III','FUNNEL VALLEY','t3'],
+  ch4:['IV','THE MARKETPLACE','t4'],ch5:['V','THE DATA DELTA','t5'],ch6:['VI','THE AI FRONTIER','t6'],ch7:['VII','DUE NORTH','t7']};
+const IDS=['hero','ch1','ch2','ch3','ch4','ch5','ch6','ch7','code','log','contact'];
+
+let stations=[],vh=innerHeight,docH=1;
+function cache(){
+  vh=innerHeight;docH=document.documentElement.scrollHeight;
+  stations=IDS.map(id=>({id,y:$(id).offsetTop+$(id).offsetHeight*0.5,k:KEYS[id]}));
+}
+addEventListener('resize',cache);addEventListener('load',cache);
+
+/* reveals */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:0.18});
+document.querySelectorAll('.chapter,.blk,.contact,.hero').forEach(s=>io.observe(s));
+
+/* route */
+const route=$('routeInk'),marker=$('marker');
+let routeLen=0;
+function measure(){routeLen=route.getTotalLength();
+  route.style.strokeDasharray=routeLen;route.style.strokeDashoffset=routeLen}
+setTimeout(measure,60);addEventListener('load',measure);
+
+/* résumé */
+const doPrint=()=>{document.querySelectorAll('details.doc').forEach(d=>d.open=true);setTimeout(()=>print(),200)};
+$('resumeBtn').addEventListener('click',doPrint);
+$('resumeBtn2').addEventListener('click',doPrint);
+
+const camG=$('camG'),needle=$('needle');
+const cam={x:800,y:590,k:1.02};
+let lastY=scrollY,swing=0,needleA=-38;
+
+function frame(now){
+  const y=scrollY,mid=y+vh*0.5;
+
+  /* progress */
+  $('prog').style.width=clamp(y/(docH-vh)*100,0,100).toFixed(2)+'%';
+
+  /* station interpolation */
+  let a=stations[0],b=stations[stations.length-1];
+  for(let i=0;i<stations.length-1;i++){
+    if(mid>=stations[i].y&&mid<=stations[i+1].y){a=stations[i];b=stations[i+1];break}
+    if(mid<stations[i].y){b=stations[i];break}
+  }
+  const t=st01((mid-a.y)/Math.max(1,b.y-a.y));
+  const tx=lerp(a.k.x,b.k.x,t),ty=lerp(a.k.y,b.k.y,t),tk=lerp(a.k.k,b.k.k,t);
+  cam.x=lerp(cam.x,RM?tx:tx,0.055);cam.y=lerp(cam.y,ty,0.055);cam.k=lerp(cam.k,tk,0.055);
+  camG.setAttribute('transform','translate('+(800-cam.k*cam.x).toFixed(1)+' '+(500-cam.k*cam.y).toFixed(1)+') scale('+cam.k.toFixed(3)+')');
+
+  /* territory local progress (--p) + readout */
+  let cur=null;
+  for(const id in TERR){
+    const el=$(id);if(!el)continue;
+    const top=el.offsetTop,h=el.offsetHeight;
+    const p=clamp((y+vh*0.8-top)/(h+vh*0.3),0,1);
+    const g=$(TERR[id][2]);
+    g.style.setProperty('--p',p.toFixed(3));
+    g.classList.toggle('on',p>0.12);
+    if(p>0.45&&p<0.75)cur=TERR[id][1];
+  }
+  if(mid>=stations[stations.length-1].y-vh*0.2)cur='YOUR COMPANY';
+  else if(mid<stations[1].y)cur='OPEN SEA';
+  cur=cur||'OPEN WATERS';
+  $('terrOut').innerHTML='TERRITORY — <b>'+cur+'</b>';
+  $('coordTag').innerHTML='28.70'+String(41+Math.floor(cur.length*3))+'° N · 77.10'+String(25+Math.floor(cur.length*7))+'° E — <b>'+cur+'</b>';
+
+  /* route ink + expedition marker */
+  const t0=stations[0].y, t1=$('contact').offsetTop;
+  const rp=clamp((mid-t0)/(t1-t0)*1.03,0,1);
+  if(routeLen){
+    route.style.strokeDashoffset=(routeLen*(1-rp)).toFixed(1);
+    const pt=route.getPointAtLength(routeLen*rp);
+    marker.setAttribute('transform','translate('+pt.x.toFixed(1)+' '+pt.y.toFixed(1)+')');
+    marker.style.opacity=rp>0.01?1:0;
+  }
+
+  /* compass needle: base north + scroll-velocity swing */
+  const dv=y-lastY;lastY=y;
+  swing=lerp(swing,clamp(dv*0.9,-42,42),0.07);
+  needleA=lerp(needleA,-38+ (cur==='YOUR COMPANY'?0:0) + swing + (RM?0:Math.sin(now*0.0011)*3),0.08);
+  needle.setAttribute('transform','rotate('+needleA.toFixed(2)+' 60 60)');
+
+  requestAnimationFrame(frame);
+}
+cache();requestAnimationFrame(frame);setTimeout(cache,500);
+
+console.log('%cATLAS OF ATTENTION%c surveyed by hand. the next coordinate could be yours.\n→ harshdhmija4678@gmail.com',
+ 'background:#b3451c;color:#f1e9d7;padding:2px 6px;font-weight:bold','color:#6f6552');
+})();
+</script>
+</body>
+</html>
