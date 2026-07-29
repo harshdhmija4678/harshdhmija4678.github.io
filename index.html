@@ -123,7 +123,10 @@ body.leaving .veil{opacity:1;pointer-events:auto}
 }
 
 /* №7 — the self-running ad (just aired) */
-.w-ad{grid-column:1/-1;border-style:dashed;border-color:rgba(212,52,37,.55);background:linear-gradient(135deg,#faf7f0 60%,#f7edda)}
+.w-ad{grid-column:1/-1;border:2px solid rgba(212,52,37,.65);background:linear-gradient(135deg,#fdf8ee 40%,#f9ecd9);box-shadow:0 16px 44px -18px rgba(212,52,37,.35)}
+.w-ad .flag{position:absolute;top:14px;right:14px;background:#d43425;color:#fff;font:600 .54rem var(--mono);letter-spacing:.2em;padding:.55rem .85rem;border-radius:99px;box-shadow:0 8px 22px rgba(212,52,37,.45);animation:flagpulse 2.6s ease-in-out infinite;z-index:2}
+.w-ad h2{font-size:1.65rem}
+@keyframes flagpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 .w-ad h2 em{color:#d43425}.w-ad .go{color:#d43425}.w-ad .no{color:#d43425}
 .w-ad .key{background:#d43425;border-color:#d43425;color:#fff}
 .w-ad .cpn{display:block;margin-top:.8rem;border:1.5px dashed rgba(23,19,13,.5);border-radius:6px;padding:.5rem .8rem;
@@ -132,6 +135,13 @@ body.leaving .veil{opacity:1;pointer-events:auto}
 .w-ad .cpn::after{content:'';position:absolute;top:0;bottom:0;width:60px;background:linear-gradient(90deg,transparent,rgba(212,52,37,.14),transparent);
   animation:sheen 3.2s linear infinite}
 @keyframes sheen{from{left:-80px}to{left:110%}}
+
+/* face block */
+.hero-me{margin:0 0 .5rem;display:flex;flex-direction:column;align-items:center}
+.hero-me img{width:124px;height:124px;border-radius:50%;object-fit:cover;object-position:50% 18%;
+  border:4px solid var(--card);box-shadow:0 0 0 1.5px var(--accent),0 18px 44px -14px rgba(25,23,18,.4)}
+.hero-me figcaption{margin-top:.65rem;font:600 .56rem var(--mono);letter-spacing:.22em;color:var(--muted)}
+.hero-me figcaption b{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -139,7 +149,7 @@ body.leaving .veil{opacity:1;pointer-events:auto}
 <div class="veil" aria-hidden="true"></div>
 
 <header>
-  <span class="logo">Harsh Dhamija <em>✦</em> the universe</span>
+  <span class="logo" style="display:inline-flex;align-items:center;gap:.45rem"><img src="portrait.jpg" alt="" style="width:24px;height:24px;border-radius:50%;object-fit:cover;object-position:50% 18%">Harsh Dhamija <em>✦</em> the universe</span>
   <div class="chips">
     <span class="chip" id="clockChip">DELHI NCR · --:--</span>
     <span class="chip" id="visitChip">VISIT #—</span>
@@ -148,12 +158,23 @@ body.leaving .veil{opacity:1;pointer-events:auto}
 </header>
 
 <main>
-  <p class="kicker">ONE MARKETER · SEVEN WORLDS</p>
+  <figure class="hero-me"><img src="portrait.jpg" alt="Harsh Dhamija"></figure>
+  <p class="kicker">ONE MARKETER · SEVEN WORLDS · <b style="color:var(--accent)">HARSH DHAMIJA · DELHI NCR</b></p>
   <h1>Choose how you'd like<br>to read my <em>mind.</em></h1>
   <p class="sub">Seven editions of the same truth — <b>Harsh Dhamija, AI Performance Marketer</b>.
-  Two are the signature works; the rest are side-quests in what a portfolio can be.</p>
+  <b>Start with the campaign below</b> — the 90-second pitch — then roam the rest, signatures included.</p>
 
   <div class="worlds">
+    <a class="world w-ad" data-key="7" data-w="ad" href="./ad/harsh-dhamija-ad.html">
+      <span class="key">7</span>
+      <span class="flag">★ THE CAMPAIGN — READ THIS FIRST</span>
+      <div class="top"><span class="no">№7 · ★ FEATURED — NEW SPOT · START HERE</span><span class="go">WATCH →</span></div>
+      <h2>The <em>Ad</em></h2>
+      <p>The portfolio as a self-running advertisement — unskippable hook, live ad formats (feed/story/search) played on himself, media-plan insertion orders, a funnel that tracks <b>you</b>, and a coupon you can actually redeem.</p>
+      <span class="cpn">✂ - - - - - - <b>CLIP THIS COUPON TO HIRE HIM</b> · FREE* FIRST CONVERSATION · NO METRICS WERE EXAGGERATED - - - - - - ✂</span>
+      <div class="tags"><span>SELF-AWARE</span><span>LIVE AD UNITS</span><span>LONG-COPY</span><span>REDEEMABLE</span></div>
+    </a>
+
     <a class="world w-imp sig" data-key="1" data-w="imp" href="./impression/harsh-dhamija-impression.html">
       <span class="key">1</span>
       <div class="top"><span class="no">№1 · SIGNATURE</span><span class="go">ENTER →</span></div>
@@ -212,17 +233,9 @@ body.leaving .veil{opacity:1;pointer-events:auto}
       <div class="tags"><span>TERMINAL</span><span>LIVE TICKER</span><span>TRADEABLE</span></div>
     </a>
 
-    <a class="world w-ad" data-key="7" data-w="ad" href="./ad/harsh-dhamija-ad.html">
-      <span class="key">7</span>
-      <div class="top"><span class="no">№7 · JUST AIRED — NEW SPOT</span><span class="go">WATCH →</span></div>
-      <h2>The <em>Ad</em></h2>
-      <p>The portfolio as a self-running advertisement — unskippable hook, live ad formats (feed/story/search) played on himself, media-plan insertion orders, a funnel that tracks <b>you</b>, and a coupon you can actually redeem.</p>
-      <span class="cpn">✂ - - - - - - <b>CLIP THIS COUPON TO HIRE HIM</b> · FREE* FIRST CONVERSATION · NO METRICS WERE EXAGGERATED - - - - - - ✂</span>
-      <div class="tags"><span>SELF-AWARE</span><span>LIVE AD UNITS</span><span>LONG-COPY</span><span>REDEEMABLE</span></div>
-    </a>
   </div>
 
-  <p class="keys" id="keyHint">PRESS <b>1</b>–<b>7</b> TO JUMP · RECRUITERS USUALLY START AT <b>1</b></p>
+  <p class="keys" id="keyHint">PRESS <b>1</b>–<b>7</b> TO JUMP · THE FASTEST PITCH IS THE AD — PRESS <b>7</b></p>
 </main>
 
 <canvas id="strip" aria-hidden="true"></canvas>
@@ -264,6 +277,9 @@ tick();setInterval(tick,30000);
 function go(href,w){
   try{const k='hd_launch_v2',s=JSON.parse(localStorage.getItem(k))||{v:n};s.last=w;localStorage.setItem(k,JSON.stringify(s))}catch(e){}
   document.body.classList.add('leaving');setTimeout(()=>location.href=href,RM?60:360);
+}
+addEventListener('pageshow',function(){requestAnimationFrame(function(){document.body.classList.remove('leaving')})});
+function _unused_go_old(){
 }
 document.querySelectorAll('.world').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(a.href,a.dataset.w)}));
 addEventListener('keydown',e=>{
