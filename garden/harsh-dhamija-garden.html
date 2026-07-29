@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harsh Dhamija — The Growth Garden</title>
+<meta name="description" content="A living portfolio. Every result is a plant, every visit plants a seed, and the garden keeps growing after you leave. Harsh Dhamija — AI Performance Marketer, Delhi NCR, India.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232c4a2e'/%3E%3Ctext x='32' y='42' font-family='Georgia' font-size='30' fill='%23f2eee6' text-anchor='middle'%3E✿%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f2eee6; --card:#faf7f0;
+  --ink:#211d13; --muted:#6e6757; --faint:#a49c8a;
+  --line:rgba(33,29,19,.16);
+  --leaf:#3e6b3f; --accent:#c2541f;
+  --shadow:0 24px 60px rgba(30,35,20,.25);
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:#0d1420;color:var(--ink);font:400 1rem/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--paper)}
+a{color:inherit}
+.mono{font-family:var(--mono)}
+button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
+
+#garden{position:fixed;inset:0;display:block;touch-action:none}
+
+/* ── world-anchored DOM (pans with the garden) ─────────────── */
+#worldDom{position:fixed;inset:0;pointer-events:none;will-change:transform}
+.hero-title{position:absolute;top:14vh;width:92vw;max-width:920px}
+.hero-title p.k{font:600 .62rem var(--mono);letter-spacing:.34em;color:#3d5a3e;margin-bottom:1rem}
+.hero-title h1{font:700 clamp(3rem,9.5vw,8rem)/0.98 var(--serif);letter-spacing:-.03em;color:#23291c}
+.hero-title h1 em{font-style:italic;color:var(--accent)}
+.hero-title .sub{margin-top:1.3rem;max-width:46ch;color:#42503a;font-size:1rem}
+.hero-title .scroll-hint{margin-top:2rem;font:600 .58rem var(--mono);letter-spacing:.3em;color:#5c6b52;display:flex;align-items:center;gap:.6rem}
+.hero-title .scroll-hint i{display:inline-block;width:26px;height:1px;background:#5c6b52;animation:pull 2s var(--ease) infinite}
+@keyframes pull{0%{transform:scaleX(0)}55%{transform:scaleX(1)}100%{transform:scaleX(1);opacity:0}}
+.polaroid{
+  position:absolute;pointer-events:auto;cursor:pointer;
+  width:150px;padding:8px 8px 30px;background:var(--card);border:1px solid var(--line);
+  box-shadow:0 14px 34px rgba(30,35,20,.28);transform:rotate(-4deg);
+  transition:transform .4s var(--ease);
+}
+.polaroid:hover{transform:rotate(0deg) translateY(-6px)}
+.polaroid img{width:100%;height:150px;object-fit:cover;object-position:50% 18%;display:block;border-radius:2px}
+.polaroid figcaption{margin-top:7px;font:italic 600 .72rem var(--serif);text-align:center;color:#5b5344}
+
+/* ── fixed HUD ─────────────────────────────────────────────── */
+.hud{position:fixed;z-index:30;display:flex;align-items:center;gap:.6rem}
+.hud-tl{top:1rem;left:1.1rem}
+.hud-tr{top:1rem;right:1.1rem}
+.hud-bl{bottom:1rem;left:1.1rem}
+.logo{font:700 1rem var(--serif);color:#f2eee6;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+.logo em{font-style:normal;color:#ffd68a}
+.chip{
+  display:flex;align-items:center;gap:.5rem;padding:.48rem .85rem;border-radius:99px;
+  background:rgba(250,247,240,.82);backdrop-filter:blur(10px);border:1px solid var(--line);
+  font:600 .58rem var(--mono);letter-spacing:.14em;color:#4a4433;
+}
+.chip b{color:var(--accent)}
+.btn-hud{
+  padding:.55rem 1rem;border-radius:99px;background:var(--ink);color:var(--paper);
+  font:600 .6rem var(--mono);letter-spacing:.16em;transition:transform .3s var(--ease),background .3s;
+  display:flex;align-items:center;gap:.45rem;
+}
+.btn-hud:hover{transform:translateY(-2px);background:var(--accent)}
+.btn-hud.alt{background:rgba(250,247,240,.85);color:var(--ink);border:1px solid var(--line)}
+.btn-hud.alt:hover{background:var(--card)}
+#toast{
+  position:fixed;left:50%;bottom:1.2rem;transform:translate(-50%,140%);z-index:35;
+  background:var(--ink);color:var(--paper);padding:.85rem 1.3rem;border-radius:14px;
+  font-size:.82rem;max-width:min(480px,88vw);text-align:center;box-shadow:var(--shadow);
+  transition:transform .8s var(--ease);
+}
+#toast.show{transform:translate(-50%,0)}
+#toast b{color:#ffd68a}
+
+/* hover chip near plants */
+#chip{
+  position:fixed;z-index:28;pointer-events:none;padding:.4rem .8rem;border-radius:99px;
+  background:var(--ink);color:var(--paper);font:600 .56rem var(--mono);letter-spacing:.16em;
+  transform:translate(-50%,-170%);opacity:0;transition:opacity .2s;white-space:nowrap;
+}
+#chip.show{opacity:1}
+
+/* ── plant card (right side panel) ─────────────────────────── */
+#card{
+  position:fixed;top:50%;right:1.2rem;z-index:40;width:min(380px,92vw);
+  transform:translateY(-50%) translateX(120%);
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:var(--shadow);padding:1.5rem;
+  transition:transform .7s var(--ease);
+}
+#card.open{transform:translateY(-50%) translateX(0)}
+#card .c-kick{font:600 .56rem var(--mono);letter-spacing:.26em;color:var(--accent);margin-bottom:.6rem}
+#card h3{font:700 1.55rem/1.15 var(--serif);letter-spacing:-.01em;margin-bottom:.7rem}
+#card p{color:var(--muted);font-size:.9rem}
+#card .metrics{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+#card .metrics span{
+  font:600 .62rem var(--mono);letter-spacing:.06em;color:var(--ink);
+  border:1px solid var(--line);border-radius:99px;padding:.36rem .7rem;background:#fff;
+}
+#card .metrics span b{color:var(--accent)}
+#card .c-link{display:inline-block;margin-top:1.1rem;font:600 .8rem var(--sans);border-bottom:2px solid var(--accent);padding-bottom:.1rem}
+#cardClose{position:absolute;top:.8rem;right:.9rem;font:600 1.1rem var(--sans);color:var(--faint);padding:.3rem}
+#cardClose:hover{color:var(--accent)}
+
+/* ── index overlay (all content, readable) ─────────────────── */
+#index{
+  position:fixed;inset:0;z-index:60;background:rgba(242,238,230,.9);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  overflow-y:auto;padding:6rem 1.5rem 4rem;
+  opacity:0;visibility:hidden;transition:opacity .5s var(--ease),visibility .5s;
+}
+#index.open{opacity:1;visibility:visible}
+.idx-wrap{max-width:780px;margin:0 auto}
+.idx-wrap .i-kick{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--accent);margin-bottom:.8rem}
+.idx-wrap h2{font:700 clamp(2.2rem,6vw,3.6rem)/1.05 var(--serif);letter-spacing:-.02em;margin-bottom:2rem}
+.idx-wrap h2 em{font-style:italic;color:var(--accent)}
+.idx-sec{border-top:1px solid var(--line);padding:1.5rem 0}
+.idx-sec h4{font:600 .62rem var(--mono);letter-spacing:.24em;color:var(--muted);margin-bottom:.5rem}
+.idx-sec b.t{display:block;font:700 1.25rem var(--serif);letter-spacing:-.01em}
+.idx-sec p{color:var(--muted);font-size:.93rem;max-width:62ch}
+.idx-sec .m{font:600 .6rem var(--mono);color:var(--accent);letter-spacing:.1em}
+.idx-close{
+  position:fixed;top:1.2rem;right:1.2rem;z-index:61;
+  width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--paper);
+  font-size:1.1rem;line-height:1;transition:transform .3s var(--ease),background .3s;
+  opacity:0;visibility:hidden;
+}
+#index.open + .idx-close{opacity:1;visibility:visible}
+.idx-close:hover{transform:rotate(90deg);background:var(--accent)}
+.idx-foot{margin-top:2.5rem;padding-top:1.4rem;border-top:1px dashed var(--line);font:600 .58rem var(--mono);letter-spacing:.16em;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.idx-mail{display:inline-block;margin-top:.8rem;font:italic 700 1.3rem var(--serif);border-bottom:2px solid var(--accent);padding-bottom:.1rem}
+
+@media (max-width:820px){
+  .hud-bl{display:none}
+  #card{top:auto;bottom:1rem;right:50%;transform:translateX(50%) translateY(140%)}
+  #card.open{transform:translateX(50%) translateY(0)}
+  .hero-title h1{font-size:clamp(2.6rem,13vw,4.2rem)}
+  .polaroid{width:110px}
+  .polaroid img{height:110px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.15s !important}
+}
+</style>
+</head>
+<body>
+
+<canvas id="garden"></canvas>
+
+<!-- world-anchored DOM -->
+<div id="worldDom">
+  <div class="hero-title" id="heroTitle" style="left:38vw">
+    <p class="k">THE GROWTH GARDEN · A LIVING PORTFOLIO</p>
+    <h1>Harsh<br>Dhamija <em>grows brands.</em></h1>
+    <p class="sub">Every plant here is a real result — campaigns became flowers,
+    lessons became trees. Stroll through my work: it never stops growing.</p>
+    <p class="scroll-hint">SCROLL TO STROLL <i></i></p>
+  </div>
+  <figure class="polaroid" id="polaroid" style="left:118vw; top:44vh">
+    <img id="polImg" src="../portrait.jpg" alt="Harsh Dhamija">
+    <figcaption>the gardener ✿</figcaption>
+  </figure>
+</div>
+
+<!-- HUD -->
+<div class="hud hud-tl"><span class="logo">Harsh Dhamija <em>✿</em> garden</span></div>
+<div class="hud hud-tr">
+  <span class="chip" id="clockChip">DELHI NCR · --:--</span>
+  <span class="chip" id="weatherChip"><b>◦</b> CLEAR</span>
+  <button class="btn-hud alt" id="waterBtn" title="Water the garden">☂ WATER</button>
+  <button class="btn-hud alt" id="soundBtn" title="Ambient sound">♪ OFF</button>
+  <button class="btn-hud" id="indexBtn">INDEX ☰</button>
+</div>
+<div class="hud hud-bl">
+  <span class="chip" id="visitChip">VISITOR #—</span>
+</div>
+
+<div id="toast"></div>
+<div id="chip"></div>
+
+<!-- plant card -->
+<aside id="card" aria-live="polite">
+  <button id="cardClose" aria-label="Close">✕</button>
+  <p class="c-kick mono" id="cardKick">FLOWER</p>
+  <h3 id="cardTitle">—</h3>
+  <div id="cardBody"><p>—</p></div>
+  <div class="metrics" id="cardMetrics"></div>
+</aside>
+
+<!-- index overlay -->
+<div id="index" role="dialog" aria-label="Portfolio index">
+  <div class="idx-wrap">
+    <p class="i-kick">INDEX — FOR READERS IN A HURRY</p>
+    <h2>Everything,<br><em>on paper.</em></h2>
+
+    <div class="idx-sec">
+      <h4>ABOUT</h4>
+      <b class="t">Harsh Dhamija — AI Performance Marketer, Delhi NCR</b>
+      <p>Fresh MBA (International Business · Marketing) grad, agency-trained on
+      multi-objective campaigns across Meta &amp; Google. AI-assisted creative ops
+      and analytics — judged only by the business metric behind the marketing metric.</p>
+      <p class="m">TOOLS: META ADS · GOOGLE ADS · GA4 · SEMRUSH · CHATGPT · CLAUDE · GEMINI · PERPLEXITY · WIX · REPLIT</p>
+    </div>
+
+    <div class="idx-sec"><h4>SKILL S·01</h4><b class="t">Performance Marketing</b>
+      <p>Multi-objective campaigns across Meta &amp; Google — structure, creative testing, audience science.</p></div>
+    <div class="idx-sec"><h4>SKILL S·02</h4><b class="t">Growth Strategy &amp; Research</b>
+      <p>Competitor teardowns, market maps and go-to-market plans grounded in real outreach.</p></div>
+    <div class="idx-sec"><h4>SKILL S·03</h4><b class="t">AI-Assisted Creative Ops</b>
+      <p>AI drafts the variants; humans keep the strategy. Speed without the slop.</p></div>
+    <div class="idx-sec"><h4>SKILL S·04</h4><b class="t">Analytics &amp; CRO</b>
+      <p>GA4, clean tracking, structured tests — decisions from data.</p></div>
+    <div class="idx-sec"><h4>SKILL S·05</h4><b class="t">Web &amp; Landing Builds</b>
+      <p>Conversion-first pages and prototypes — 15+ shipped with AI builders.</p></div>
+
+    <div class="idx-sec"><h4>RESULT · DIGIMARK MEDIA</h4><b class="t">One internship flight, full stack</b>
+      <p>Multi-objective campaigns across Meta &amp; Google; 40+ creatives, 20+ posts, 10+ competitor analyses.</p></div>
+    <div class="idx-sec"><h4>RESULT · BUILD ENGINE</h4><b class="t">15+ sites &amp; prototypes shipped</b>
+      <p>Conversion-first builds via 8 AI tools — plus 7 live portfolio worlds, this garden included.</p></div>
+    <div class="idx-sec"><h4>RESULT · FIELD LEAD GEN</h4><b class="t">Propsalt Landbase — leads to keys</b>
+      <p>Generation → consultation → site visits → negotiation → closure. CRM discipline throughout.</p></div>
+
+    <div class="idx-sec"><h4>PRINCIPLES</h4>
+      <p>“Curiosity first. Principles over trends. Experiments over opinions.” · “Every rupee of ad spend is a tiny
+      employee.” · “Data + customer insight + continuous experimentation.” — all his, all applied.</p>
+    </div>
+
+    <div class="idx-sec">
+      <h4>CONTACT</h4>
+      <b class="t">Open to full-time growth &amp; performance roles.</b>
+      <!-- EDIT: swap in your real email -->
+      <a class="idx-mail" href="mailto:harshdhmija4678@gmail.com">harshdhmija4678@gmail.com</a>
+      <p class="m"><a href="https://www.linkedin.com/in/harsh-dhamija-063897194" style="border-bottom:1px dotted currentColor">LINKEDIN ↗ /in/harsh-dhamija-063897194</a> · DELHI NCR, INDIA · <a href="../index.html" style="border-bottom:1px dotted currentColor">ALL 7 WORLDS ↺</a></p>
+    </div>
+
+    <div class="idx-foot">
+      <span>© 2026 HARSH DHAMIJA — GROWN BY HAND</span>
+      <span id="gardenStats">— SEEDS PLANTED</span>
+    </div>
+  </div>
+</div>
+<button class="idx-close" id="indexClose" aria-label="Close index">✕</button>
+
+<script>
+(() => {
+'use strict';
+/* ═══════════════════ THE GROWTH GARDEN ═══════════════════
+   A portfolio that is alive:
+   · every marketing result is a procedurally-grown plant
+   · day/night follows the visitor's real clock
+   · weather passes; rain makes things grow
+   · every visitor plants a seed — saved, and it keeps growing
+     between visits (localStorage). The site is never the same twice. */
+
+const TAU = Math.PI*2;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let seed=7; const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
+const mulberry=s=>()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296};
+
+const canvas=document.getElementById('garden'), ctx=canvas.getContext('2d');
+let W=0,H=0,DPR=1, groundY=0;
+function resize(){
+  DPR=Math.min(2,devicePixelRatio||1);
+  W=innerWidth;H=innerHeight;
+  canvas.width=W*DPR;canvas.height=H*DPR;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  groundY=H*0.78;
+}
+addEventListener('resize',resize);resize();
+
+/* ── persistence ─────────────────────────────────────────── */
+const LS='hd_garden_v1';
+let store;
+try{ store=JSON.parse(localStorage.getItem(LS))||null }catch(e){ store=null }
+const first=!store;
+if(!store) store={v:1,visits:0,first:Date.now(),seeds:[]};
+if(!sessionStorage.getItem('hd_s')){
+  store.visits++; sessionStorage.setItem('hd_s','1');
+  store.seeds.push({x:20+rnd()*60, t:'wild', ts:Date.now()});
+  save();
+}
+function save(){ try{localStorage.setItem(LS,JSON.stringify(store))}catch(e){} }
+const visitNo=store.visits;
+document.getElementById('visitChip').innerHTML='VISITOR <b>#'+visitNo+'</b>';
+document.getElementById('gardenStats').textContent=store.seeds.length+' SEEDS PLANTED · VISITOR #'+visitNo;
+
+/* ── world & camera ──────────────────────────────────────── */
+const WORLD_VW=5.6;                     // world width in viewports
+const worldW=()=>W*WORLD_VW;
+const cam={x:0,tx:0};
+addEventListener('wheel',e=>{
+  if(document.getElementById('index').classList.contains('open'))return;
+  cam.tx=clamp(cam.tx+(e.deltaY+e.deltaX)*1.1,0,worldW()-W);
+},{passive:true});
+let tch=null;
+addEventListener('touchstart',e=>{tch=e.touches[0].clientX},{passive:true});
+addEventListener('touchmove',e=>{
+  if(tch==null)return;const x=e.touches[0].clientX;
+  cam.tx=clamp(cam.tx+(tch-x)*1.6,0,worldW()-W);tch=x;
+},{passive:true});
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight')cam.tx=clamp(cam.tx+180,0,worldW()-W);
+  if(e.key==='ArrowLeft')cam.tx=clamp(cam.tx-180,0,worldW()-W);
+});
+
+/* ── time → sky ──────────────────────────────────────────── */
+const SKY=[ // hour, top, mid, bottom
+  [0,'#0b1226','#131c38','#1d2a4a'],[4,'#0e1530','#1a2340','#273356'],
+  [6,'#35507e','#b7766a','#e8a56b'],[8,'#7fb2d9','#bcd8e6','#efe3c2'],
+  [12,'#8ec3e8','#cfe4ec','#f4ecd4'],[16,'#86b4dd','#cfd9d3','#f0d9ac'],
+  [18,'#5b5b96','#d98a66','#f0b06a'],[20,'#1c2447','#3a3f6b','#6d5570'],
+  [22,'#0d1430','#16204a','#22305c'],[24,'#0b1226','#131c38','#1d2a4a']];
+function skyColors(h){
+  for(let i=0;i<SKY.length-1;i++){
+    const a=SKY[i],b=SKY[i+1];
+    if(h>=a[0]&&h<=b[0]){const k=(h-a[0])/(b[0]-a[0]);
+      return [mixc(a[1],b[1],k),mixc(a[2],b[2],k),mixc(a[3],b[3],k)];}
+  }return [SKY[0][1],SKY[0][2],SKY[0][3]];
+}
+const hx=c=>[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];
+function mixc(a,b,k){const A=hx(a),B=hx(b);return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],k))).join(',')+')'}
+const nightF=h=>(h>=19||h<5)?1:(h>=17?smoothstep((h-17)/2):(h<7?1-smoothstep((h-5)/2):0));
+const smoothstep=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+
+/* stars & clouds */
+const stars=Array.from({length:90},()=>({x:rnd(),y:rnd()*0.6,r:0.4+rnd()*1.3,p:rnd()*TAU}));
+const clouds=Array.from({length:7},()=>({x:rnd(),y:0.06+rnd()*0.22,s:0.6+rnd()*0.9,sp:0.004+rnd()*0.008}));
+
+/* ── CONTENT → PLANTS ────────────────────────────────────── */
+const BLOOM=['#e8734a','#d9a441','#8fae5d','#5d8fae','#b45d8f'];
+const plants=[];              // everything drawn
+const interactive=[];         // hoverable / clickable
+const X=vw=>vw/100*W;         // bed positions are in world vw units
+
+function addSign(xw,txt){plants.push({kind:'sign',xw,yj:8,s:1,txt,phase:rnd()*TAU})}
+
+/* the hero gate sign */
+addSign(46,'START THE STROLL →');
+
+/* ABOUT — the old tree (at 1.25 of world) */
+(function(){
+  const r=mulberry(101);
+  const canopy=Array.from({length:6},()=>({dx:-30+r()*60,dy:-95-r()*55,r:26+r()*26}));
+  const t={kind:'tree',xw:126,yj:2,s:1.9,canopy,phase:r()*TAU,
+    data:{kick:'THE OLDEST TREE',title:'About the gardener',
+    body:'<p>I\u2019m <b>Harsh</b> — an AI performance marketer from Delhi NCR. Fresh MBA (International Business · Marketing) grad; my agency internship ran multi-objective campaigns across Meta &amp; Google — 40+ creatives, 10+ competitor analyses, 15+ sites built. My rule: care about the <b>business metric</b> behind every marketing metric. Reach is nice. Revenue is better.</p>',
+    metrics:['40+ CREATIVES','15+ BUILDS','META · GOOGLE','GA4 · SEMRUSH','OPEN TO WORK']}};
+  plants.push(t);interactive.push(t);
+})();
+
+/* SERVICES — five shrubs */
+const SVCS=[['S·01','Performance Marketing','Multi-objective campaigns across Meta &amp; Google — structure, creative testing, audience science.','META · GOOGLE · LEAD GEN'],
+['S·02','Growth Strategy &amp; Research','Competitor teardowns, market mapping and GTM plans grounded in real outreach.','RESEARCH · GTM'],
+['S·03','AI-Assisted Creative Ops','AI drafts the variants; humans keep the strategy and judgment. Internship-proven speed.','COPY · VARIANTS'],
+['S·04','Analytics &amp; CRO','GA4, clean tracking, honest dashboards, structured tests. Data, not vibes.','GA4 · A/B TESTS'],
+['S·05','Web &amp; Landing Builds','Conversion-first pages and prototypes shipped with AI builders — 15+ and counting.','WIX · REPLIT']];
+SVCS.forEach((s,i)=>{
+  const r=mulberry(50+i*13);
+  const blobs=Array.from({length:3},(_,j)=>({dx:-22+r()*44,dy:-26-r()*30,r:20+r()*14}));
+  const p={kind:'shrub',xw:210+i*16,yj:4+rnd()*10,s:1+rnd()*0.3,blobs,hue:BLOOM[i%5],phase:r()*TAU,
+    data:{kick:s[0]+' — SKILL SHRUB',title:s[1],body:'<p>'+s[2]+'</p>',metrics:[s[3]]}};
+  plants.push(p);interactive.push(p);
+});
+addSign(232,'SKILL SHRUBS');
+
+/* CASES — three great blooms */
+const CASES=[
+ {c:'#e8734a',petals:9,kick:'RESULT FLOWER · Nº1',title:'The Campaign Bloom — DigiMark Media',
+  body:'<p>One internship, one flight: multi-objective campaigns across Meta &amp; Google — AI-assisted copy, human strategy.</p>',
+  metrics:['<b>40+</b> CREATIVES','<b>20+</b> POSTS','<b>10+</b> ANALYSES']},
+ {c:'#5d8fae',petals:7,kick:'RESULT FLOWER · Nº2',title:'The Build Bloom — Sites &amp; Prototypes',
+  body:'<p>Conversion-first pages and prototypes shipped with AI builders. This very garden is one of seven worlds he built.</p>',
+  metrics:['<b>15+</b> BUILDS','<b>8</b> AI TOOLS','<b>7</b> WORLDS']},
+ {c:'#d9a441',petals:11,kick:'RESULT FLOWER · Nº3',title:'The Field Bloom — Propsalt Landbase',
+  body:'<p>Real-estate leads walked the full path: generation → consultation → site visits → negotiation → closure.</p>',
+  metrics:['<b>5</b> LEAD STAGES','<b>CRM</b> DISCIPLINE','<b>FIELD</b> PROVEN']},
+];
+CASES.forEach((cs,i)=>{
+  const p={kind:'bloom',xw:308+i*22,yj:2,s:1.55,color:cs.c,petals:cs.petals,phase:rnd()*TAU,h:120+rnd()*30,
+    data:{kick:cs.kick,title:cs.title,body:cs.body,metrics:cs.metrics}};
+  plants.push(p);interactive.push(p);
+});
+addSign(330,'THE RESULT BLOOMS');
+
+/* QUOTES — firefly grove (rocks by day, glow at night) */
+const QUOTES=[
+ ['\u201cCuriosity first. Principles over trends. Experiments over opinions.\u201d','HARSH — OPERATING RULE №01'],
+ ['\u201cEvery rupee of ad spend is a tiny employee. Hire a strict manager.\u201d','HARSH — OPERATING RULE №02'],
+ ['\u201cData + customer insight + continuous experimentation.\u201d','HARSH — OPERATING RULE №03']];
+const grove=[];
+QUOTES.forEach((q,i)=>{
+  const p={kind:'stone',xw:418+i*16,yj:8,s:1+rnd()*0.2,phase:rnd()*TAU,
+    data:{kick:'FIREFLY · FIELD NOTES',title:q[1],body:'<p><i>'+q[0]+'</i></p>',metrics:[]}};
+  plants.push(p);interactive.push(p);grove.push(p);
+});
+addSign(440,'FIREFLY GROVE — VISIT AFTER DARK');
+
+/* CONTACT — the mailbox at the end of the garden */
+(function(){
+  const p={kind:'mail',xw:520,yj:6,s:1.5,phase:rnd()*TAU,
+    data:{kick:'THE MAILBOX',title:'Plant something together?',
+    body:'<p>Open to full-time growth &amp; performance marketing roles. Tell me where your brand is and where the graph should go.</p>',
+    metrics:['<a class="c-link" href="mailto:harshdhmija4678@gmail.com">harshdhmija4678@gmail.com</a>','DELHI NCR · OPEN TO WORK']}};
+  plants.push(p);interactive.push(p);
+})();
+addSign(514,'THE MAILBOX — SAY NAMASTE');
+
+/* visitor seeds + planted wildflowers (they persist!) */
+function sproutKind(){const r=rnd();return r<0.5?'wild':'sprout'}
+store.seeds.forEach(s=>{
+  plants.push({kind:s.t==='wild'?'wild':'sprout',xw:s.x*WORLD_VW,yj:6+rnd()*18,
+    s:0.7+rnd()*0.5,ts:s.ts,phase:rnd()*TAU,vx:s.x,hue:BLOOM[Math.floor(rnd()*5)]});
+});
+/* click soil → plant a seed (saved forever) */
+canvas.addEventListener('pointerdown',e=>{
+  if(hover)return;                                   // don't plant on top of a plant
+  const wx=(cam.x+e.clientX)/W*100;                  // world vw
+  const wy=e.clientY-groundY;
+  if(wy<-40||wy>H*0.3)return;                        // only on soil band
+  store.seeds.push({x:clamp(wx/WORLD_VW,2,98),t:sproutKind(),ts:Date.now()});save();
+  const ns=store.seeds[store.seeds.length-1];
+  plants.push({kind:ns.t,xw:ns.x*WORLD_VW,yj:6+rnd()*18,s:0.8,ts:ns.ts,phase:rnd()*TAU,hue:BLOOM[Math.floor(rnd()*5)]});
+  document.getElementById('gardenStats').textContent=store.seeds.length+' SEEDS PLANTED · VISITOR #'+visitNo;
+  toast(['A seed for tomorrow.','It\u2019ll be taller when you return.','The garden remembers you.'][Math.floor(rnd()*3)]);
+});
+
+/* ── plant drawing ───────────────────────────────────────── */
+const plantPos=p=>({x:X(p.xw),y:groundY+(p.yj||0)});
+const ageG=p=> p.ts? clamp(0.25+(Date.now()-p.ts)/(3*864e5),0.25,1):1;   // 3 days to mature
+let breeze={x:0,v:0}, mouse={x:-999,y:-999};
+
+function drawPlant(p,t,ll){
+  const pos=plantPos(p); if(pos.x<cam.x-160||pos.x>cam.x+W+160)return;
+  const g=ageG(p), s=p.s*(p.kind==='wild'||p.kind==='sprout'?g:1);
+  const sx=pos.x-cam.x;
+  const breezeI=clamp(1-Math.abs(sx-mouse.x)/(W*0.14),0,1);
+  const target=breezeI*(sx>mouse.x?0.10:-0.10);
+  p._b=lerp(p._b||0.001,target,0.05);
+  const sway=(RM?0:Math.sin(t*0.0011+p.phase)*0.022*(0.6+wind()))+p._b;
+
+  ctx.save();ctx.translate(sx,pos.y);ctx.scale(s,s);ctx.rotate(sway* (p.kind==='sign'||p.kind==='mail'?0.2:1));
+  switch(p.kind){
+    case 'sign':{
+      ctx.strokeStyle='#6b5136';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(0,2);ctx.lineTo(0,-30);ctx.stroke();
+      ctx.fillStyle='#8a6b45';rr(-46,-52,92,26,4);ctx.fill();
+      ctx.fillStyle='#f2eee6';ctx.font='600 9px "JetBrains Mono"';ctx.textAlign='center';ctx.fillText(p.txt,0,-35);
+      break}
+    case 'tree':{
+      ctx.fillStyle='#5c4630';
+      ctx.beginPath();ctx.moveTo(-9,4);ctx.quadraticCurveTo(-12,-58,-4,-84);ctx.lineTo(6,-84);ctx.quadraticCurveTo(13,-52,9,4);ctx.closePath();ctx.fill();
+      p.canopy.forEach(c=>{ctx.fillStyle='rgba(76,122,66,.92)';circ(c.dx,c.dy,c.r)});
+      ctx.fillStyle='rgba(240,158,92,.9)';[[-18,-117],[16,-102],[3,-138]].forEach(f=>circ(f[0],f[1],3));
+      break}
+    case 'shrub':{
+      p.blobs.forEach(b=>{ctx.fillStyle='rgba(84,128,72,.95)';circ(b.dx,b.dy,b.r)});
+      ctx.fillStyle=p.hue;for(let i=0;i<4;i++)circ(-18+i*12,-42-Math.sin(i+t*0.002)*3,2.6);
+      break}
+    case 'bloom':{
+      ctx.strokeStyle='#4a7a4a';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,2);
+      ctx.quadraticCurveTo(Math.sin(t*0.0009+p.phase)*8,-p.h*0.5,0,-p.h);ctx.stroke();
+      ctx.fillStyle='#5d8f57';leaf(-12,-p.h*0.4,-0.7);leaf(12,-p.h*0.55,0.7);
+      ctx.save();ctx.translate(0,-p.h);
+      for(let i=0;i<p.petals;i++){ctx.save();ctx.rotate(i/ p.petals*TAU+Math.sin(t*0.001+p.phase)*0.05);
+        ctx.fillStyle=p.color;petal(0,-14);ctx.restore();}
+      ctx.fillStyle='#f2d06b';circ(0,0,9);
+      ctx.fillStyle='rgba(33,29,19,.35)';for(let i=0;i<5;i++)circ(-3+Math.cos(i*1.7)*3.4,-3+Math.sin(i*1.7)*3.4,1.1);
+      ctx.restore();break}
+    case 'stone':{
+      ctx.fillStyle='#7d7a72';ctx.beginPath();ctx.ellipse(0,-6,20,13,0,0,TAU);ctx.fill();
+      ctx.fillStyle='#8f8c83';ctx.beginPath();ctx.ellipse(-4,-9,11,7,-0.3,0,TAU);ctx.fill();
+      break}
+    case 'mail':{
+      ctx.fillStyle='#6b5136';ctx.fillRect(-3,-26,6,26);
+      ctx.fillStyle='#c2541f';rr(-17,-52,34,26,5);ctx.fill();
+      ctx.fillStyle='#a34215';ctx.beginPath();ctx.arc(0,-52,17,Math.PI,0);ctx.fill();
+      ctx.strokeStyle='#f2eee6';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-17,-52);ctx.lineTo(0,-38);ctx.lineTo(17,-52);ctx.stroke();
+      ctx.fillStyle='#ffd68a';ctx.fillRect(14,-58,4,12); // flag
+      break}
+    case 'sprout':case 'wild':{
+      ctx.strokeStyle='#4a7a4a';ctx.lineWidth=2.6;ctx.beginPath();ctx.moveTo(0,0);
+      ctx.quadraticCurveTo(2,-10,0,-20);ctx.stroke();
+      ctx.fillStyle='#5d8f57';leaf(-6,-12,-0.8);leaf(6,-16,0.8);
+      if(p.kind==='wild'&&g>0.55){ctx.fillStyle=p.hue;
+        for(let i=0;i<5;i++){ctx.save();ctx.translate(0,-21);ctx.rotate(i/5*TAU);petal(0,-5,3.4);ctx.restore();}
+        ctx.fillStyle='#f2d06b';circ(0,-21,2.4);}
+      break}
+  }
+  ctx.restore();
+}
+function circ(x,y,r){ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill()}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,w,h,r):ctx.rect(x,y,w,h)}
+function leaf(x,y,a){ctx.save();ctx.translate(x,y);ctx.rotate(a);
+  ctx.beginPath();ctx.ellipse(0,0,10,4.5,0,0,TAU);ctx.fill();ctx.restore()}
+function petal(x,y,l=16){ctx.beginPath();ctx.ellipse(x,y,l*0.42,l,0,0,TAU);ctx.fill()}
+
+/* ── weather ─────────────────────────────────────────────── */
+let rain=0,rainTarget=0,nextAuto=Date.now()+45000;
+document.getElementById('waterBtn').addEventListener('click',()=>{
+  rainTarget=rainTarget>0?0:1; toast(rainTarget?'Rain — the garden says thank you.':'The clouds move on.');
+});
+setInterval(()=>{ if(Date.now()>nextAuto&&!RM){rainTarget=rnd()<0.4?1:0;
+  if(rainTarget)setTimeout(()=>rainTarget=0,16000); nextAuto=Date.now()+60000+rnd()*60000;} },5000);
+const drops=Array.from({length:130},()=>({x:rnd(),y:rnd(),v:9+rnd()*5}));
+const splashes=[];
+function wind(){return rain>0.3?0.25:0.6+Math.sin(performance.now()*0.00017)*0.35}
+
+/* ── critters ────────────────────────────────────────────── */
+const flies=grove.map((g,i)=>({p:g,a:rnd()*TAU,r:26+rnd()*20,sp:0.4+rnd()*0.5}));
+const birds=Array.from({length:2},()=>({x:rnd()*W,y:60+rnd()*80,vx:0.4+rnd()*0.5,ph:rnd()*TAU}));
+
+/* ── sound (generative, off by default) ──────────────────── */
+let ac=null,master=null,soundOn=false;
+function audio(){ if(ac)return; ac=new (window.AudioContext||window.webkitAudioContext)();
+  master=ac.createGain();master.gain.value=0.14;master.connect(ac.destination);}
+function blip(f0,f1,dur,type='sine',g=0.5){ const t=ac.currentTime;
+  const o=ac.createOscillator(),GN=ac.createGain();o.type=type;
+  o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);
+  GN.gain.setValueAtTime(0,t);GN.gain.linearRampToValueAtTime(g,t+0.02);
+  GN.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  o.connect(GN);GN.connect(master);o.start(t);o.stop(t+dur+0.05);}
+function rainNoise(){ const len=ac.sampleRate*2,b=ac.createBuffer(1,len,ac.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  const s=ac.createBufferSource();s.buffer=b;s.loop=true;
+  const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=1100;
+  const g=ac.createGain();g.gain.value=0;s.connect(f);f.connect(g);g.connect(master);s.start();return g;}
+let rainG=null;
+setInterval(()=>{ if(!soundOn||!ac)return; const h=new Date().getHours();
+  if(nightF(h)<0.4&&rnd()<0.5){blip(2200+rnd()*800,1500,0.28,'sine',0.25);      // birds by day
+    if(rnd()<0.5)setTimeout(()=>blip(2600,1900,0.2,'sine',0.2),300);}
+  if(nightF(h)>0.6&&rnd()<0.7){blip(420,430,0.08,'square',0.06);                 // crickets by night
+    setTimeout(()=>blip(420,430,0.08,'square',0.06),140);}
+  if(rainG)rainG.gain.value=rain*0.5;
+},900);
+document.getElementById('soundBtn').addEventListener('click',function(){
+  audio();soundOn=!soundOn;this.textContent=soundOn?'♪ ON':'♪ OFF';
+  if(soundOn){ac.resume();if(!rainG)rainG=rainNoise();toast(nightF(new Date().getHours())>0.5?'Crickets hum…':'Birdsong…');}
+});
+
+/* ── hover & card ────────────────────────────────────────── */
+let hover=null;
+const chipEl=document.getElementById('chip');
+addEventListener('pointermove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;
+  let best=null,bd=110;
+  interactive.forEach(p=>{const pos=plantPos(p),dx=pos.x-cam.x-e.clientX,dy=pos.y-(p.kind==='stone'?10:p.s*60)-e.clientY;
+    const d=Math.hypot(dx,dy);if(d<bd){bd=d;best=p}});
+  hover=best;document.body.style.cursor=best?'pointer':(e.clientY>groundY-40?'cell':'default');
+  if(best){chipEl.textContent=(best.data?best.data.kick+' — CLICK':'');
+    chipEl.style.left=e.clientX+'px';chipEl.style.top=e.clientY+'px';chipEl.classList.add('show');}
+  else chipEl.classList.remove('show');
+},{passive:true});
+const card=document.getElementById('card');
+addEventListener('click',e=>{
+  if(document.getElementById('index').classList.contains('open'))return;
+  if(!hover){card.classList.remove('open');return}
+  const d=hover.data;if(!d)return;
+  document.getElementById('cardKick').textContent=d.kick;
+  document.getElementById('cardTitle').textContent=d.title;
+  document.getElementById('cardBody').innerHTML=d.body;
+  document.getElementById('cardMetrics').innerHTML=d.metrics.map(m=>'<span>'+m+'</span>').join('');
+  card.classList.add('open');
+});
+document.getElementById('cardClose').addEventListener('click',()=>card.classList.remove('open'));
+addEventListener('keydown',e=>{if(e.key==='Escape'){card.classList.remove('open');closeIndex()}});
+
+/* index */
+const idx=document.getElementById('index');
+function closeIndex(){idx.classList.remove('open')}
+document.getElementById('indexBtn').addEventListener('click',()=>idx.classList.toggle('open'));
+document.getElementById('indexClose').addEventListener('click',closeIndex);
+
+/* toast */
+let toastT;
+function toast(msg){const t=document.getElementById('toast');t.innerHTML=msg;
+  t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),4200);}
+
+/* clock chip */
+function clock(){const d=new Date();
+  const hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0');
+  const ph=d.getHours()<5?'DEEP NIGHT':d.getHours()<7?'DAWN':d.getHours()<12?'MORNING':
+           d.getHours()<17?'AFTERNOON':d.getHours()<19?'GOLDEN HOUR':d.getHours()<22?'DUSK':'NIGHT';
+  document.getElementById('clockChip').innerHTML='DELHI NCR · <b>'+hh+':'+mm+'</b> · '+ph;}
+clock();setInterval(clock,30000);
+
+/* polaroid → about card */
+document.getElementById('polaroid').addEventListener('click',()=>{
+  const t=interactive[0];
+  document.getElementById('cardKick').textContent=t.data.kick;
+  document.getElementById('cardTitle').textContent=t.data.title;
+  document.getElementById('cardBody').innerHTML=t.data.body;
+  document.getElementById('cardMetrics').innerHTML=t.data.metrics.map(m=>'<span>'+m+'</span>').join('');
+  card.classList.add('open');
+});
+
+/* ── MAIN LOOP ───────────────────────────────────────────── */
+const worldDom=document.getElementById('worldDom');
+const heroTitle=document.getElementById('heroTitle');
+let started=Date.now();
+
+function frame(now){
+  const t=now-started, h=new Date().getHours()+new Date().getMinutes()/60;
+  const nf=nightF(h), ll=1-nf*0.55;
+  rain=lerp(rain,RM?0:rainTarget,0.02);
+
+  /* camera */
+  cam.x=clamp(RM?cam.tx:lerp(cam.x,cam.tx,0.075),0,worldW()-W);
+  worldDom.style.transform='translate3d('+(-cam.x)+'px,0,0)';
+  heroTitle.style.opacity=clamp(1-cam.x/(W*0.55),0,1);
+
+  /* sky */
+  const [c1,c2,c3]=skyColors(h);
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,c1);g.addColorStop(0.55,c2);g.addColorStop(1,c3);
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+  /* stars */
+  if(nf>0.15){stars.forEach(s=>{ctx.globalAlpha=nf*(0.4+0.6*Math.abs(Math.sin(t*0.001+s.p)));
+    ctx.fillStyle='#fff';circ(s.x*W,s.y*H,s.r)});ctx.globalAlpha=1;}
+
+  /* sun & moon */
+  const dt=(h-6)/12, nt=((h+12)%24-6)/12;
+  if(dt>0&&dt<1){const sx=W*(1-dt),sy=H*0.72-Math.sin(dt*Math.PI)*H*0.55;
+    glow(sx,sy,60,'rgba(255,214,138,'+(0.55- rain*0.3)+')');ctx.fillStyle='#ffdf9e';circ(sx,sy,26);}
+  if(nf>0.3&&nt>0&&nt<1){const mx=W*(1-nt),my=H*0.72-Math.sin(nt*Math.PI)*H*0.5;
+    glow(mx,my,44,'rgba(220,228,255,.35)');ctx.fillStyle='#e9edfb';circ(mx,my,19);
+    ctx.fillStyle=skyColors(h)[0];circ(mx+7,my-5,16);}
+  function glow(x,y,r,c){const G=ctx.createRadialGradient(x,y,0,x,y,r*3);
+    G.addColorStop(0,c);G.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=G;ctx.fillRect(x-r*3,y-r*3,r*6,r*6);}
+  function hill(par,base,amp,fq){
+    ctx.beginPath();ctx.moveTo(-4,H);
+    for(let x=-4;x<=W+14;x+=14){
+      const wx=x+cam.x*par;
+      ctx.lineTo(x, base + Math.sin(wx*fq)*amp*0.5 + Math.sin(wx*fq*2.7+1.4)*amp*0.28);
+    }
+    ctx.lineTo(W+14,H);ctx.closePath();ctx.fill();
+  }
+
+  /* clouds */
+  clouds.forEach(c=>{c.x+=c.sp*(rain>0.4?1.8:1);if(c.x>1.15)c.x=-0.15;
+    const cx=c.x*W-cam.x*0.15,cy=c.y*H,cs=c.s*46;
+    ctx.fillStyle=rain>0.4?'rgba(90,96,110,'+(0.5*rain+0.2)+')':'rgba(255,252,244,'+(0.5*(1-nf*0.6))+')';
+    circ(cx,cy,cs*0.6);circ(cx+cs*0.55,cy+cs*0.12,cs*0.48);circ(cx-cs*0.55,cy+cs*0.14,cs*0.42);});
+
+  /* far hills */
+  ctx.fillStyle=mixc('#5b7a55','#2c3a4a',nf*0.7);hill(0.14,H*0.70,110,0.0016);
+  ctx.fillStyle=mixc('#486b47','#242f3d',nf*0.7);hill(0.3,H*0.74,80,0.0024);
+
+  /* ground */
+  const gg=ctx.createLinearGradient(0,groundY-40,0,H);
+  gg.addColorStop(0,mixc(rain>0.3?'#5d4a33':'#77593a','#1d2430',nf*0.65));
+  gg.addColorStop(1,mixc('#3e2f20','#12161f',nf*0.65));
+  ctx.fillStyle=gg;ctx.fillRect(0,groundY-40,W,H-(groundY-40));
+  ctx.fillStyle=mixc('#6f8a4e','#28323f',nf*0.7);
+  ctx.fillRect(0,groundY-44,W,10);
+  /* pebbles */
+  for(let i=0;i<26;i++){const px=((i*137)%W),py=groundY-26+((i*71)%60);
+    ctx.fillStyle='rgba(0,0,0,.12)';ctx.beginPath();ctx.ellipse(px,py,6+(i%3)*3,3,0,0,TAU);ctx.fill();}
+
+  /* plants */
+  plants.forEach(p=>drawPlant(p,t,ll));
+
+  /* birds (day) */
+  if(nf<0.3&&!RM){ctx.strokeStyle='rgba(33,29,19,.7)';ctx.lineWidth=1.6;
+    birds.forEach(b=>{b.x+=b.vx;if(b.x>W+30)b.x=-30;
+      const by=b.y+Math.sin(t*0.002+b.ph)*8,w=Math.sin(t*0.02+b.ph)*5;
+      ctx.beginPath();ctx.moveTo(b.x-8,by+w);ctx.quadraticCurveTo(b.x-3,by-3,b.x,by);
+      ctx.quadraticCurveTo(b.x+3,by-3,b.x+8,by+w);ctx.stroke();});}
+
+  /* fireflies (night) */
+  if(nf>0.2){flies.forEach((f,i)=>{f.a+=0.008*f.sp*(RM?0:1);
+      const pos=plantPos(f.p),fx=pos.x-cam.x+Math.cos(f.a)*f.r,fy=pos.y-30+Math.sin(f.a*1.4)*16;
+      ctx.globalAlpha=nf*(0.5+0.5*Math.sin(t*0.004+i));
+      glow(fx,fy,7,'rgba(255,230,140,.8)');ctx.fillStyle='#fff6c9';circ(fx,fy,1.6);});
+    ctx.globalAlpha=1;}
+
+  /* rain */
+  if(rain>0.02){ctx.strokeStyle='rgba(190,205,225,'+(0.5*rain)+')';ctx.lineWidth=1;
+    drops.forEach(d=>{d.y+=d.v*0.02*rain;d.x-=0.002*rain;
+      if(d.y>1){d.y=-0.05;d.x=rnd();splashes.push({x:d.x*W,y:groundY+20+rnd()*40,r:1,a:0.5*rain});}
+      const px=d.x*W,py=d.y*H;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px-3,py+14);ctx.stroke();});
+    for(let i=splashes.length-1;i>=0;i--){const s=splashes[i];s.r+=0.9;s.a-=0.02;
+      if(s.a<=0){splashes.splice(i,1);continue}
+      ctx.strokeStyle='rgba(200,215,235,'+s.a+')';
+      ctx.beginPath();ctx.ellipse(s.x,s.y,s.r,s.r*0.35,0,0,TAU);ctx.stroke();}
+  }
+
+  /* weather chip */
+  const wc=document.getElementById('weatherChip');
+  const wtxt=rain>0.4?'RAIN · GREAT FOR GROWTH':(nf>0.6?'CLEAR NIGHT':'FAIR SKY');
+  if(wc.dataset.t!==wtxt){wc.dataset.t=wtxt;wc.innerHTML='<b>'+(rain>0.4?'☂':'◦')+'</b> '+wtxt;}
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* intro toast */
+setTimeout(()=>{
+  toast(first
+    ?'Welcome to my garden, <b>Visitor #'+visitNo+'</b> — a seed was just planted for you. It keeps growing after you leave.'
+    :'Welcome back, <b>Visitor #'+visitNo+'</b> — look how the garden has grown since your first visit.');
+},1200);
+})();
+</script>
+</body>
+</html>
