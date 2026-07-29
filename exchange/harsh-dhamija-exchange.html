@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HDX · The Harsh Dhamija Exchange — AI Performance Marketer, publicly traded</title>
+<meta name="description" content="Harsh Dhamija has gone public. Trade shares of his marketing skills on HDX — a live simulated exchange with candlesticks, ticker tape, news and fundamentals. Delhi NCR.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2306080a'/%3E%3Cpath d='M14 44 L26 32 L34 38 L50 18' stroke='%23ffb300' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090c; --panel:#0c1015; --panel2:#10151c; --line:#1c232e;
+  --ink:#e8edf2; --mut:#7d8894; --dim:#4a545f;
+  --up:#22c55e; --dn:#ef4444; --gold:#ffb300; --cyan:#38bdf8; --viol:#a78bfa;
+  --mono:'JetBrains Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
+  --serif:'Fraunces',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:400 .86rem/1.55 var(--sans);min-height:100vh}
+.mono{font-family:var(--mono)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
+::selection{background:var(--gold);color:#000}
+.up{color:var(--up)}.dn{color:var(--dn)}.gold{color:var(--gold)}.cy{color:var(--cyan)}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.05;
+  background:repeating-linear-gradient(transparent 0 3px,rgba(0,0,0,.9) 3px 4px)}
+.crt{position:fixed;inset:0;pointer-events:none;z-index:81;
+  background:radial-gradient(120% 100% at 50% 0%,transparent 60%,rgba(0,0,0,.45))}
+
+/* ── masthead + ticker ───────────────────────────────────── */
+header{
+  display:flex;align-items:center;gap:1rem;padding:.65rem 1rem;border-bottom:1px solid var(--line);
+  background:var(--panel);position:sticky;top:0;z-index:40;flex-wrap:wrap;
+}
+.mast{font:700 1.05rem var(--mono);letter-spacing:.02em}
+.mast b{color:var(--gold)}
+.mast small{display:block;font:600 .5rem var(--mono);letter-spacing:.3em;color:var(--mut)}
+.hchip{
+  display:flex;align-items:center;gap:.45rem;border:1px solid var(--line);border-radius:6px;
+  padding:.35rem .65rem;font:600 .56rem var(--mono);letter-spacing:.1em;color:var(--mut);
+  background:var(--panel2);
+}
+.hchip b{color:var(--ink)}
+#mktDot{width:8px;height:8px;border-radius:50%}
+header .right{margin-left:auto;display:flex;gap:.5rem;flex-wrap:wrap}
+.tap{
+  overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:#05070a;white-space:nowrap;position:relative;height:34px;display:flex;align-items:center;
+}
+.tap-in{display:inline-flex;gap:2.6rem;padding-left:1rem;animation:tape 40s linear infinite;will-change:transform}
+@keyframes tape{to{transform:translateX(-50%)}}
+.tap b{font:600 .72rem var(--mono)}
+.tap .nm{color:var(--mut);font:600 .6rem var(--mono);margin-left:.35rem}
+
+/* ── layout ──────────────────────────────────────────────── */
+.grid{
+  display:grid;grid-template-columns:300px 1fr 320px;gap:1px;background:var(--line);
+  border-bottom:1px solid var(--line);
+}
+.col{background:var(--bg);min-height:calc(100vh - 178px);padding:.9rem}
+.col h5{font:600 .56rem var(--mono);letter-spacing:.26em;color:var(--dim);margin-bottom:.7rem;
+  display:flex;justify-content:space-between;align-items:center}
+.col h5 .live-pill{color:var(--up)}
+
+/* asset list */
+.asset{
+  display:grid;grid-template-columns:56px 1fr 74px;gap:.5rem;align-items:center;
+  padding:.55rem .55rem;border:1px solid transparent;border-radius:8px;cursor:pointer;
+  transition:background .2s,border-color .2s;
+}
+.asset:hover{background:var(--panel)}
+.asset.sel{background:var(--panel2);border-color:var(--gold)}
+.asset .s{font:700 .74rem var(--mono)}
+.asset .n{font:500 .62rem var(--sans);color:var(--mut);letter-spacing:.02em}
+.asset .p{font:600 .72rem var(--mono);text-align:right}
+.asset .c{font:600 .6rem var(--mono);text-align:right}
+
+/* chart */
+.chart-head{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:.6rem}
+.chart-head .sym{font:700 1.3rem var(--mono)}
+.chart-head .nm{color:var(--mut);font:500 .72rem var(--sans)}
+.chart-head .px{font:700 1.3rem var(--mono)}
+.chart-head .chg{font:600 .74rem var(--mono)}
+.ohlc{display:flex;gap:.9rem;font:600 .58rem var(--mono);color:var(--mut);margin-bottom:.4rem}
+.ohlc b{color:var(--ink)}
+#chart{width:100%;height:430px;display:block;cursor:crosshair;background:var(--panel);
+  border:1px solid var(--line);border-radius:10px}
+.xhair-info{font:600 .58rem var(--mono);color:var(--mut);height:1.2rem;margin-top:.35rem}
+
+/* trade + holdings */
+.tbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:.9rem;margin-bottom:1rem}
+.trow{display:flex;justify-content:space-between;align-items:center;font:600 .62rem var(--mono);color:var(--mut);margin:.45rem 0}
+.trow b{color:var(--ink)}
+.qty{display:flex;align-items:center;gap:.5rem}
+.qty button{width:28px;height:28px;border:1px solid var(--line);border-radius:6px;font:700 .9rem var(--mono);transition:.2s}
+.qty button:hover{border-color:var(--gold);color:var(--gold)}
+.qty input{
+  width:64px;background:var(--bg);border:1px solid var(--line);border-radius:6px;color:var(--ink);
+  font:700 .8rem var(--mono);text-align:center;padding:.3rem;outline:none;
+}
+.tbtn{flex:1;padding:.65rem;border-radius:8px;font:700 .68rem var(--mono);letter-spacing:.12em;transition:transform .2s,filter .2s}
+.tbtn:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.tbtn.buy{background:var(--up);color:#021007}
+.tbtn.sell{background:var(--dn);color:#160303}
+.tbtns{display:flex;gap:.5rem;margin-top:.7rem}
+.fld{font:600 .6rem var(--mono);color:var(--dim);letter-spacing:.1em}
+.pos{display:grid;grid-template-columns:56px 1fr auto;gap:.5rem;align-items:center;padding:.45rem .2rem;border-bottom:1px dashed var(--line);font:600 .62rem var(--mono)}
+.pos small{display:block;color:var(--dim);font-size:.5rem}
+.empty{color:var(--dim);font:600 .6rem var(--mono);padding:.6rem 0;letter-spacing:.1em}
+
+/* news */
+#news{max-height:330px;overflow-y:auto;display:flex;flex-direction:column;gap:.45rem;padding-right:.3rem}
+#news::-webkit-scrollbar{width:5px}
+#news::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+.news-i{border-left:2px solid var(--gold);background:var(--panel);padding:.5rem .65rem;border-radius:0 8px 8px 0;animation:flash .6s ease}
+.news-i b{font:700 .6rem var(--mono);letter-spacing:.06em;color:var(--gold);display:block}
+.news-i span{font:500 .64rem var(--sans);color:var(--mut)}
+.news-i.mv{border-color:var(--cyan)}.news-i.mv b{color:var(--cyan)}
+.news-i.earn{border-color:var(--up)}.news-i.earn b{color:var(--up)}
+.news-i.warn{border-color:var(--dn)}.news-i.warn b{color:var(--dn)}
+@keyframes flash{0%{background:rgba(255,179,0,.25)}100%{background:var(--panel)}}
+
+/* order book */
+.book{display:flex;flex-direction:column;gap:2px;font:600 .58rem var(--mono)}
+.book .lvl{display:grid;grid-template-columns:1fr auto;gap:.5rem;position:relative;padding:.12rem .4rem;border-radius:4px;overflow:hidden}
+.book .lvl i{position:absolute;inset:0 auto 0 0;opacity:.14}
+.book .lvl.bid{color:var(--up)}.book .lvl.bid i{background:var(--up)}
+.book .lvl.ask{color:var(--dn)}.book .lvl.ask i{background:var(--dn)}
+.book .lvl span{position:relative;color:var(--mut)}
+.book .lvl b{position:relative}
+.spread{text-align:center;color:var(--dim);font:600 .55rem var(--mono);padding:.25rem 0;letter-spacing:.14em}
+
+/* ── filings (the résumé) ───────────────────────────────── */
+.filings{max-width:1060px;margin:0 auto;padding:4rem 1.2rem 3rem}
+.f-head{text-align:center;margin-bottom:2.6rem}
+.f-head .u{font:600 .58rem var(--mono);letter-spacing:.4em;color:var(--gold)}
+.f-head h2{font:italic 700 clamp(1.9rem,4.5vw,3rem)/1.15 var(--serif);letter-spacing:-.01em;margin:.7rem 0 .5rem}
+.f-head p{color:var(--mut);max-width:58ch;margin:0 auto;font-size:.86rem}
+.doc{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:1.6rem;margin-bottom:1.2rem}
+.doc .df{font:600 .58rem var(--mono);letter-spacing:.3em;color:var(--cyan);border-bottom:1px solid var(--line);padding-bottom:.7rem;margin-bottom:1rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.doc .df b{color:var(--ink)}
+.doc h3{font:700 1.2rem var(--serif);margin-bottom:.8rem}
+.doc p{color:var(--mut);font-size:.85rem;max-width:70ch}
+.doc .row{display:grid;grid-template-columns:170px 1fr;gap:1rem;padding:.75rem 0;border-top:1px dashed var(--line)}
+.doc .row .w{font:600 .56rem var(--mono);letter-spacing:.12em;color:var(--gold)}
+.doc .row b.t{display:block;font:600 .9rem var(--sans)}
+.doc .row .o{font:600 .56rem var(--mono);letter-spacing:.12em;color:var(--mut);margin-bottom:.3rem}
+.doc .row ul{list-style:none;display:flex;flex-wrap:wrap;gap:.35rem}
+.doc .row ul li{font:600 .56rem var(--mono);color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:.25rem .6rem}
+.tagrow{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.3rem}
+.tagrow span{font:600 .54rem var(--mono);color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:.28rem .62rem}
+.f6{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.f6 .bx{border:1px solid var(--line);border-radius:10px;padding:.7rem;text-align:center}
+.f6 .bx b{display:block;font:700 1.25rem var(--mono);color:var(--gold)}
+.f6 .bx span{font:600 .5rem var(--mono);letter-spacing:.12em;color:var(--dim)}
+
+/* ceo letter + acquisition */
+.ceo{
+  border:1px solid var(--gold);border-radius:16px;background:linear-gradient(160deg,rgba(255,179,0,.06),transparent 55%),var(--panel);
+  padding:2rem;margin:1.2rem 0;
+}
+.ceo .sig{font:italic 600 1.3rem var(--serif);color:var(--gold)}
+.acquire{text-align:center;padding:2.6rem 1rem}
+.acquire h2{font:italic 700 clamp(1.8rem,4.5vw,2.8rem)/1.15 var(--serif)}
+.acquire p{color:var(--mut);margin:.6rem auto 1.4rem;max-width:52ch}
+.abtns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.abtn{padding:.85rem 1.6rem;border-radius:99px;font:700 .7rem var(--mono);letter-spacing:.12em;transition:transform .25s,filter .25s;display:inline-block}
+.abtn:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.abtn.g{background:var(--gold);color:#161000}
+.abtn.o{border:1px solid var(--line);color:var(--ink)}
+footer{border-top:1px solid var(--line);padding:1.2rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;font:600 .54rem var(--mono);letter-spacing:.18em;color:var(--dim)}
+
+.toast{
+  position:fixed;left:50%;bottom:1.2rem;transform:translate(-50%,200%);z-index:70;
+  background:var(--ink);color:#000;padding:.65rem 1.2rem;border-radius:8px;
+  font:700 .62rem var(--mono);letter-spacing:.1em;transition:transform .5s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
+}
+.toast.show{transform:translate(-50%,0)}
+
+@media (max-width:1080px){
+  .grid{grid-template-columns:1fr}
+  .col{min-height:auto}
+  #news{max-height:220px}
+  header .right .hchip:nth-child(2){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .tap-in{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="scan" aria-hidden="true"></div>
+<div class="crt" aria-hidden="true"></div>
+
+<header>
+  <div class="mast"><b>HDX</b>&nbsp;EXCHANGE<small>THE HARSH DHAMIJA MARKET · EST. 2026</small></div>
+  <span class="hchip"><span id="mktDot"></span><b id="mktStatus">—</b></span>
+  <div class="right">
+    <span class="hchip">IST <b id="clock">--:--:--</b></span>
+    <span class="hchip">EQUITY <b id="hEquity">₹0</b></span>
+    <button class="hchip" id="soundBtn" style="cursor:pointer">♪ <b>OFF</b></button>
+  </div>
+</header>
+
+<div class="tap"><div class="tap-in" id="tape"></div></div>
+
+<div class="grid">
+  <!-- LEFT: assets -->
+  <div class="col">
+    <h5>LISTED ASSETS <span class="live-pill" id="tickDot">●</span></h5>
+    <div id="assetList"></div>
+  </div>
+
+  <!-- CENTER: chart -->
+  <div class="col">
+    <div class="chart-head">
+      <span class="sym gold" id="cSym">HDX</span>
+      <span class="nm" id="cName">THE HARSH INDEX</span>
+      <span class="px" id="cPx">—</span>
+      <span class="chg" id="cChg">—</span>
+    </div>
+    <div class="ohlc" id="cOhlc"></div>
+    <canvas id="chart"></canvas>
+    <div class="xhair-info" id="xInfo">IPO PRICE ₹100 · FLOAT: FULLY PUBLIC · CIRCUIT LIMIT: NONE — THE CEO WORKS WEEKENDS</div>
+  </div>
+
+  <!-- RIGHT: trade, book, news -->
+  <div class="col">
+    <div class="tbox">
+      <h5>ORDER TICKET — <b class="gold" id="tSym">HDX</b></h5>
+      <div class="trow"><span>CASH</span><b id="tCash">₹0</b></div>
+      <div class="trow"><span>MARKET PRICE</span><b id="tPx">—</b></div>
+      <div class="trow"><span>QUANTITY</span>
+        <span class="qty"><button id="qMinus">−</button><input id="qIn" value="10" inputmode="numeric"><button id="qPlus">+</button></span>
+      </div>
+      <div class="trow"><span>ORDER VALUE</span><b id="tVal">₹0</b></div>
+      <div class="tbtns">
+        <button class="tbtn buy" id="buyBtn">BUY / LONG</button>
+        <button class="tbtn sell" id="sellBtn">SELL / EXIT</button>
+      </div>
+      <div class="trow" style="margin-top:.6rem"><span>P&amp;L (ALL POSITIONS)</span><b id="tPnl">—</b></div>
+    </div>
+
+    <h5>YOUR POSITIONS</h5>
+    <div id="positions"><p class="empty">NO HOLDINGS — THE MARKET AWAITS YOUR CONVICTION.</p></div>
+
+    <h5 style="margin-top:1.2rem">ORDER BOOK <span class="live-pill">SIMULATED DEPTH</span></h5>
+    <div class="book" id="book"></div>
+
+    <h5 style="margin-top:1.2rem">WIRE <span class="live-pill">LIVE</span></h5>
+    <div id="news"></div>
+  </div>
+</div>
+
+<!-- ═ FILINGS: the actual portfolio ═ -->
+<div class="filings" id="filings">
+  <div class="f-head">
+    <p class="u">HDX REGULATORY FILINGS · INVESTOR RELATIONS</p>
+    <h2>The fundamentals behind the ticker.</h2>
+    <p>Markets run on stories; filings run on facts. Below: the complete audited
+    record of Harsh Dhamija — AI Performance Marketer, Delhi NCR.</p>
+  </div>
+
+  <div class="doc">
+    <div class="df"><span>FORM <b>HD-10</b> · ANNUAL REPORT</span><span>SECTION: PROFESSIONAL SUMMARY</span></div>
+    <h3>The business of growth.</h3>
+    <p>AI Performance Marketer with a Growth Marketing mindset, combining paid advertising,
+    business development and customer acquisition to help businesses generate qualified leads
+    and improve marketing performance. Background spans digital marketing, real-estate sales,
+    strategic market research and customer experience. Method: creativity + analytics +
+    AI-powered workflows. Belief: the best marketing decisions run on data, customer insight
+    and continuous experimentation.</p>
+  </div>
+
+  <div class="doc">
+    <div class="df"><span>FORM <b>HD-10</b> · CONTINUED</span><span>SECTION: OPERATING HISTORY</span></div>
+    <div class="row">
+      <span class="w">APR 2026 — JUN 2026</span>
+      <div><b class="t">AI Performance Marketing Intern</b><p class="o">DIGIMARK MEDIA</p>
+        <ul><li>4 META CAMPAIGNS</li><li>2 GOOGLE CAMPAIGNS</li><li>50+ AD CREATIVES</li><li>20+ SOCIAL POSTS</li><li>10+ COMPETITOR ANALYSES</li><li>15+ WEBSITE BUILDS</li><li>AI-ASSISTED COPY</li></ul>
+      </div>
+    </div>
+    <div class="row">
+      <span class="w">PREVIOUSLY</span>
+      <div><b class="t">Business Development Executive</b><p class="o">PROPSALT LANDBASE · REAL ESTATE</p>
+        <ul><li>LEAD GENERATION</li><li>CLIENT CONSULTATION</li><li>SITE VISITS</li><li>CRM &amp; PIPELINE</li><li>NEGOTIATION</li><li>DEAL CLOSURE</li></ul>
+      </div>
+    </div>
+    <div class="row">
+      <span class="w">EARLIER</span>
+      <div><b class="t">Marketing &amp; Strategy Intern</b><p class="o">AGILE CAPITAL SERVICES</p>
+        <ul><li>MARKET RESEARCH</li><li>COMPETITOR ANALYSIS</li><li>STRATEGIC REPORTS</li><li>PRESENTATIONS</li></ul>
+      </div>
+    </div>
+    <div class="row">
+      <span class="w">EARLIEST</span>
+      <div><b class="t">Customer Care Executive — Sales</b><p class="o">TELEPERFORMANCE · APPLE PROCESS</p>
+        <ul><li>CUSTOMER SUPPORT</li><li>PRODUCT CONSULTATION</li><li>SALES ASSISTANCE</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc">
+    <div class="df"><span>FORM <b>HD-S1</b> · CAPABILITY STATEMENT</span><span>SECTION: SEGMENTS &amp; INSTRUMENTS</span></div>
+    <p style="margin-bottom:.8rem">Operating segments: Performance Marketing (Meta · Google · targeting · optimisation) ·
+    Growth Strategy (funnels · journeys · competitor analysis) · Analytics (reporting · CTR · conversion tracking) ·
+    AI &amp; Productivity (prompt engineering · AI workflows · automation) · Design &amp; Web (Wix · landing pages).</p>
+    <p class="fld" style="margin-bottom:.4rem">INSTRUMENTS IN USE</p>
+    <div class="tagrow">
+      <span>META ADS MANAGER</span><span>GOOGLE ADS</span><span>GA4</span><span>SEMRUSH</span><span>WIX</span>
+      <span>CHATGPT</span><span>CLAUDE</span><span>GEMINI</span><span>PERPLEXITY</span><span>EMERGENT</span>
+      <span>LOVABLE</span><span>STITCH</span><span>REPLIT</span>
+    </div>
+  </div>
+
+  <div class="doc">
+    <div class="df"><span>FORM <b>HD-10K</b> · SUPPLEMENT</span><span>SECTION: EDUCATION · CERTS · METRICS</span></div>
+    <div class="f6">
+      <div class="bx"><b>MBA</b><span>INT'L BUSINESS · MARKETING</span></div>
+      <div class="bx"><b>McK</b><span>McKINSEY.ORG FORWARD</span></div>
+      <div class="bx"><b>4</b><span>META CAMPAIGNS</span></div>
+      <div class="bx"><b>2</b><span>GOOGLE CAMPAIGNS</span></div>
+      <div class="bx"><b>50+</b><span>AD CREATIVES</span></div>
+      <div class="bx"><b>15+</b><span>WEBSITE BUILDS</span></div>
+    </div>
+  </div>
+
+  <div class="doc">
+    <div class="df"><span>FORM <b>HD-8K</b> · CURRENT EVENTS (NOW)</span><span>SECTION: THIS QUARTER</span></div>
+    <p>Exploring AI applications in performance marketing · building the personal brand
+    <b style="color:var(--gold)">theharshdhamija</b> around AI, marketing and growth · documenting real
+    campaign learnings · open to roles in performance marketing, growth marketing, paid media and AI-powered marketing.</p>
+  </div>
+
+  <div class="ceo">
+    <p class="df" style="border:none;margin-bottom:1rem;color:var(--gold)">FORM <b>HD-CEO</b> · SHAREHOLDER LETTER</p>
+    <h3>Dear future employer,</h3>
+    <p>I'm passionate about why people buy and how businesses grow. Rather than chasing trends, I study
+    principles — research the customer, build the strategy, launch, analyse, optimise, and scale what works.
+    If my stock chart impressed you, wait until you see what I do with your media budget.</p>
+    <br>
+    <p class="sig">— Harsh Dhamija, CEO of himself</p>
+  </div>
+
+  <div class="acquire">
+    <p class="u" style="font:600 .58rem var(--mono);letter-spacing:.4em;color:var(--gold)">CORPORATE ACTION NOTICE</p>
+    <h2>Acquire the company.</h2>
+    <p>No hostile takeover needed — the board <em>wants</em> to be acquired.
+    One email starts due diligence.</p>
+    <div class="abtns">
+      <!-- EDIT: replace with your real email -->
+      <a class="abtn g" href="/cdn-cgi/l/email-protection#41292033322925292c282b207577767901262c20282d6f222e2c" id="ctaMail">INITIATE ACQUISITION →</a>
+      <a class="abtn o" href="#" onclick="return false">LINKEDIN /in/harsh-dhamija-063897194 ↗</a>
+    </div>
+    <p style="margin-top:1.2rem;font:600 .56rem var(--mono);letter-spacing:.14em;color:var(--dim)">
+      REGISTERED OFFICE: DELHI NCR, INDIA · REPLIES WITHIN 24H</p>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 HDX EXCHANGE · HARSH DHAMIJA</span>
+  <span>MARKETS SIMULATED · SKILLS REAL · PAST PERFORMANCE = FUTURE AMBITION</span>
+</footer>
+
+<div class="toast" id="toast">ORDER EXECUTED</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(() => {
+'use strict';
+/* ═══════════ HDX EXCHANGE ENGINE ═══════════ */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id);
+const fmtIN=n=>'₹'+new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n));
+const f2=n=>new Intl.NumberFormat('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+
+let S=99;const SRND=()=>{S=(S*1664525+1013904223)>>>0;return S/4294967296};
+
+/* ── securities (fair values = his fundamentals) ─────────── */
+const SYMS=[
+ {s:'HDX',n:'THE HARSH INDEX',fv:1240,vol:1.5,pe:'∞',note:'THE PARENT ASSET'},
+ {s:'MTA',n:'META ADS PERFORMANCE',fv:884,vol:2.2,pe:'4 CPN LIVE'},
+ {s:'GAD',n:'GOOGLE ADS',fv:702,vol:2.0,pe:'2 CPN LIVE'},
+ {s:'AIF',n:'AI WORKFLOWS',fv:918,vol:2.6,pe:'8 AI TOOLS'},
+ {s:'LDG',n:'LEAD GENERATION',fv:801,vol:1.9,pe:'B2C+B2B'},
+ {s:'CRT',n:'CREATIVE & COPY',fv:746,vol:1.7,pe:'50+ UNITS'},
+ {s:'ANL',n:'ANALYTICS & REPORTING',fv:690,vol:1.5,pe:'GA4+SEMRUSH'},
+ {s:'STG',n:'STRATEGY & RESEARCH',fv:668,vol:1.4,pe:'10+ ANALYSES'},
+];
+const DAYS=90;
+SYMS.forEach((m,i)=>{
+  m.hist=[];let p=100+SRND()*20;
+  for(let d=0;d<DAYS;d++){
+    const drift=(m.fv-p)*0.03, w=(SRND()-0.5)*2*m.vol*4;
+    const o=p,c=clamp(p+drift+w,60,m.fv*1.5);
+    const h=Math.max(o,c)+SRND()*m.vol*2, l=Math.min(o,c)-SRND()*m.vol*2;
+    m.hist.push({o,h,l,c,v:800+SRND()*2200});p=c;
+  }
+  m.price=m.hist[m.hist.length-1].c;
+  m.prevClose=m.hist[m.hist.length-2].c;
+  m.cur={o:m.price,h:m.price,l:m.price,c:m.price,v:0};
+  m.spark=m.hist.slice(-14).map(c=>c.c);
+  m.tick=0;
+});
+
+/* ── trader account (persists!) ──────────────────────────── */
+const K='hdx_account';
+let acc;
+try{acc=JSON.parse(localStorage.getItem(K))||null}catch(e){acc=null}
+if(!acc) acc={cash:1000000,pos:{},tx:0,visits:0,last:0};
+if(!sessionStorage.getItem('hdx_s')){
+  acc.visits++;sessionStorage.setItem('hdx_s','1');
+  const days=acc.last?(Date.now()-acc.last)/864e5:0;
+  if(days>=1){acc.cash+=1000*Math.min(5,Math.floor(days));setTimeout(()=>toast('LOYALTY DIVIDEND CREDITED · '+fmtIN(1000*Math.min(5,Math.floor(days)))),2200);}
+  acc.last=Date.now();save();
+}
+function save(){try{localStorage.setItem(K,JSON.stringify(acc))}catch(e){}}
+
+/* ── market hours (NSE-style IST) ────────────────────────── */
+function istNow(){const d=new Date();return new Date(d.getTime()+ (330+d.getTimezoneOffset())*60000)}
+function marketOpen(){const d=istNow(),mins=d.getHours()*60+d.getMinutes(),day=d.getDay();
+  return day>=1&&day<=5&&mins>=555&&mins<=930}
+setInterval(()=>{const d=istNow();
+  $('clock').textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':');
+  const open=marketOpen();
+  $('mktStatus').textContent=open?'MARKET OPEN':'AFTER HOURS';
+  $('mktDot').style.background=open?'var(--up)':'var(--gold)';
+  $('mktDot').style.boxShadow=open?'0 0 8px var(--up)':'0 0 8px var(--gold)';
+},1000);
+
+/* ── audio ───────────────────────────────────────────────── */
+let AC=null,snd=false;
+function audio(){if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)()}}
+function ding(f,dur=.12,type='square',g=.06){if(!snd||!AC)return;const t=AC.currentTime,o=AC.createOscillator(),G=AC.createGain();
+  o.type=type;o.frequency.value=f;G.gain.setValueAtTime(g,t);G.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(G);G.connect(AC.destination);o.start(t);o.stop(t+dur+.02);}
+$('soundBtn').addEventListener('click',function(){audio();snd=!snd;this.innerHTML='♪ <b>'+(snd?'ON':'OFF')+'</b>';
+  if(snd){AC.resume();ding(660,.1);setTimeout(()=>ding(880,.12),120);}});
+
+/* ── state + selection ───────────────────────────────────── */
+let sel='HDX';
+const M=s=>SYMS.find(m=>m.s===s);
+
+/* ── ASSET LIST ──────────────────────────────────────────── */
+function renderAssets(){
+  $('assetList').innerHTML=SYMS.map(m=>{
+    const chg=(m.price-m.prevClose)/m.prevClose*100, up=chg>=0;
+    const pts=m.spark.map((v,i)=>(i/(m.spark.length-1)*56).toFixed(1)+','+(16-(v-Math.min(...m.spark))/(Math.max(...m.spark)-Math.min(...m.spark)||1)*14).toFixed(1)).join(' ');
+    return `<div class="asset ${m.s===sel?'sel':''}" data-s="${m.s}">
+      <div><div class="s ${up?'up':'dn'}">${m.s}</div><div class="n">${m.n}</div></div>
+      <svg width="56" height="18" viewBox="0 0 56 18"><polyline points="${pts}" fill="none" stroke="${up?'#22c55e':'#ef4444'}" stroke-width="1.4"/></svg>
+      <div><div class="p">${f2(m.price)}</div><div class="c ${up?'up':'dn'}">${up?'▲':'▼'} ${Math.abs(chg).toFixed(2)}%</div></div>
+    </div>`;}).join('');
+  document.querySelectorAll('.asset').forEach(a=>a.addEventListener('click',()=>{sel=a.dataset.s;renderAssets();renderAll();ding(520,.06);}));
+}
+
+/* ── CHART ───────────────────────────────────────────────── */
+const cv=$('chart'),ctx=cv.getContext('2d');
+let CW=0,CH=0,mouse=null;
+function sizeChart(){const DPR=Math.min(2,devicePixelRatio||1);
+  CW=cv.clientWidth;CH=cv.clientHeight;cv.width=CW*DPR;cv.height=CH*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);}
+addEventListener('resize',()=>{sizeChart();drawChart()});
+cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mouse={x:e.clientX-r.left,y:e.clientY-r.top};drawChart()});
+cv.addEventListener('pointerleave',()=>{mouse=null;drawChart()});
+
+function drawChart(){
+  const m=M(sel);const data=[...m.hist.slice(-60),m.cur];
+  const W=CW,H=CH,padL=8,padR=64,padT=14,volH=H*0.16,pH=H-padT-volH-20;
+  ctx.clearRect(0,0,W,H);
+  let mn=Infinity,mx=-Infinity,mv=0;
+  data.forEach(c=>{mn=Math.min(mn,c.l);mx=Math.max(mx,c.h);mv=Math.max(mv,c.v)});
+  const rng=(mx-mn)||1; mn-=rng*0.06; mx+=rng*0.06;
+  const bw=(W-padL-padR)/data.length, cw=Math.max(2,bw*0.62);
+  const Y=v=>padT+(mx-v)/(mx-mn)*pH;
+
+  /* grid + price labels */
+  ctx.strokeStyle='#141a23';ctx.fillStyle='#4a545f';ctx.font='600 9px "JetBrains Mono"';ctx.textAlign='left';
+  for(let i=0;i<=5;i++){const v=mn+ (mx-mn)*i/5,y=Y(v);
+    ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(W-padR,y);ctx.stroke();
+    ctx.fillText(f2(v),W-padR+8,y+3);}
+
+  /* candles */
+  data.forEach((c,i)=>{
+    const x=padL+i*bw+bw/2, up=c.c>=c.o;
+    ctx.strokeStyle=up?'#22c55e':'#ef4444';ctx.fillStyle=up?'#22c55e':'#ef4444';
+    ctx.beginPath();ctx.moveTo(x,Y(c.h));ctx.lineTo(x,Y(c.l));ctx.stroke();
+    const yo=Y(c.o),yc=Y(c.c);
+    ctx.fillRect(x-cw/2,Math.min(yo,yc),cw,Math.max(1.5,Math.abs(yc-yo)));
+    const vv=c.v/mv*volH;ctx.globalAlpha=.35;
+    ctx.fillRect(x-cw/2,H-8-vv,cw,vv);ctx.globalAlpha=1;
+    if(i===data.length-1){ /* last price tag */
+      ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(255,179,0,.5)';
+      ctx.beginPath();ctx.moveTo(padL,Y(c.c));ctx.lineTo(W-padR,Y(c.c));ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#ffb300';ctx.fillText(f2(c.c),W-padR+8,Y(c.c)-6);
+    }
+  });
+
+  /* crosshair */
+  if(mouse&&mouse.x>padL&&mouse.x<W-padR){
+    const i=clamp(Math.floor((mouse.x-padL)/bw),0,data.length-1),c=data[i];
+    ctx.setLineDash([4,4]);ctx.strokeStyle='rgba(232,237,242,.25)';
+    ctx.beginPath();ctx.moveTo(mouse.x,padT);ctx.lineTo(mouse.x,H-8);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(padL,mouse.y);ctx.lineTo(W-padR,mouse.y);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#e8edf2';
+    $('xInfo').innerHTML='SESSION '+(m.hist.length-60+i+1)+' · O <b class="'+(c.c>=c.o?'up':'dn')+'">'+f2(c.o)+'</b> · H <b class="up">'+f2(c.h)+'</b> · L <b class="dn">'+f2(c.l)+'</b> · C <b>'+f2(c.c)+'</b> · VOL '+Math.round(c.v).toLocaleString('en-IN');
+  }
+}
+
+/* ── header of chart + order ticket ──────────────────────── */
+function renderAll(){
+  const m=M(sel),chg=(m.price-m.prevClose)/m.prevClose*100,up=chg>=0;
+  $('cSym').textContent=m.s;$('cName').textContent=m.n;
+  $('cPx').textContent=f2(m.price);$('cPx').className='px '+(up?'up':'dn');
+  $('cChg').textContent=(up?'+':'−')+Math.abs(chg).toFixed(2)+'%';
+  $('cChg').className='chg '+(up?'up':'dn');
+  $('cOhlc').innerHTML='O <b>'+f2(m.cur.o)+'</b> H <b class="up">'+f2(m.cur.h)+'</b> L <b class="dn">'+f2(m.cur.l)+'</b> FV <b class="gold">'+f2(m.fv)+'</b> FLOAT <b>'+m.pe+'</b>';
+  $('tSym').textContent=m.s;$('tPx').textContent=f2(m.price);
+  const q=Math.max(1,parseInt($('qIn').value)||1);
+  $('tVal').textContent=fmtIN(q*m.price);
+  /* equity + pnl */
+  let invested=0,worth=0,html='';
+  for(const s in acc.pos){const p=acc.pos[s],mm=M(s);
+    invested+=p.qty*p.avg;worth+=p.qty*mm.price;
+    const pl=(mm.price-p.avg)*p.qty,up2=pl>=0;
+    html+=`<div class="pos"><b class="${up2?'up':'dn'}">${s}</b>
+      <span><small>${p.qty} SHRS @ ${f2(p.avg)}</small></span>
+      <b class="${up2?'up':'dn'}" style="text-align:right">${up2?'+':''}${fmtIN(pl)}<small>${f2(mm.price)}</small></b></div>`;}
+  $('positions').innerHTML=html||'<p class="empty">NO HOLDINGS — THE MARKET AWAITS YOUR CONVICTION.</p>';
+  const pnl=worth-invested;
+  $('tPnl').textContent=(invested?((pnl>=0?'+':'')+fmtIN(pnl)+' ('+(pnl/invested*100).toFixed(1)+'%)'):'—');
+  $('tPnl').className=invested?(pnl>=0?'up':'dn'):'';
+  $('tCash').textContent=fmtIN(acc.cash);
+  $('hEquity').textContent=fmtIN(acc.cash+worth);
+  drawChart();
+}
+$('qIn').addEventListener('input',renderAll);
+$('qPlus').addEventListener('click',()=>{$('qIn').value=(parseInt($('qIn').value)||0)+10;renderAll()});
+$('qMinus').addEventListener('click',()=>{$('qIn').value=Math.max(1,(parseInt($('qIn').value)||1)-10);renderAll()});
+
+/* ── trading ─────────────────────────────────────────────── */
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+$('buyBtn').addEventListener('click',()=>{
+  const m=M(sel),q=Math.max(1,parseInt($('qIn').value)||1),cost=q*m.price;
+  if(cost>acc.cash){toast('INSUFFICIENT MARGIN · NEED '+fmtIN(cost));ding(200,.2,'sawtooth');return}
+  acc.cash-=cost;const p=acc.pos[sel]||(acc.pos[sel]={qty:0,avg:0});
+  p.avg=(p.avg*p.qty+cost)/(p.qty+q);p.qty+=q;acc.tx++;save();
+  toast('BOUGHT '+q+' '+sel+' @ '+f2(m.price)+' ✓');ding(660,.1);setTimeout(()=>ding(990,.14),110);
+  pushNews('ins','INSIDER FLOW','RETAIL TRADER #'+acc.tx+' WENT LONG '+q+' '+sel+' — CONVICTION DETECTED');
+  renderAll();
+});
+$('sellBtn').addEventListener('click',()=>{
+  const m=M(sel),q=Math.max(1,parseInt($('qIn').value)||1),p=acc.pos[sel];
+  if(!p||p.qty<q){toast('NOT ENOUGH SHARES TO SELL');ding(200,.2,'sawtooth');return}
+  p.qty-=q;acc.cash+=q*m.price;if(!p.qty)delete acc.pos[sel];acc.tx++;save();
+  toast('SOLD '+q+' '+sel+' @ '+f2(m.price)+' ✓');ding(440,.1);setTimeout(()=>ding(330,.14),110);
+  renderAll();
+});
+
+/* ── order book (simulated depth) ────────────────────────── */
+function renderBook(){const m=M(sel);let h='';
+  for(let i=5;i>=1;i--){const p=m.price*(1+i*0.0007),q=Math.floor(200+SRND()*1800);
+    h+=`<div class="lvl ask"><i style="width:${q/22}%"></i><span>${f2(p)}</span><b>${q}</b></div>`;}
+  h+=`<div class="spread">— SPREAD ${(m.price*0.0007).toFixed(2)} —</div>`;
+  for(let i=1;i<=5;i++){const p=m.price*(1-i*0.0007),q=Math.floor(200+SRND()*1800);
+    h+=`<div class="lvl bid"><i style="width:${q/22}%"></i><span>${f2(p)}</span><b>${q}</b></div>`;}
+  $('book').innerHTML=h;}
+
+/* ── NEWS WIRE ───────────────────────────────────────────── */
+const NEWS=[
+ ['earn','EARNINGS BEAT','LDG REPORTS 4 META CAMPAIGNS + 2 GOOGLE CAMPAIGNS — STREET CHEERS THE EXECUTION'],
+ ['earn','REVENUE NOTE','CRT SHIPS 50+ AD CREATIVES IN ONE QUARTER — OUTPUT VELOCITY RISING'],
+ ['mv','ANALYST UPGRADE','"PRINCIPLES OVER TRENDS" — RESEARCH NOTE LIFTS HDX TO STRONG-BUY'],
+ ['mv','SECTOR WATCH','AI-POWERED MARKETING IN FOCUS; AIF HOLDS 8-TOOL STACK (CHATGPT TO REPLIT)'],
+ ['gen','GOVERNANCE','CEO COMPLETES MBA (INT\'L BUSINESS) + McKINSEY.ORG FORWARD — GOVERNANCE PREMIUM'],
+ ['earn','OPERATIONS UPDATE','STG FILES 10+ COMPETITOR ANALYSES — MOAT WIDENING'],
+ ['mv','RUMOUR MILL','SOURCES SAY HDX CEO "OPEN TO ACQUISITION" — TALKS POSSIBLE OVER EMAIL'],
+ ['gen','INSIDER NOTE','TELEPERFORMANCE (APPLE PROCESS) ALUM — CUSTOMER PSYCHOLOGY AT SCALE PRICED IN'],
+ ['warn','VOLATILITY ALERT','META ALGORITHM MYSTERY UPDATE — TRADERS ADVISED TO BREATHE STEADILY'],
+ ['gen','INFRASTRUCTURE','15+ AI-ASSISTED WEBSITES DEPLOYED — CAPEX: CURIOSITY, RETURNS: COMPOUNDING'],
+ ['mv','ANALYST NOTE','"THE SUPPORT AT ₹₹₹ IS HIS WORK ETHIC" — DESK STRATEGIST, UNNAMED'],
+ ['gen','DIVIDEND POLICY','LOYALTY DIVIDEND ACTIVE — REPEAT VISITORS PAID DAILY'],
+];
+function pushNews(cls,tag,txt){
+  const el=document.createElement('div');el.className='news-i '+cls;
+  el.innerHTML='<b>'+tag+'</b><span>'+txt+'</span>';
+  const N=$('news');N.prepend(el);
+  while(N.children.length>32)N.lastChild.remove();
+}
+function newsTick(){
+  if(RM&&newsQ.length>3)return;
+  const n=NEWS[Math.floor(Math.random()*NEWS.length)];
+  pushNews(n[0],n[1],n[2]);
+  /* occasional volatility event on a related asset */
+  if(Math.random()<0.3 && marketOpen()){
+    const m=SYMS[Math.floor(Math.random()*SYMS.length)];
+    m.cur.v+=4000;m._jolt=(Math.random()-0.35)*m.vol*3;
+    pushNews('warn','PRICE ALERT',m.s+' SEES UNUSUAL VOLUME — DESKS WATCHING');
+  }
+}
+pushNews('earn','WELCOME TO HDX','THE HARSH DHAMIJA EXCHANGE IS NOW LIVE — ALL SKILLS PUBLICLY TRADED');
+setInterval(newsTick,6500);
+
+/* ── ticker tape ─────────────────────────────────────────── */
+function renderTape(){
+  const one=SYMS.map(m=>{
+    const chg=(m.price-m.prevClose)/m.prevClose*100,up=chg>=0;
+    return '<span><b class="'+(up?'up':'dn')+'">'+m.s+' '+f2(m.price)+' '+(up?'▲':'▼')+Math.abs(chg).toFixed(2)+'%</b><span class="nm">'+m.n+'</span></span>';
+  }).join('');
+  $('tape').innerHTML=one+one;
+}
+
+/* ── price engine ────────────────────────────────────────── */
+let tickN=0;
+function engine(){
+  SYMS.forEach(m=>{
+    const mr=(m.fv-m.price)/m.fv*0.010;       // mean reversion to fundamentals
+    const noise=(Math.random()-0.5)*m.vol*0.9;
+    const jolt=m._jolt||0;m._jolt=(m._jolt||0)*0.82;
+    m.price=clamp(m.price*(1+mr+noise*0.01+jolt*0.01),50,m.fv*1.8);
+    m.cur.c=m.price;m.cur.h=Math.max(m.cur.h,m.price);m.cur.l=Math.min(m.cur.l,m.price);
+    m.cur.v+=Math.floor(Math.random()*90);
+  });
+  tickN++;
+  const m=M(sel);
+  if(tickN%6===0){m.spark.push(m.price);if(m.spark.length>14)m.spark.shift();}
+  if(tickN%24===0){SYMS.forEach(x=>{x.hist.push(x.cur);if(x.hist.length>DAYS+40)x.hist.shift();
+    x.prevClose=x.cur.c;x.cur={o:x.price,h:x.price,l:x.price,c:x.price,v:0};});}
+  if(tickN%2===0){renderAssets();renderBook();renderTape();}
+  renderAll();
+}
+sizeChart();renderAssets();renderBook();renderTape();renderAll();
+setInterval(engine,RM?3000:950);
+if(!acc.visits||acc.tx===0)setTimeout(()=>toast('₹10,00,000 SIMULATED CAPITAL CREDITED · GO LONG WHAT YOU BELIEVE IN'),1500);
+$('ctaMail').addEventListener('click',()=>toast('TERM SHEET OPENED IN YOUR MAIL CLIENT ✓'));
+
+console.log('%cHDX TERMINAL%c insider tip: the CEO answers emails faster than the support desk.\n→ harshdhmija4678@gmail.com',
+ 'background:#ffb300;color:#000;padding:2px 6px;font-weight:bold','color:#888');
+})();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a22abad79b775649',t:'MTc4NTMxMzQ5Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
