@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harsh Dhamija — EXP-2026-047 · AI Performance Marketer</title>
+<meta name="description" content="This portfolio is a live experiment. A/B variants, live tracking, a campaign simulator — built and measured by Harsh Dhamija, AI Performance Marketer from Delhi NCR.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23211d13'/%3E%3Ccircle cx='32' cy='26' r='10' fill='none' stroke='%232f52d8' stroke-width='4'/%3E%3Cpath d='M38 34 L48 48' stroke='%23c2541f' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f1ea; --card:#faf8f2; --ink:#1d1a12;
+  --muted:#6d6757; --faint:#a29a88; --line:rgba(29,26,18,.15);
+  --accent:#c2541f; --lab:#2f52d8; --good:#1d9e53; --bad:#c22f2f; --warn:#b8860b;
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:400 1rem/1.7 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--lab);color:#fff}
+a{color:inherit}
+.mono{font-family:var(--mono)}
+.grain{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.04;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--lab);z-index:60}
+
+/* ── experiment HUD ──────────────────────────────────────── */
+.hud{
+  position:fixed;top:0;left:0;right:0;z-index:55;
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;
+  padding:.65rem clamp(.8rem,2.5vw,1.6rem);
+  background:rgba(244,241,234,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  font:600 .56rem var(--mono);letter-spacing:.12em;
+}
+.tag{border:1px solid var(--line);border-radius:99px;padding:.32rem .7rem;background:rgba(250,248,242,.8);color:var(--muted);display:flex;gap:.4rem;align-items:center}
+.tag b{color:var(--ink)}
+.tag.exp b{color:var(--lab)}
+.tag.live b{color:var(--accent)}
+.tag .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(194,84,31,.5);animation:pulse 1.6s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 7px rgba(194,84,31,0)}100%{box-shadow:0 0 0 0 rgba(194,84,31,0)}}
+.hud-right{margin-left:auto;display:flex;gap:.5rem}
+
+main{position:relative;z-index:2}
+section{max-width:1080px;margin:0 auto;padding:13vh 1.3rem}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .75s var(--ease),transform .75s var(--ease);transition-delay:calc(var(--i,0)*75ms)}
+section.on .rv,.on .rv{opacity:1;transform:none}
+
+/* ── HERO ────────────────────────────────────────────────── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-top:20vh;position:relative}
+.exp-id{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--lab);margin-bottom:1.6rem}
+.hypo{
+  transform:rotate(-1.4deg);background:#fff;border:1px solid var(--line);border-left:4px solid var(--lab);
+  padding:.85rem 1.2rem;max-width:560px;text-align:left;border-radius:6px;
+  box-shadow:0 16px 40px rgba(29,26,18,.10);margin-bottom:2.4rem;
+}
+.hypo b{font:600 .56rem var(--mono);letter-spacing:.22em;color:var(--lab);display:block;margin-bottom:.25rem}
+.hypo p{font:italic 400 .92rem/1.55 var(--serif);color:var(--muted)}
+h1.name{font:700 clamp(3rem,10vw,7.6rem)/0.98 var(--serif);letter-spacing:-.03em}
+h1.name em{font-style:italic;color:var(--accent)}
+.roles{font:600 .62rem var(--mono);letter-spacing:.26em;color:var(--muted);margin:1.2rem 0 .8rem}
+.tagline{font:italic 600 clamp(1.15rem,2.6vw,1.6rem)/1.4 var(--serif);max-width:30ch}
+.tagline b{color:var(--lab);font-style:normal}
+.sub{max-width:560px;color:var(--muted);font-size:.95rem;margin-top:1rem}
+.ctas{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.8rem}
+.btn{
+  font:600 .82rem var(--sans);padding:.85rem 1.5rem;border-radius:99px;cursor:pointer;text-decoration:none;
+  transition:transform .3s var(--ease),background .3s,color .3s,border-color .3s;border:none;background:none;display:inline-block;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-solid{background:var(--ink);color:var(--paper)}
+.btn-solid:hover{background:var(--lab)}
+.btn-line{border:1px solid var(--line);color:var(--ink)}
+.btn-line:hover{border-color:var(--ink)}
+.btn-lab{background:var(--lab);color:#fff}
+.btn-lab:hover{background:#2340b4}
+.variant-note{
+  margin-top:2.2rem;font:600 .56rem var(--mono);letter-spacing:.14em;color:var(--muted);
+  border:1px dashed var(--line);border-radius:10px;padding:.7rem 1rem;max-width:520px;
+}
+.variant-note b{color:var(--lab)}
+.scroll-cue{position:absolute;bottom:4vh;left:50%;transform:translateX(-50%);font:600 .55rem var(--mono);letter-spacing:.3em;color:var(--faint)}
+
+/* section chrome */
+.kick{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--lab);margin-bottom:1rem;display:flex;align-items:center;gap:.7rem}
+.kick::after{content:"";flex:1;height:1px;background:var(--line)}
+.h2{font:700 clamp(1.9rem,4.2vw,3rem)/1.1 var(--serif);letter-spacing:-.02em;margin-bottom:1.6rem}
+.h2 em{font-style:italic;color:var(--accent)}
+.lead{color:var(--muted);max-width:64ch}
+.lead b{color:var(--ink)}
+.cols2{display:grid;grid-template-columns:1.25fr .85fr;gap:2.5rem;align-items:start}
+
+/* subject card (photo) */
+.subject{
+  background:#fff;border:1px solid var(--line);border-radius:6px;padding:.9rem;
+  box-shadow:0 18px 44px rgba(29,26,18,.10);transform:rotate(1.2deg);
+  font:600 .55rem var(--mono);letter-spacing:.12em;color:var(--muted);
+}
+.subject img{width:100%;height:230px;object-fit:cover;object-position:50% 18%;border-radius:3px;display:block;margin-bottom:.7rem}
+.subject b{color:var(--ink)}
+.subject .row{display:flex;justify-content:space-between;gap:.5rem;padding:.12rem 0;border-bottom:1px dashed var(--line)}
+.subject .row:last-child{border-bottom:none}
+
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.4rem}
+.chips span{font:600 .56rem var(--mono);letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:.36rem .7rem;transition:all .25s;cursor:default}
+.chips span:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chips.lab span:hover{background:var(--lab);border-color:var(--lab)}
+.g-title{font:600 .58rem var(--mono);letter-spacing:.22em;color:var(--faint);margin:1.6rem 0 .2rem}
+
+/* ── SIMULATOR ───────────────────────────────────────────── */
+.sim{
+  background:var(--ink);border-radius:20px;padding:clamp(1.4rem,3vw,2.4rem);color:var(--paper);
+  box-shadow:0 40px 90px rgba(29,26,18,.30);
+}
+.sim .s-kick{font:600 .6rem var(--mono);letter-spacing:.3em;color:#8fa4ff;margin-bottom:.6rem}
+.sim h3{font:700 clamp(1.5rem,3vw,2.1rem)/1.15 var(--serif);margin-bottom:.4rem}
+.sim .s-sub{color:rgba(244,241,234,.6);font-size:.86rem;max-width:56ch}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.8rem}
+.ctl{margin-bottom:1.3rem}
+.ctl label{display:flex;justify-content:space-between;font:600 .58rem var(--mono);letter-spacing:.14em;color:rgba(244,241,234,.55);margin-bottom:.5rem}
+.ctl label b{color:#ffd68a}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:rgba(244,241,234,.18);border-radius:99px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 0 4px rgba(194,84,31,.25);transition:transform .2s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.outs{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;align-content:start}
+.out{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:.8rem 1rem}
+.out b{display:block;font:700 1.5rem/1.15 var(--serif);color:#ffd68a;font-variant-numeric:tabular-nums}
+.out span{font:600 .52rem var(--mono);letter-spacing:.16em;color:rgba(244,241,234,.5)}
+.out.big{grid-column:1/-1}
+.out.big b{font-size:2.1rem}
+.verdict{margin-top:1.2rem;padding:.85rem 1.1rem;border-radius:12px;font:700 .92rem var(--serif);text-align:center;transition:background .4s,color .4s}
+.verdict.good{background:rgba(29,158,83,.18);color:#7fe0a8;border:1px solid rgba(29,158,83,.4)}
+.verdict.warn{background:rgba(184,134,11,.16);color:#ffd68a;border:1px solid rgba(255,214,138,.35)}
+.verdict.bad{background:rgba(194,47,47,.16);color:#ff9c9c;border:1px solid rgba(194,47,47,.4)}
+.roas-bar{margin-top:1rem;height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
+.roas-bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--accent),#ffd68a);transition:width .5s var(--ease)}
+.sim-note{margin-top:.9rem;font:600 .52rem var(--mono);letter-spacing:.14em;color:rgba(244,241,234,.4)}
+
+/* ── experience ──────────────────────────────────────────── */
+.job{border-top:1px solid var(--line);padding:1.5rem 0;display:grid;grid-template-columns:170px 1fr;gap:1.4rem}
+.job:last-child{border-bottom:1px solid var(--line)}
+.job .when{font:600 .58rem var(--mono);letter-spacing:.16em;color:var(--lab);padding-top:.35rem}
+.job h3{font:700 1.25rem var(--serif);letter-spacing:-.01em}
+.job .org{font:600 .6rem var(--mono);letter-spacing:.14em;color:var(--accent);margin:.15rem 0 .7rem}
+.job ul{list-style:none;display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem}
+.job ul li{font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:.3rem .7rem;background:rgba(255,255,255,.5)}
+.job .num-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0}
+.job .num-chips b{font:700 1.05rem var(--serif);color:var(--lab);border:1px dashed rgba(47,82,216,.4);border-radius:10px;padding:.3rem .6rem}
+.job .num-chips b small{display:block;font:600 .48rem var(--mono);letter-spacing:.1em;color:var(--faint)}
+
+/* projects */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.proj{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.4rem;transition:transform .35s var(--ease),box-shadow .35s}
+.proj:hover{transform:translateY(-5px);box-shadow:0 24px 50px rgba(29,26,18,.12)}
+.proj .p-no{font:600 .56rem var(--mono);letter-spacing:.2em;color:var(--lab)}
+.proj h3{font:700 1.25rem var(--serif);margin:.35rem 0 .6rem}
+.proj ul{list-style:none}
+.proj ul li{font-size:.86rem;color:var(--muted);padding:.2rem 0 .2rem 1.1rem;position:relative}
+.proj ul li::before{content:"→";position:absolute;left:0;color:var(--accent);font-size:.75rem}
+
+/* skill groups */
+.skill-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.sg h4{font:700 1.05rem var(--serif);border-bottom:2px solid var(--lab);display:inline-block;padding-bottom:.2rem;margin-bottom:.3rem}
+
+/* process */
+.proc{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.step{
+  display:flex;align-items:center;gap:.55rem;font:600 .6rem var(--mono);letter-spacing:.1em;
+  border:1px solid var(--line);border-radius:99px;padding:.55rem .95rem;color:var(--faint);
+  transition:all .4s var(--ease);
+}
+.step .idx{width:18px;height:18px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;font-size:.5rem}
+.step.lit{background:var(--ink);color:var(--paper);border-color:var(--ink);transform:scale(1.06)}
+.step.lit .idx{background:var(--accent);border-color:var(--accent);color:#fff}
+.proc .arr{color:var(--faint);font-size:.8rem}
+.proc .loop{font:600 .56rem var(--mono);letter-spacing:.2em;color:var(--lab)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem;text-align:center}
+.stat b{display:block;font:700 clamp(1.9rem,4vw,2.7rem)/1.1 var(--serif);color:var(--lab);font-variant-numeric:tabular-nums}
+.stat span{font:600 .53rem var(--mono);letter-spacing:.14em;color:var(--faint)}
+
+/* edu/certs/achievements */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.tcol{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.3rem}
+.tcol h4{font:600 .58rem var(--mono);letter-spacing:.22em;color:var(--lab);margin-bottom:.7rem}
+.tcol b.t{font:700 1.1rem var(--serif);display:block;margin-bottom:.2rem}
+.tcol p,.tcol li{color:var(--muted);font-size:.85rem}
+.tcol ul{list-style:none;margin-top:.4rem}
+.tcol li{padding:.25rem 0 .25rem 1rem;position:relative}
+.tcol li::before{content:"✓";position:absolute;left:0;color:var(--good);font-weight:700;font-size:.8rem}
+
+/* ── DASHBOARD (the experiment shows itself) ─────────────── */
+.dash-sec{max-width:none;background:var(--ink);color:var(--paper);padding:14vh 1.3rem}
+.dash{max-width:1080px;margin:0 auto}
+.dash .kick{color:#8fa4ff}
+.dash .kick::after{background:rgba(255,255,255,.12)}
+.dash .h2 em{color:#ffd68a}
+.dp-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1rem}
+.dp{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:.9rem 1rem}
+.dp b{display:block;font:700 1.5rem/1.15 var(--serif);color:#ffd68a;font-variant-numeric:tabular-nums}
+.dp span{font:600 .5rem var(--mono);letter-spacing:.15em;color:rgba(244,241,234,.5)}
+.ab-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:1.3rem}
+.ab-card h3{font:700 1.2rem var(--serif);margin-bottom:.2rem}
+.ab-card .note{font:600 .52rem var(--mono);letter-spacing:.12em;color:rgba(244,241,234,.45);margin-bottom:1rem}
+.ab-row{display:grid;grid-template-columns:120px 1fr 70px;gap:.8rem;align-items:center;margin:.55rem 0;font:600 .6rem var(--mono);letter-spacing:.1em}
+.ab-row .vname{color:rgba(244,241,234,.75)}
+.ab-row .vname b{color:#8fa4ff}
+.ab-row .you{font-size:.48rem;color:#ffd68a;margin-left:.4rem}
+.bar{height:9px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden}
+.bar i{display:block;height:100%;width:0;transition:width .8s var(--ease)}
+.bar.a i{background:#8fa4ff}.bar.b i{background:#e8734a}
+.ab-row .pct{text-align:right;color:#ffd68a}
+.stamp{
+  display:inline-block;margin-top:1.2rem;padding:.6rem 1.3rem;border:2px solid #7fe0a8;color:#7fe0a8;border-radius:8px;
+  font:600 .78rem var(--mono);letter-spacing:.24em;transform:rotate(-2.5deg);
+}
+.sess-list{margin-top:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+.dash .seed-note{margin-top:1.4rem;font:600 .52rem var(--mono);letter-spacing:.12em;color:rgba(244,241,234,.35)}
+
+/* contact */
+.contact{text-align:center;padding-bottom:8vh}
+.mail{display:inline-block;font:italic 700 clamp(1.2rem,3.4vw,2rem) var(--serif);border-bottom:2px solid var(--accent);padding-bottom:.15rem;margin:.6rem 0 1.4rem;transition:color .3s}
+.mail:hover{color:var(--accent)}
+.meta-row{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;font:600 .6rem var(--mono);letter-spacing:.14em;color:var(--muted);margin-bottom:1.6rem}
+.meta-row span{border:1px solid var(--line);border-radius:99px;padding:.45rem .9rem}
+.funnel-end{margin-top:2.6rem;font:italic 600 1.05rem var(--serif);color:var(--muted)}
+.funnel-end b{color:var(--lab)}
+footer{max-width:1080px;margin:0 auto;padding:2rem 1.3rem 3rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;font:600 .55rem var(--mono);letter-spacing:.2em;color:var(--faint);border-top:1px solid var(--line)}
+
+.toast{
+  position:fixed;left:50%;bottom:1.2rem;transform:translate(-50%,200%);z-index:70;
+  background:var(--ink);color:var(--paper);padding:.7rem 1.2rem;border-radius:99px;
+  font:600 .6rem var(--mono);letter-spacing:.14em;transition:transform .6s var(--ease);
+}
+.toast.show{transform:translate(-50%,0)}
+.toast b{color:#7fe0a8}
+
+@media (max-width:900px){
+  .cols2,.sim-grid,.proj-grid,.skill-groups,.trio{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .dp-row,.sess-list{grid-template-columns:repeat(2,1fr)}
+  .job{grid-template-columns:1fr;gap:.4rem}
+  .hud .tag:nth-child(4){display:none}
+  .subject{max-width:340px;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition-duration:.15s !important}
+  .rv{opacity:1 !important;transform:none !important}
+}
+@media print{
+  .hud,.grain,.toast,#progress,.scroll-cue,.ctas,.sim-ctl-only,.variant-note{display:none !important}
+  body{background:#fff}
+  section{padding:2vh 0;page-break-inside:avoid}
+  .rv{opacity:1 !important;transform:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div id="progress"></div>
+
+<div class="hud">
+  <span class="tag exp">EXP <b>№2026-047</b></span>
+  <span class="tag">VARIANT <b id="hudVar">—</b></span>
+  <span class="tag live"><span class="dot"></span> LIVE · <b id="hudTime">00:00</b></span>
+  <div class="hud-right">
+    <span class="tag">DEPTH <b id="hudDepth">0%</b></span>
+    <span class="tag">SUBJECT <b id="hudYou">#—</b></span>
+  </div>
+</div>
+
+<main>
+
+<!-- ═ HERO ═ -->
+<section class="hero" id="top">
+  <p class="exp-id rv" style="--i:0">MARKETING LAB · LIVE EXPERIMENT · DELHI NCR</p>
+  <div class="hypo rv" style="--i:1">
+    <b>HYPOTHESIS H1</b>
+    <p>A marketer who treats his own portfolio as a measurable experiment is worth an interview.</p>
+  </div>
+  <h1 class="name rv" style="--i:2">HARSH<br><em>DHAMIJA</em></h1>
+  <p class="roles rv" style="--i:3">AI PERFORMANCE MARKETER · GROWTH MARKETING · PAID MEDIA</p>
+  <p class="tagline rv" style="--i:4" id="variantLine">I turn <b>attention</b> into measurable growth.</p>
+  <p class="sub rv" style="--i:5">Data-driven campaigns through paid advertising, AI-assisted workflows, and
+  customer-focused strategy. This site is running a live A/B test on you right now — results at the bottom.</p>
+  <div class="ctas rv" style="--i:6">
+    <a class="btn btn-solid" href="#projects" data-cta="view_projects">View Projects ↓</a>
+    <button class="btn btn-line" id="resumeBtn" data-cta="download_resume">Download Résumé ⇩</button>
+    <a class="btn btn-lab" href="#contact" data-cta="lets_connect">Let's Connect →</a>
+  </div>
+  <p class="variant-note rv" style="--i:7">⚗ VARIANT ASSIGNMENT: you are <b id="varNote">—</b>.
+  Every visit, click and second of attention is being logged as experiment data.</p>
+  <span class="scroll-cue">SCROLL — THE PROTOCOL BEGINS ↓</span>
+</section>
+
+<!-- ═ 01 SUMMARY ═ -->
+<section id="summary">
+  <p class="kick rv" style="--i:0">§01 — PROTOCOL · PROFESSIONAL SUMMARY</p>
+  <h2 class="h2 rv" style="--i:1">The subject:<br>a growth <em>experimentalist.</em></h2>
+  <div class="cols2">
+    <div class="rv" style="--i:2">
+      <p class="lead">I'm an AI Performance Marketer with a Growth Marketing mindset — combining
+      paid advertising, business development and customer acquisition to help businesses
+      generate <b>qualified leads</b> and improve marketing performance.</p>
+      <br>
+      <p class="lead">My background spans digital marketing, real-estate sales, strategic market
+      research and customer experience. I solve growth problems with <b>creativity, analytics
+      and AI-powered workflows</b> — not trend-chasing.</p>
+      <p class="g-title">CURRENTLY FOCUSED ON</p>
+      <div class="chips lab">
+        <span>META ADS</span><span>GOOGLE ADS</span><span>GROWTH MARKETING</span><span>LEAD GENERATION</span>
+        <span>AI-ASSISTED MARKETING</span><span>PERFORMANCE ANALYTICS</span><span>MARKETING STRATEGY</span>
+      </div>
+    </div>
+    <figure class="subject rv" style="--i:3">
+      <img src="../portrait.jpg" alt="Harsh Dhamija">
+      SUBJECT: <b>THE MARKETER</b>
+      <div class="row"><span>NAME</span><b>HARSH DHAMIJA</b></div>
+      <div class="row"><span>BASE</span><b>DELHI NCR, IN</b></div>
+      <div class="row"><span>DEGREE</span><b>MBA · INT'L BUSINESS</b></div>
+      <div class="row"><span>STATUS</span><b>OPEN TO WORK ●</b></div>
+    </figure>
+  </div>
+</section>
+
+<!-- ═ 02 ABOUT ═ -->
+<section id="about">
+  <p class="kick rv" style="--i:0">§02 — MOTIVATION · WHY PEOPLE BUY</p>
+  <h2 class="h2 rv" style="--i:1">Principles over<br><em>trend cycles.</em></h2>
+  <p class="lead rv" style="--i:2">I'm passionate about understanding <b>why people buy</b> and how businesses grow.
+  Rather than chasing marketing trends, I study the principles that create long-term results.
+  I believe the best marketing decisions are driven by data, customer insight and <b>continuous experimentation</b> —
+  which is precisely why this website is an experiment.</p>
+  <div class="chips rv" style="--i:3">
+    <span>DIGITAL MARKETING</span><span>BUSINESS DEVELOPMENT</span><span>SALES PSYCHOLOGY</span>
+    <span>CUSTOMER BEHAVIOUR</span><span>AI PRODUCTIVITY</span><span>MARKETING ANALYTICS</span>
+  </div>
+</section>
+
+<!-- ═ 03 SIMULATOR ═ -->
+<section id="simulator">
+  <p class="kick rv" style="--i:0">§03 — INTERACTIVE · CAMPAIGN SIMULATOR</p>
+  <h2 class="h2 rv" style="--i:1">Don't take my word.<br><em>Run the numbers.</em></h2>
+  <div class="sim rv" style="--i:2">
+    <p class="s-kick">LIVE MODEL · CPM ₹220 ASSUMED · LEAD-GEN MATH</p>
+    <h3>The Profit Machine</h3>
+    <p class="s-sub">Drag the levers. This is the mental model I use before launching any campaign.</p>
+    <div class="sim-grid">
+      <div>
+        <div class="ctl"><label><span>MONTHLY BUDGET</span><b id="vBud">₹1,00,000</b></label><input type="range" id="inBud" min="10000" max="1000000" step="10000" value="100000"></div>
+        <div class="ctl"><label><span>CLICK-THROUGH RATE</span><b id="vCtr">1.5%</b></label><input type="range" id="inCtr" min="20" max="500" step="10" value="150"></div>
+        <div class="ctl"><label><span>CONVERSION RATE</span><b id="vCvr">4.0%</b></label><input type="range" id="inCvr" min="50" max="2000" step="10" value="400"></div>
+        <div class="ctl" style="margin-bottom:0"><label><span>VALUE PER LEAD</span><b id="vVal">₹2,000</b></label><input type="range" id="inVal" min="500" max="50000" step="500" value="2000"></div>
+      </div>
+      <div>
+        <div class="outs">
+          <div class="out"><b id="oImp">0</b><span>IMPRESSIONS</span></div>
+          <div class="out"><b id="oClk">0</b><span>CLICKS</span></div>
+          <div class="out"><b id="oLeads">0</b><span>LEADS</span></div>
+          <div class="out"><b id="oCpl">₹0</b><span>COST / LEAD</span></div>
+          <div class="out big"><b id="oRev">₹0</b><span>PROJECTED REVENUE · ROAS <span id="oRoas" style="color:inherit">0.0×</span></span></div>
+        </div>
+        <div class="roas-bar"><i id="roasFill"></i></div>
+        <div class="verdict warn" id="verdict">—</div>
+      </div>
+    </div>
+    <p class="sim-note">⚗ LESSON: the same budget can lose money or 10× it. The difference is CTR × CVR — and that's what I optimise.</p>
+  </div>
+</section>
+
+<!-- ═ 04 EXPERIENCE ═ -->
+<section id="experience">
+  <p class="kick rv" style="--i:0">§04 — EXPERIMENT LOG · EXPERIENCE</p>
+  <h2 class="h2 rv" style="--i:1">Field work<br><em>so far.</em></h2>
+
+  <article class="job rv" style="--i:2">
+    <span class="when">APR 2026 — JUN 2026</span>
+    <div>
+      <h3>AI Performance Marketing Intern</h3>
+      <p class="org">DIGIMARK MEDIA</p>
+      <div class="num-chips">
+        <b>4<small>META CAMPAIGNS</small></b><b>2<small>GOOGLE CAMPAIGNS</small></b>
+        <b>50+<small>AD CREATIVES</small></b><b>20+<small>SOCIAL POSTS</small></b>
+        <b>10+<small>COMPETITOR ANALYSES</small></b><b>15+<small>WEBSITE BUILDS</small></b>
+      </div>
+      <ul>
+        <li>Lead-gen, engagement &amp; sales campaigns</li><li>AI-assisted marketing copy</li>
+        <li>AI-assisted development tools</li><li>Independent + cross-functional work</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="job rv" style="--i:3">
+    <span class="when">2024 — 2026</span>
+    <div>
+      <h3>Business Development Executive</h3>
+      <p class="org">PROPSALT LANDBASE · REAL ESTATE</p>
+      <ul>
+        <li>Lead generation &amp; client consultation</li><li>Property presentations &amp; site visits</li>
+        <li>Sales pipeline &amp; CRM management</li><li>Negotiation &amp; deal closure</li>
+        <li>Channel partner coordination</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="job rv" style="--i:4">
+    <span class="when">2023</span>
+    <div>
+      <h3>Marketing &amp; Strategy Intern</h3>
+      <p class="org">AGILE CAPITAL SERVICES</p>
+      <ul>
+        <li>Market research &amp; competitor analysis</li><li>Strategic reports &amp; marketing insights</li>
+        <li>Business presentations</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="job rv" style="--i:5">
+    <span class="when">2022 — 2023</span>
+    <div>
+      <h3>Customer Care Executive (Sales)</h3>
+      <p class="org">TELEPERFORMANCE · APPLE PROCESS</p>
+      <ul>
+        <li>Customer support &amp; product consultation</li><li>Sales assistance &amp; order support</li>
+        <li>Learned customer behaviour at scale</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<!-- ═ 05 PROJECTS ═ -->
+<section id="projects">
+  <p class="kick rv" style="--i:0">§05 — EVIDENCE · FEATURED PROJECTS</p>
+  <h2 class="h2 rv" style="--i:1">Proof of<br><em>practice.</em></h2>
+  <div class="proj-grid">
+    <article class="proj rv" style="--i:2">
+      <span class="p-no">EXHIBIT P·01</span><h3>AI Performance Marketing Campaigns</h3>
+      <ul><li>Meta Ads campaigns (4 live)</li><li>Google Ads campaigns (2)</li><li>Audience research</li><li>Campaign optimisation loops</li></ul>
+    </article>
+    <article class="proj rv" style="--i:3">
+      <span class="p-no">EXHIBIT P·02</span><h3>Website Development</h3>
+      <ul><li>15+ AI-assisted website prototypes</li><li>Conversion-focused landing pages</li><li>Marketing-first page layouts</li></ul>
+    </article>
+    <article class="proj rv" style="--i:4">
+      <span class="p-no">EXHIBIT P·03</span><h3>Competitor Research</h3>
+      <ul><li>10+ industry benchmark studies</li><li>Creative teardown &amp; analysis</li><li>Positioning &amp; growth opportunities</li></ul>
+    </article>
+    <article class="proj rv" style="--i:5">
+      <span class="p-no">EXHIBIT P·04</span><h3>Marketing Strategy Projects</h3>
+      <ul><li>Campaign planning</li><li>Audience segmentation</li><li>Customer acquisition planning</li></ul>
+    </article>
+  </div>
+</section>
+
+<!-- ═ 06 SKILLS + TOOLS ═ -->
+<section id="skills">
+  <p class="kick rv" style="--i:0">§06 — CAPABILITY MATRIX · SKILLS &amp; TOOLS</p>
+  <h2 class="h2 rv" style="--i:1">The instrument<br><em>panel.</em></h2>
+  <div class="skill-groups">
+    <div class="sg rv" style="--i:2"><h4>Performance Marketing</h4>
+      <div class="chips"><span>META ADS</span><span>FACEBOOK ADS</span><span>INSTAGRAM ADS</span><span>GOOGLE ADS</span><span>CAMPAIGN SETUP</span><span>AUDIENCE TARGETING</span><span>OPTIMISATION</span><span>LEAD GEN</span></div></div>
+    <div class="sg rv" style="--i:3"><h4>Marketing</h4>
+      <div class="chips"><span>GROWTH MARKETING</span><span>STRATEGY</span><span>CUSTOMER JOURNEY</span><span>FUNNEL THINKING</span><span>COMPETITOR ANALYSIS</span><span>MARKET RESEARCH</span><span>CONSUMER BEHAVIOUR</span></div></div>
+    <div class="sg rv" style="--i:4"><h4>Analytics</h4>
+      <div class="chips"><span>CAMPAIGN REPORTING</span><span>PERFORMANCE ANALYSIS</span><span>CTR ANALYSIS</span><span>CONVERSION TRACKING</span><span>DATA INTERPRETATION</span><span>INSIGHTS</span></div></div>
+    <div class="sg rv" style="--i:5"><h4>AI &amp; Productivity</h4>
+      <div class="chips lab"><span>AI CONTENT CREATION</span><span>AI MARKETING WORKFLOWS</span><span>PROMPT ENGINEERING</span><span>CAMPAIGN IDEATION</span><span>AUTOMATION</span></div></div>
+    <div class="sg rv" style="--i:6"><h4>Design &amp; Web</h4>
+      <div class="chips"><span>WIX</span><span>LANDING PAGES</span><span>UI PROTOTYPING</span><span>CREATIVE BRIEFS</span></div></div>
+    <div class="sg rv" style="--i:7"><h4>Soft Skills</h4>
+      <div class="chips"><span>COMMUNICATION</span><span>PRESENTATION</span><span>NEGOTIATION</span><span>CLIENT HANDLING</span><span>COLLABORATION</span><span>PROBLEM SOLVING</span><span>LEADERSHIP</span></div></div>
+  </div>
+  <p class="g-title rv" style="--i:8">TOOLS · DAILY DRIVERS</p>
+  <div class="chips lab rv" style="--i:9">
+    <span>META ADS MANAGER</span><span>GOOGLE ADS</span><span>GOOGLE ANALYTICS</span><span>SEMRUSH</span><span>WIX</span>
+    <span>CHATGPT</span><span>CLAUDE</span><span>GEMINI</span><span>PERPLEXITY</span><span>EMERGENT</span><span>LOVABLE</span><span>STITCH</span><span>REPLIT</span>
+  </div>
+</section>
+
+<!-- ═ 07 PROCESS ═ -->
+<section id="process">
+  <p class="kick rv" style="--i:0">§07 — METHOD · THE LOOP</p>
+  <h2 class="h2 rv" style="--i:1">How I run<br>every <em>campaign.</em></h2>
+  <div class="proc rv" style="--i:2" id="procSteps">
+    <span class="step"><span class="idx">1</span>RESEARCH</span><span class="arr">↓</span>
+    <span class="step"><span class="idx">2</span>UNDERSTAND THE CUSTOMER</span><span class="arr">↓</span>
+    <span class="step"><span class="idx">3</span>BUILD THE STRATEGY</span><span class="arr">↓</span>
+    <span class="step"><span class="idx">4</span>LAUNCH CAMPAIGNS</span><span class="arr">↓</span>
+    <span class="step"><span class="idx">5</span>ANALYSE PERFORMANCE</span><span class="arr">↓</span>
+    <span class="step"><span class="idx">6</span>OPTIMISE WITH DATA</span><span class="arr">↓</span>
+    <span class="step"><span class="idx">7</span>SCALE WHAT WORKS</span>
+    <span class="loop">↺ REPEAT FOREVER</span>
+  </div>
+</section>
+
+<!-- ═ 08 STATS ═ -->
+<section id="statistics">
+  <p class="kick rv" style="--i:0">§08 — OBSERVED DATA · PORTFOLIO STATISTICS</p>
+  <h2 class="h2 rv" style="--i:1">Small numbers,<br><em>honestly</em> earned.</h2>
+  <div class="stats">
+    <div class="stat rv" style="--i:2"><b class="num" data-count="4">0</b><span>META ADS CAMPAIGNS</span></div>
+    <div class="stat rv" style="--i:3"><b class="num" data-count="2">0</b><span>GOOGLE ADS CAMPAIGNS</span></div>
+    <div class="stat rv" style="--i:4"><b class="num" data-count="50" data-suffix="+">0</b><span>AD CREATIVES</span></div>
+    <div class="stat rv" style="--i:5"><b class="num" data-count="20" data-suffix="+">0</b><span>SOCIAL POSTS</span></div>
+    <div class="stat rv" style="--i:6"><b class="num" data-count="10" data-suffix="+">0</b><span>COMPETITOR ANALYSES</span></div>
+    <div class="stat rv" style="--i:7"><b class="num" data-count="15" data-suffix="+">0</b><span>WEBSITE BUILDS</span></div>
+  </div>
+</section>
+
+<!-- ═ 09 EDUCATION ═ -->
+<section id="education">
+  <p class="kick rv" style="--i:0">§09 — CREDENTIALS · EDUCATION &amp; PROOF</p>
+  <h2 class="h2 rv" style="--i:1">Backing the<br><em>hypothesis.</em></h2>
+  <div class="trio">
+    <div class="tcol rv" style="--i:2"><h4>EDUCATION</h4>
+      <b class="t">MBA — International Business</b>
+      <p>Specialisations: Marketing · International Business.</p></div>
+    <div class="tcol rv" style="--i:3"><h4>CERTIFICATIONS</h4>
+      <ul><li>McKinsey.org Forward</li><li>AI Performance Marketing Training — DigiMark Media</li></ul></div>
+    <div class="tcol rv" style="--i:4"><h4>ACHIEVEMENTS</h4>
+      <ul><li>Managed multiple paid ad campaigns</li><li>40+ marketing creatives developed</li><li>Competitor research across industries</li><li>AI-assisted sites &amp; prototypes shipped</li><li>Marketing → strategy → BD → sales range</li></ul></div>
+  </div>
+</section>
+
+<!-- ═ 10 NOW ═ -->
+<section id="now">
+  <p class="kick rv" style="--i:0">§10 — CURRENT STATE · NOW</p>
+  <h2 class="h2 rv" style="--i:1">What I'm doing<br><em>this quarter.</em></h2>
+  <p class="lead rv" style="--i:2">Exploring AI applications in performance marketing · building my personal brand
+  as <b>theharshdhamija</b> around AI, marketing and growth · documenting real campaign learnings ·
+  sharpening paid media, analytics and growth strategy.</p>
+  <p class="g-title rv" style="--i:3">OPEN TO OPPORTUNITIES IN</p>
+  <div class="chips lab rv" style="--i:4">
+    <span>PERFORMANCE MARKETING</span><span>GROWTH MARKETING</span><span>PAID MEDIA</span>
+    <span>DIGITAL MARKETING</span><span>MARKETING ANALYTICS</span><span>AI-POWERED MARKETING</span><span>GROWTH STRATEGY</span>
+  </div>
+</section>
+
+<!-- ═ 11 THE DASHBOARD ═ -->
+<section class="dash-sec" id="dashboard">
+  <div class="dash">
+    <p class="kick rv" style="--i:0">§11 — RESULTS · THE EXPERIMENT REPORTS BACK</p>
+    <h2 class="h2 rv" style="--i:1">You are data<br>point <em id="dpYou">#—</em>.</h2>
+
+    <div class="dp-row rv" style="--i:2">
+      <div class="dp"><b id="dTime">0s</b><span>YOUR TIME ON PAGE</span></div>
+      <div class="dp"><b id="dDepth">0%</b><span>YOUR SCROLL DEPTH</span></div>
+      <div class="dp"><b id="dSecs">0/11</b><span>SECTIONS YOU READ</span></div>
+      <div class="dp"><b id="dClicks">0</b><span>YOUR CTA CLICKS</span></div>
+    </div>
+
+    <div class="ab-card rv" style="--i:3">
+      <h3>A/B Test — Hero headline</h3>
+      <p class="note">VARIANT A: “I turn attention into measurable growth.” · VARIANT B: “Data whispers. I make revenue loud.”</p>
+      <div class="ab-row">
+        <span class="vname"><b>A</b> <span id="youA" class="you"></span></span>
+        <div class="bar a"><i id="barA"></i></div>
+        <span class="pct" id="pctA">—</span>
+      </div>
+      <div class="ab-row">
+        <span class="vname"><b>B</b> <span id="youB" class="you"></span></span>
+        <div class="bar b"><i id="barB"></i></div>
+        <span class="pct" id="pctB">—</span>
+      </div>
+      <span class="stamp" id="stamp">ANALYSING…</span>
+      <div class="sess-list">
+        <div class="dp"><b id="dSessions">0</b><span>TOTAL SESSIONS LOGGED</span></div>
+        <div class="dp"><b id="dAvgT">0s</b><span>AVG. SESSION TIME</span></div>
+        <div class="dp"><b id="dAvgD">0%</b><span>AVG. SCROLL DEPTH</span></div>
+      </div>
+    </div>
+    <p class="seed-note">⚗ METHODOLOGY: seeded with simulated demo traffic + real visit data from this device (localStorage). CTR = CTA clicks ÷ sessions per variant.</p>
+  </div>
+</section>
+
+<!-- ═ 12 CONTACT ═ -->
+<section class="contact" id="contact">
+  <p class="kick rv" style="--i:0;justify-content:center">§12 — CONVERSION EVENT · CONTACT</p>
+  <h2 class="h2 rv" style="--i:1">End of funnel.<br><em>Your move.</em></h2>
+  <p class="lead rv" style="--i:2;margin:0 auto">Open to roles in performance &amp; growth marketing.<br>Based in Delhi NCR — happy to work on-site or remote.</p>
+  <br>
+  <!-- EDIT: replace with your real email -->
+  <a class="mail rv" style="--i:3" href="mailto:harshdhmija4678@gmail.com" data-cta="email_click">harshdhmija4678@gmail.com</a>
+  <div class="meta-row rv" style="--i:4">
+    <span>LINKEDIN ↗ /in/harsh-dhamija-063897194</span>
+    <span>DELHI NCR, INDIA</span>
+    <span>REPLIES WITHIN 24H</span>
+  </div>
+  <div class="ctas rv" style="--i:5">
+    <a class="btn btn-lab" href="mailto:harshdhmija4678@gmail.com" data-cta="email_click">Send the brief →</a>
+    <button class="btn btn-line" onclick="document.getElementById('resumeBtn').click()" data-cta="download_resume2">Download Résumé ⇩</button>
+  </div>
+  <p class="funnel-end rv" style="--i:6">You reached <b>100% scroll depth</b>.<br>Statistically, that's the intent I optimise for.</p>
+</section>
+
+</main>
+
+<footer>
+  <span>© 2026 HARSH DHAMIJA — EXP №2026-047</span>
+  <span>EVERY VISIT IMPROVES THE NEXT VARIANT</span>
+</footer>
+
+<div class="toast" id="toast">EVENT LOGGED <b>✓</b> — THANK YOU, SUBJECT</div>
+
+<script>
+(() => {
+'use strict';
+/* ═══════════ EXP №2026-047 — the portfolio tests itself ═══════════ */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v)), lerp=(a,b,t)=>a+(b-a)*t;
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id);
+const phi=z=>0.5*(1+Math.sign(z)*Math.sqrt(1-Math.exp(-2*z*z/Math.PI))); // normal CDF approx
+
+/* ── experiment store ────────────────────────────────────── */
+const K='hd_exp_047';
+const SEED={views:{A:168,B:157},clicks:{A:104,B:95},sessions:341,tSum:96*341,dSum:68*341};
+let st;
+try{st=JSON.parse(localStorage.getItem(K))||null}catch(e){st=null}
+if(!st) st={variant:null,views:{A:0,B:0},clicks:{A:0,B:0},sessions:0,tSum:0,dSum:0,subjects:0};
+if(!st.variant) st.variant=Math.random()<0.5?'A':'B';
+const V=st.variant;
+const isNew=!sessionStorage.getItem('hd_exp47');
+if(isNew){st.sessions++;st.views[V]++;st.subjects++;sessionStorage.setItem('hd_exp47','1');}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}};
+save();
+
+const agg={
+  views:{A:SEED.views.A+st.views.A, B:SEED.views.B+st.views.B},
+  clicks:{A:SEED.clicks.A+st.clicks.A, B:SEED.clicks.B+st.clicks.B},
+  sessions:SEED.sessions+st.sessions,
+  tSum:SEED.tSum+st.tSum, dSum:SEED.dSum+st.dSum,
+};
+const subjNo=7420+st.subjects;
+
+/* apply variant */
+const LINES={A:'I turn <b>attention</b> into measurable growth.',
+             B:'<b>Data</b> whispers. I make revenue <b>loud.</b>'};
+$('variantLine').innerHTML=LINES[V];
+$('hudVar').textContent=V+' ●';
+$('varNote').textContent='VARIANT '+V+' (“'+LINES[V].replace(/<[^>]+>/g,'')+'”)';
+$('hudYou').textContent='#'+subjNo;
+$('dpYou').textContent='#'+subjNo;
+$(V==='A'?'youA':'youB').textContent='◀ YOU';
+
+/* ── tracking: time · depth · sections · clicks ─────────── */
+const t0=Date.now();
+let maxD=0, myClicks=0;
+const seen=new Set();
+const secs=[...document.querySelectorAll('main section')];
+const fmt=s=>{s=Math.round(s);return (s>=60?Math.floor(s/60)+'m '+(s%60)+'s':s+'s')};
+
+function tickHUD(){
+  const sc=(Date.now()-t0)/1000;
+  $('hudTime').textContent=String(Math.floor(sc/60)).padStart(2,'0')+':'+String(Math.floor(sc%60)).padStart(2,'0');
+  const doc=document.documentElement;
+  const p=clamp((scrollY+innerHeight)/doc.scrollHeight,0,1);
+  maxD=Math.max(maxD,p);
+  $('hudDepth').textContent=Math.round(p*100)+'%';
+  $('progress').style.width=(p*100).toFixed(2)+'%';
+}
+addEventListener('scroll',tickHUD,{passive:true});
+setInterval(tickHUD,500);
+
+/* persist session on exit */
+function persist(){st.tSum+=(Date.now()-t0)/1000; st.dSum+=maxD*100; save();}
+setInterval(()=>{st.tSum+=(Date.now()-t0)/1000; st.dSum+=maxD*100; save();},15000);
+addEventListener('visibilitychange',()=>{if(document.hidden)persist()});
+addEventListener('beforeunload',persist);
+
+/* CTA click events = conversions */
+document.querySelectorAll('[data-cta]').forEach(el=>el.addEventListener('click',()=>{
+  st.clicks[V]++; myClicks++; save();
+  const t=$('toast'); t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800);
+}));
+$('resumeBtn').addEventListener('click',()=>setTimeout(()=>print(),250));
+
+/* ── reveal + counters ───────────────────────────────────── */
+function counters(root){root.querySelectorAll('.num[data-count]').forEach(el=>{
+  if(el.dataset.ok)return;el.dataset.ok='1';
+  const end=+el.dataset.count,suf=el.dataset.suffix||'',t1=performance.now();
+  (function s(n){const k=clamp((n-t1)/1200,0,1);el.textContent=Math.round(end*(1-Math.pow(1-k,3)))+suf;
+    if(k<1)requestAnimationFrame(s)})(t1);});}
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('on');counters(e.target);seen.add(e.target.id||e.target.className);}
+}),{threshold:0.22});
+document.querySelectorAll('section').forEach(s=>io.observe(s));
+
+/* ── hero: mark intro visible immediately ────────────────── */
+setTimeout(()=>document.querySelector('.hero').classList.add('on'),120);
+
+/* ── SIMULATOR ───────────────────────────────────────────── */
+const CPM=220;
+const fmtIN=n=>new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n));
+const sim={bud:1e5,ctr:1.5,cvr:4,val:2000,d:{imp:0,clk:0,leads:0,cpl:0,rev:0,roas:0}};
+function readSim(){
+  sim.bud=+$('inBud').value; sim.ctr=+$('inCtr').value/100;
+  sim.cvr=+$('inCvr').value/100; sim.val=+$('inVal').value;
+  $('vBud').textContent='₹'+fmtIN(sim.bud);
+  $('vCtr').textContent=sim.ctr.toFixed(1)+'%';
+  $('vCvr').textContent=sim.cvr.toFixed(1)+'%';
+  $('vVal').textContent='₹'+fmtIN(sim.val);
+}
+['inBud','inCtr','inCvr','inVal'].forEach(id=>$(id).addEventListener('input',readSim));
+readSim();
+function simTargets(){
+  const imp=sim.bud/CPM*1000, clk=imp*sim.ctr, leads=clk*sim.cvr;
+  return {imp,clk,leads, cpl:leads>0.5?sim.bud/leads:0, rev:leads*sim.val, roas:leads>0.5?(leads*sim.val)/sim.bud:0};
+}
+function round1(n){return n>=10?Math.round(n):+n.toFixed(1)}
+function simTick(){
+  const t=simTargets(),d=sim.d;
+  d.imp=lerp(d.imp,t.imp,.14);d.clk=lerp(d.clk,t.clk,.14);d.leads=lerp(d.leads,t.leads,.14);
+  d.cpl=lerp(d.cpl,t.cpl,.14);d.rev=lerp(d.rev,t.rev,.14);d.roas=lerp(d.roas,t.roas,.14);
+  $('oImp').textContent=fmtIN(d.imp);
+  $('oClk').textContent=fmtIN(d.clk);
+  $('oLeads').textContent=fmtIN(d.leads);
+  $('oCpl').textContent=t.leads>0.5?'₹'+fmtIN(d.cpl):'—';
+  $('oRev').textContent='₹'+fmtIN(d.rev);
+  $('oRoas').textContent=d.roas.toFixed(1)+'×';
+  $('roasFill').style.width=clamp(d.roas/8*100,0,100)+'%';
+  const v=$('verdict');
+  if(d.roas>=3){v.className='verdict good';v.textContent='✓ PROFITABLE — scale this. ROAS '+d.roas.toFixed(1)+'×';}
+  else if(d.roas>=1){v.className='verdict warn';v.textContent='◦ BREAKEVEN ZONE — optimise CTR & CVR before scaling.';}
+  else{v.className='verdict bad';v.textContent='✕ LOSING MONEY — kill it or fix the funnel.';}
+  requestAnimationFrame(simTick);
+}
+requestAnimationFrame(simTick);
+
+/* ── PROCESS steps light up with scroll ─────────────────── */
+const steps=[...document.querySelectorAll('#procSteps .step')];
+function procTick(){
+  const r=$('process').getBoundingClientRect();
+  const p=clamp((innerHeight*0.75-r.top)/r.height,0,1);
+  const lit=Math.floor(p*(steps.length+2));
+  steps.forEach((s,i)=>s.classList.toggle('lit',i<lit));
+}
+addEventListener('scroll',procTick,{passive:true});procTick();
+
+/* ── DASHBOARD live repaint ──────────────────────────────── */
+function pctv(v){const w=agg.views[v];return w?(agg.clicks[v]/w*100):0}
+function dash(){
+  agg.clicks[V]=SEED.clicks[V]+st.clicks[V];
+  agg.views[V]=SEED.views[V]+st.views[V];
+  const tS=(Date.now()-t0)/1000;
+  $('dTime').textContent=fmt(tS);
+  $('dDepth').textContent=Math.round(maxD*100)+'%';
+  $('dSecs').textContent=seen.size+'/11';
+  $('dClicks').textContent=myClicks;
+  const pA=pctv('A'),pB=pctv('B'),mx=Math.max(pA,pB,1);
+  $('barA').style.width=(pA/mx*100)+'%';
+  $('barB').style.width=(pB/mx*100)+'%';
+  $('pctA').textContent=pA.toFixed(1)+'%';
+  $('pctB').textContent=pB.toFixed(1)+'%';
+  /* verdict stamp */
+  const nA=agg.views.A,nB=agg.views.B,pc=(agg.clicks.A+agg.clicks.B)/(nA+nB);
+  const z=pc>0?(pA/100-pB/100)/Math.sqrt(pc*(1-pc)*(1/nA+1/nB)):0;
+  const conf=Math.round(phi(Math.abs(z))*100);
+  const lead=pA>=pB?'A':'B';
+  const win=$('stamp'), winLead=(lead===V)?'YOUR VARIANT LEADS':'VARIANT '+lead+' LEADS';
+  if(conf>=90){win.textContent='✓ '+winLead+' · '+conf+'% CONFIDENCE';win.style.borderColor='#7fe0a8';win.style.color='#7fe0a8';}
+  else{win.textContent='◦ COLLECTING DATA · INDICATIVE '+lead+' · '+conf+'%';win.style.borderColor='#ffd68a';win.style.color='#ffd68a';}
+  $('dSessions').textContent=SEED.sessions+st.sessions;
+  $('dAvgT').textContent=fmt((SEED.tSum+st.tSum)/Math.max(1,SEED.sessions+st.sessions));
+  $('dAvgD').textContent=Math.round((SEED.dSum+st.dSum)/Math.max(1,SEED.sessions+st.sessions))+'%';
+}
+dash();setInterval(dash,1000);
+
+/* console easter egg for curious recruiters */
+console.log('%c⚗ EXP №2026-047 — VARIANT '+V+' ASSIGNED\n%cThis portfolio is instrumented: variants, funnels, CTRs.\nIf you open devtools on a portfolio, we should talk.\n→ harshdhmija4678@gmail.com',
+ 'font-size:14px;font-weight:bold;color:#2f52d8','color:#666');
+})();
+</script>
+</body>
+</html>
