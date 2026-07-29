@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harsh Dhamija — IMPRESSION №1 · AI Performance Marketer</title>
+<meta name="description" content="A scroll documentary: follow one ad impression from signal to scale through Harsh Dhamija's marketing machine. AI Performance Marketer — Meta Ads, Google Ads, growth marketing, Delhi NCR.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070a10'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%234fd8e0'/%3E%3Ccircle cx='32' cy='32' r='14' fill='none' stroke='%234fd8e0' stroke-opacity='.5' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070a10; --bg2:#0b1018; --ink:#eef2f7; --mut:#8b95a4; --dim:#4d5866;
+  --line:rgba(140,160,190,.14);
+  --cy:#4fd8e0; --am:#ffb454; --gn:#34d399; --rd:#f87171;
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 1rem/1.75 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--cy);color:#03161a}
+a{color:inherit;text-decoration:none}
+.mono{font-family:var(--mono)}
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--cy),var(--am));z-index:70}
+
+/* ── HUD ─────────────────────────────────────────────────── */
+.hud{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;align-items:center;gap:.7rem;
+  padding:.7rem clamp(.9rem,2.5vw,1.6rem);background:rgba(7,10,16,.72);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);font:600 .56rem var(--mono);letter-spacing:.14em}
+.hud .lg{font:600 .72rem var(--mono)}
+.hud .lg b{color:var(--cy)}
+.hud .mid{color:var(--dim)}
+.hud .mid b{color:var(--am)}
+.hud .right{margin-left:auto;display:flex;gap:.5rem}
+.hbtn{border:1px solid var(--line);border-radius:99px;padding:.42rem .85rem;color:var(--mut);cursor:pointer;background:none;transition:.25s}
+.hbtn:hover{color:var(--ink);border-color:var(--mut)}
+.hbtn.acc{background:var(--cy);color:#03161a;border-color:var(--cy)}
+.hbtn.acc:hover{filter:brightness(1.1)}
+
+/* ── left progress rail (the impression travels here) ────── */
+.rail{position:fixed;left:26px;top:14vh;bottom:12vh;z-index:54;width:1px;background:rgba(140,160,190,.16)}
+.rail .rdot{
+  position:absolute;left:-4.5px;width:10px;height:10px;border-radius:50%;background:var(--cy);
+  box-shadow:0 0 12px var(--cy),0 0 30px rgba(79,216,224,.5);top:0;will-change:top;
+}
+.rail .mk{position:absolute;left:-3px;width:7px;height:7px;border-radius:50%;background:var(--dim);transition:.3s}
+.rail .mk.on{background:var(--am);box-shadow:0 0 8px var(--am)}
+.rail .mk span{
+  position:absolute;left:14px;top:-4px;font:600 .5rem var(--mono);letter-spacing:.2em;color:var(--dim);
+  white-space:nowrap;opacity:0;transform:translateX(-6px);transition:.3s;
+}
+.rail .mk.on span{opacity:1;transform:none;color:var(--mut)}
+
+/* ── stage of living diagrams ────────────────────────────── */
+.stage{position:fixed;inset:0;z-index:1;pointer-events:none;display:grid;place-items:center}
+.vis{position:absolute;width:min(540px,80vw);height:min(540px,72vh);opacity:0;will-change:opacity}
+
+/* generic pieces */
+.rl{position:absolute;font:600 .52rem var(--mono);letter-spacing:.2em;color:var(--dim)}
+.gc{position:absolute;border:1px solid var(--line);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
+.dotp{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--cy);box-shadow:0 0 10px var(--cy)}
+
+/* V1 · SIGNAL — radar converging on one person */
+.v1 .gc.r1{width:120px;height:120px}
+.v1 .gc.r2{width:230px;height:230px;opacity:.7}
+.v1 .gc.r3{width:340px;height:340px;opacity:.45}
+.v1 .gc.r4{width:450px;height:450px;opacity:.25}
+.v1 .gc.pulse{animation:none;border-color:rgba(79,216,224,.5);opacity:calc((1 - var(--p,0)) * .8)}
+.v1 .who{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#9ff0f5,var(--cy) 70%);box-shadow:0 0 26px rgba(79,216,224,.55);
+}
+.v1 .kw{
+  --s:clamp(0, calc((var(--p,0) - .1) * 1.5), 1);
+  position:absolute;left:50%;top:50%;font:700 .62rem var(--mono);letter-spacing:.24em;color:var(--cy);
+  transform:translate(calc(-50% + (1 - var(--s)) * var(--dx)), calc(-50% + (1 - var(--s)) * var(--dy)));
+  opacity:clamp(.15, calc(1 - var(--s) * .5), 1);
+}
+.v1 .beam{position:absolute;left:50%;top:50%;width:1px;height:225px;transform-origin:top;
+  background:linear-gradient(rgba(79,216,224,.5),transparent);animation:beam 6s linear infinite;opacity:.5}
+@keyframes beam{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* V2 · TARGET — audience cluster selected */
+.v2 .adot{position:absolute;left:var(--x);top:var(--y);width:7px;height:7px;border-radius:50%;
+  background:var(--dim);opacity:.65;transition:none}
+.v2 .adot.in{--s:clamp(0, calc((var(--p,0) - .25) * 2), 1);
+  background:var(--am);box-shadow:0 0 calc(var(--s) * 10px) var(--am);opacity:calc(.3 + var(--s) * .7)}
+.v2 .selring{position:absolute;left:50%;top:50%;border:1.5px solid var(--am);border-radius:50%;
+  --s:clamp(0, calc((var(--p,0) - .1) * 1.4), 1);
+  width:calc(360px - var(--s) * 235px);height:calc(360px - var(--s) * 235px);
+  transform:translate(-50%,-50%);box-shadow:0 0 20px rgba(255,180,84,.12);opacity:calc(.15 + var(--s) * .85)}
+.v2 .cross{position:absolute;left:calc(50% + 60px);top:calc(50% + 40px);font:600 .55rem var(--mono);color:var(--am);letter-spacing:.2em;
+  --s:clamp(0, calc((var(--p,0) - .55) * 3), 1);opacity:var(--s);transform:translateY(calc((1 - var(--s)) * 8px))}
+
+/* V3 · LAUNCH — campaign switches */
+.v3{—pad:0}
+.v3 .crow{
+  position:absolute;left:8%;right:8%;height:74px;border:1px solid var(--line);border-radius:14px;
+  background:var(--bg2);padding:0 1.1rem;display:flex;align-items:center;justify-content:space-between;
+}
+.v3 .crow:nth-child(1){top:6%}.v3 .crow:nth-child(2){top:38%}.v3 .crow:nth-child(3){top:70%}
+.v3 .crow .nm{font:700 .66rem var(--mono);letter-spacing:.16em}
+.v3 .crow .nm small{display:block;font:500 .52rem;color:var(--mut);letter-spacing:.1em;margin-top:2px}
+.v3 .track{position:relative;width:150px;height:6px;border-radius:99px;background:rgba(140,160,190,.18)}
+.v3 .track i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,var(--cy),var(--am))}
+.v3 .knob{position:absolute;top:50%;left:0;width:16px;height:16px;border-radius:50%;background:var(--ink);
+  transform:translateY(-50%);box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.v3 .st{position:relative;width:86px;text-align:right;font:700 .56rem var(--mono);letter-spacing:.18em}
+.v3 .st .off{position:absolute;right:0;color:var(--dim)}
+.v3 .st .on{position:absolute;right:0;color:var(--gn)}
+.v3 .crow.c1 .track i,.v3 .crow.c2 .track i,.v3 .crow.c3 .track i{width:0}
+.v3 .crow.c1{--si:clamp(0, calc((var(--p,0) - .08) * 4), 1)}
+.v3 .crow.c2{--si:clamp(0, calc((var(--p,0) - .34) * 4), 1)}
+.v3 .crow.c3{--si:clamp(0, calc((var(--p,0) - .6) * 4), 1)}
+.v3 .crow .track i{width:calc(var(--si) * 100%)}
+.v3 .crow .knob{left:calc(var(--si) * (100% - 16px));background:color-mix(in srgb,var(--cy) calc(var(--si)*100%),var(--ink))}
+.v3 .crow .st .on{opacity:var(--si)}
+.v3 .crow .st .off{opacity:calc(1 - var(--si))}
+.v3 .crow{opacity:calc(.25 + var(--si) * .75)}
+
+/* V4 · ATTENTION — the feed */
+.v4 .phone{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:220px;height:400px;border:2px solid rgba(140,160,190,.35);border-radius:28px;background:var(--bg2);
+  overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.v4 .pnotch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:70px;height:7px;border-radius:99px;background:rgba(140,160,190,.3);z-index:2}
+.v4 .feed{position:absolute;inset:26px 12px 12px;display:flex;flex-direction:column;gap:10px;
+  transform:translateY(calc(var(--p,0) * -168px))}
+.v4 .post{height:86px;border:1px solid var(--line);border-radius:12px;background:rgba(140,160,190,.06);
+  padding:8px;display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
+.v4 .post i{height:34px;border-radius:8px;background:linear-gradient(120deg,rgba(140,160,190,.22),rgba(140,160,190,.08))}
+.v4 .post b{height:6px;border-radius:99px;background:rgba(140,160,190,.25);width:70%}
+.v4 .post u{height:6px;border-radius:99px;background:rgba(140,160,190,.16);width:45%}
+.v4 .post.mine{
+  --s:clamp(0, calc((var(--p,0) - .35) * 3), 1);
+  border-color:rgba(255,180,84,calc(.3 + var(--s) * .7));background:rgba(255,180,84,.08);
+  box-shadow:0 0 calc(var(--s) * 26px) rgba(255,180,84,.25);
+}
+.v4 .post.mine i{background:linear-gradient(120deg,#ffb454,#e8734a)}
+.v4 .sticker{position:absolute;right:12px;bottom:14px;z-index:3;background:var(--am);color:#1a1206;
+  font:700 .58rem var(--mono);letter-spacing:.1em;padding:.4rem .7rem;border-radius:99px;
+  --s:clamp(0, calc((var(--p,0) - .5) * 4), 1);opacity:var(--s);transform:scale(calc(.6 + var(--s) * .4))}
+
+/* V5 · CLICK & LAND — funnel */
+.v5 .cone{position:absolute;left:50%;top:12%;width:300px;height:250px;transform:translateX(-50%);
+  background:linear-gradient(180deg,rgba(79,216,224,.06),rgba(79,216,224,.01));
+  clip-path:polygon(0 0,100% 0,62% 100%,38% 100%)}
+.v5 .cone-o{position:absolute;left:50%;top:12%;width:300px;height:250px;transform:translateX(-50%);
+  background:transparent;border-top:1px solid rgba(140,160,190,.2)}
+.v5 .fd{position:absolute;left:var(--x);top:8%;width:7px;height:7px;border-radius:50%;background:rgba(140,160,190,.7);
+  --d2:clamp(0, calc((var(--p,0) - var(--dl)) * 2), 1);
+  transform:translateY(calc(var(--d2) * 300px));opacity:calc(1 - var(--d2) * .9)}
+.v5 .fd.won{background:var(--am);box-shadow:0 0 12px var(--am);opacity:1}
+.v5 .land{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);
+  font:600 .55rem var(--mono);letter-spacing:.2em;color:var(--am);text-align:center}
+.v5 .land b{display:block;font:700 1.4rem var(--serif);color:var(--am)}
+
+/* V6 · CLOSE — pipeline to WON */
+.v6 .zone{position:absolute;top:8%;bottom:16%;width:40%;border:1px dashed var(--line);border-radius:14px;
+  font:600 .55rem var(--mono);letter-spacing:.2em;color:var(--dim);padding:.6rem}
+.v6 .zone.zn{left:7%}.v6 .zone.zw{right:7%;color:var(--gn);border-color:rgba(52,211,153,.35)}
+.v6 .card6{
+  position:absolute;left:10%;width:56px;padding:.45rem .55rem;border-radius:8px;background:var(--bg2);
+  border:1px solid var(--line);font:700 .5rem var(--mono);letter-spacing:.12em;color:var(--mut);
+  top:calc(14% + var(--ty));--m:clamp(0, calc((var(--p,0) - var(--dl)) * 3), 1);
+  transform:translateX(calc(var(--m) * 300%)) scale(calc(1 - var(--m) * .12));
+  border-color:color-mix(in srgb,var(--gn) calc(var(--m) * 100%),rgba(140,160,190,.15));
+  color:color-mix(in srgb,var(--gn) calc(var(--m) * 100%),var(--mut));
+}
+.v6 .stamp6{position:absolute;right:8%;bottom:6%;transform:rotate(-8deg);
+  font:700 .7rem var(--mono);letter-spacing:.24em;color:var(--gn);border:2px solid var(--gn);
+  border-radius:8px;padding:.5rem .9rem;--s:clamp(0, calc((var(--p,0) - .8) * 5), 1);
+  opacity:var(--s);scale:calc(1.6 - var(--s) * .6)}
+
+/* V7 · LEARN — charts */
+.v7 svg{position:absolute;inset:0;width:100%;height:100%}
+.v7 .anno{position:absolute;font:700 .58rem var(--mono);letter-spacing:.14em;padding:.35rem .6rem;border-radius:8px;
+  background:var(--bg2);border:1px solid var(--line);opacity:var(--s);transform:translateY(calc((1 - var(--s)) * 10px))}
+.v7 .a1{left:56%;top:14%;color:var(--gn);--s:clamp(0, calc((var(--p,0) - .45) * 4), 1)}
+.v7 .a2{left:60%;bottom:16%;color:var(--am);--s:clamp(0, calc((var(--p,0) - .62) * 4), 1)}
+.v7 .a3{left:24%;top:34%;color:var(--dim);--s:clamp(0, calc((var(--p,0) - .75) * 4), 1)}
+
+/* V8 · SCALE — the compounding loop */
+.v8 .loopwrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:320px;height:320px}
+.v8 .nc{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(var(--r)) translateY(-160px) rotate(calc(var(--r) * -1));
+  font:600 .5rem var(--mono);letter-spacing:.14em;color:var(--mut);background:var(--bg);
+  border:1px solid var(--line);border-radius:99px;padding:.3rem .6rem;white-space:nowrap;
+  --s:clamp(0, calc((var(--p,0) - var(--dl)) * 4), 1);opacity:var(--s);
+}
+.v8 .core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;
+  font:700 .62rem var(--mono);letter-spacing:.26em;color:var(--cy)}
+.v8 .core b{display:block;font:italic 700 1.5rem var(--serif);letter-spacing:0;color:var(--ink)}
+
+/* V9 · LANDING — rings close on one dot (contact stage) */
+.v9 .gc{border-color:rgba(79,216,224,.4)}
+.v9 .gc.z1{width:calc(90px + (1 - var(--p,0)) * 320px);height:calc(90px + (1 - var(--p,0)) * 320px)}
+.v9 .gc.z2{width:calc(60px + (1 - var(--p,0)) * 190px);height:calc(60px + (1 - var(--p,0)) * 190px)}
+.v9 .gc.z3{width:calc(34px + (1 - var(--p,0)) * 90px);height:calc(34px + (1 - var(--p,0)) * 90px)}
+.v9 .fin{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;
+  border-radius:50%;background:var(--cy);box-shadow:0 0 18px var(--cy),0 0 44px rgba(79,216,224,.6);
+  opacity:clamp(0, calc(var(--p,0) * 2), 1)}
+
+/* ── text chapters ───────────────────────────────────────── */
+main{position:relative;z-index:2}
+.chapter{min-height:165vh;padding:14vh 6vw;display:flex}
+.chapter .ct{max-width:470px;margin:auto 0}
+.chapter:nth-child(odd) .ct{margin-left:auto}
+.chapter:nth-child(even) .ct{margin-right:auto}
+.ck{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--cy);margin-bottom:.9rem}
+.ct h2{font:700 clamp(1.9rem,4.2vw,3rem)/1.12 var(--serif);letter-spacing:-.02em;margin-bottom:1rem}
+.ct h2 em{font-style:italic;color:var(--am)}
+.pr{color:var(--mut);font-size:.97rem;max-width:48ch}
+.pr b{color:var(--ink)}
+.qline{margin-top:1.1rem;padding-left:1rem;border-left:2px solid var(--cy);font:italic 400 1.02rem var(--serif);color:var(--ink)}
+.ms{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.2rem}
+.ms span{font:600 .56rem var(--mono);letter-spacing:.12em;color:var(--cy);border:1px solid rgba(79,216,224,.35);
+  border-radius:99px;padding:.35rem .7rem;background:rgba(79,216,224,.06)}
+.ms span.amb{color:var(--am);border-color:rgba(255,180,84,.35);background:rgba(255,180,84,.06)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:calc(var(--i,0)*80ms)}
+.on .rv{opacity:1;transform:none}
+
+/* ── HERO ────────────────────────────────────────────────── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:16vh 1.2rem 12vh;position:relative}
+.type-line{font:600 .68rem var(--mono);letter-spacing:.26em;color:var(--cy);min-height:1.4em;margin-bottom:2rem}
+.type-line .caret{display:inline-block;width:9px;height:1.05em;background:var(--cy);vertical-align:-0.18em;
+  margin-left:3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero h1{font:700 clamp(3.2rem,11vw,8.6rem)/0.98 var(--serif);letter-spacing:-.03em}
+.hero h1 em{font-style:italic;color:var(--cy)}
+.hero .roles{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--mut);margin:1.4rem 0 1rem}
+.hero .sub{max-width:54ch;color:var(--mut);font-size:.95rem}
+.hero .cta{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.9rem}
+.btn{font:600 .8rem var(--sans);padding:.85rem 1.5rem;border-radius:99px;cursor:pointer;border:none;background:none;
+  transition:transform .3s var(--ease),filter .3s;display:inline-block}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.12)}
+.btn.solid{background:var(--ink);color:#0a0f16}
+.btn.cy2{background:var(--cy);color:#03161a}
+.btn.line{border:1px solid var(--line);color:var(--ink)}
+.hero .hint{position:absolute;bottom:4.5vh;left:50%;transform:translateX(-50%);font:600 .55rem var(--mono);
+  letter-spacing:.32em;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.hero .hint i{width:1px;height:34px;background:linear-gradient(var(--cy),transparent);animation:drop 1.8s var(--ease) infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
+.hero-stats{display:flex;flex-wrap:wrap;gap:2rem;justify-content:center;margin-top:3.4rem;padding-top:1.6rem;border-top:1px solid var(--line)}
+.hero-stats b{display:block;font:700 1.7rem/1.1 var(--serif);color:var(--cy);font-variant-numeric:tabular-nums}
+.hero-stats span{font:600 .5rem var(--mono);letter-spacing:.16em;color:var(--dim)}
+
+/* ── constants / principles ─────────────────────────────── */
+.blk{max-width:1080px;margin:0 auto;padding:12vh 1.3rem;position:relative;z-index:2}
+.blk .ck2{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--am);margin-bottom:.9rem}
+.blk h2{font:700 clamp(1.9rem,4.2vw,3rem)/1.12 var(--serif);letter-spacing:-.02em;margin-bottom:1.6rem}
+.blk h2 em{font-style:italic;color:var(--cy)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.pri{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:1.5rem}
+.pri .pn{font:600 .56rem var(--mono);letter-spacing:.24em;color:var(--cy)}
+.pri h3{font:700 1.3rem var(--serif);margin:.5rem 0 .5rem}
+.pri p{color:var(--mut);font-size:.87rem}
+
+/* ── dossier ─────────────────────────────────────────────── */
+details.doc{background:var(--bg2);border:1px solid var(--line);border-radius:14px;margin-bottom:.8rem;overflow:hidden}
+details.doc summary{
+  cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;
+  padding:1.1rem 1.3rem;font:700 .95rem var(--serif);letter-spacing:-.01em;
+}
+details.doc summary::-webkit-details-marker{display:none}
+details.doc summary .dm{font:600 .54rem var(--mono);letter-spacing:.2em;color:var(--cy);transition:transform .3s var(--ease)}
+details.doc[open] summary .dm{transform:rotate(45deg);color:var(--am)}
+details.doc .db{padding:0 1.3rem 1.3rem}
+details.doc p{color:var(--mut);font-size:.88rem;max-width:70ch}
+.jrow{display:grid;grid-template-columns:150px 1fr;gap:1rem;padding:.85rem 0;border-top:1px dashed var(--line)}
+.jrow:first-child{border-top:none}
+.jrow .w{font:600 .55rem var(--mono);letter-spacing:.14em;color:var(--cy);padding-top:.25rem}
+.jrow b.t{display:block;font:600 .92rem var(--sans)}
+.jrow .o{font:600 .54rem var(--mono);letter-spacing:.12em;color:var(--am);margin:.15rem 0 .5rem}
+.tagrow{display:flex;flex-wrap:wrap;gap:.35rem}
+.tagrow span{font:600 .54rem var(--mono);color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:.3rem .62rem}
+.subject{display:grid;grid-template-columns:130px 1fr;gap:1.1rem;align-items:start}
+.subject img{width:130px;height:158px;object-fit:cover;object-position:50% 18%;border-radius:10px;display:block}
+.minirow{display:flex;justify-content:space-between;gap:.6rem;padding:.3rem 0;border-bottom:1px dashed var(--line);font:600 .56rem var(--mono);letter-spacing:.1em;color:var(--mut)}
+.minirow b{color:var(--ink);text-align:right}
+
+/* ── contact ─────────────────────────────────────────────── */
+.contact{position:relative;z-index:2;text-align:center;padding:30vh 1.2rem 14vh;min-height:150vh}
+.contact .cname{display:inline-block;font:700 clamp(2.6rem,8vw,6rem)/1.05 var(--serif);letter-spacing:-.02em;position:relative}
+.contact .cname::after{
+  content:"";position:absolute;right:-0.28em;bottom:0.08em;width:.16em;height:.16em;border-radius:50%;
+  background:var(--cy);box-shadow:0 0 14px var(--cy);
+}
+.contact .roles{font:600 .6rem var(--mono);letter-spacing:.3em;color:var(--mut);margin:1.2rem 0}
+.mail{display:inline-block;font:italic 700 clamp(1.1rem,3.2vw,1.8rem) var(--serif);border-bottom:2px solid var(--cy);
+  padding-bottom:.12rem;margin:.8rem 0 1.6rem;transition:color .3s}
+.mail:hover{color:var(--cy)}
+.meta{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;margin-bottom:1.8rem}
+.meta span{font:600 .56rem var(--mono);letter-spacing:.14em;color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:.45rem .9rem}
+footer{position:relative;z-index:2;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;
+  padding:1.6rem clamp(1rem,3vw,2.2rem) 2.2rem;border-top:1px solid var(--line);
+  font:600 .55rem var(--mono);letter-spacing:.2em;color:var(--dim)}
+
+@media (max-width:900px){
+  .stage{top:52px;height:44vh;place-items:center;background:linear-gradient(rgba(7,10,16,.9),rgba(7,10,16,0) 90%)}
+  .vis{width:min(420px,92vw);height:min(420px,44vh)}
+  .rail{display:none}
+  .chapter{min-height:150vh;padding-top:48vh;display:block}
+  .chapter .ct{max-width:none;margin:0}
+  .prin{grid-template-columns:1fr}
+  .subject{grid-template-columns:1fr}
+  .hud .mid{display:none}
+  .hero-stats{gap:1.2rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition-duration:.15s !important}
+  .rv{opacity:1 !important;transform:none !important}
+  .type-line .caret{display:none}
+}
+@media print{
+  .hud,.rail,.stage,.grain,#prog,.hero .cta,.hero .hint{display:none !important}
+  body{background:#fff;color:#000}
+  .rv{opacity:1 !important;transform:none !important}
+  .chapter{min-height:0;padding:2vh 0}
+  .ct h2,.blk h2,.pr b,.pri h3,.jrow b.t{color:#000}
+  .pr,.doc p,.pri p{color:#333}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div id="prog"></div>
+
+<div class="hud">
+  <span class="lg">HD<b>·</b>IMPRESSION №1</span>
+  <span class="mid" id="chapOut">CH 00 — <b>ORIGIN</b></span>
+  <div class="right">
+    <button class="hbtn" id="resumeBtn">RÉSUMÉ ⇩</button>
+    <a class="hbtn acc" href="#contact">HIRE ME</a>
+  </div>
+</div>
+
+<div class="rail" id="rail" aria-hidden="true">
+  <div class="rdot" id="railDot"></div>
+</div>
+
+<div class="stage" aria-hidden="true">
+
+  <div class="vis v1" id="v1">
+    <span class="gc r1"></span><span class="gc r2"></span><span class="gc r3"></span><span class="gc r4"></span>
+    <span class="gc pulse" style="width:280px;height:280px"></span>
+    <span class="beam"></span>
+    <div class="who"></div>
+    <span class="kw" style="--dx:-164px;--dy:-120px">WANTS</span>
+    <span class="kw" style="--dx:150px;--dy:-88px">NEEDS</span>
+    <span class="kw" style="--dx:-140px;--dy:130px">FEARS</span>
+    <span class="kw" style="--dx:170px;--dy:110px">DESIRES</span>
+    <span class="rl" style="left:8%;bottom:6%">ONE HUMAN / FULL SIGNAL</span>
+  </div>
+
+  <div class="vis v2" id="v2">
+    <span class="adot" style="--x:12%;--y:22%"></span><span class="adot" style="--x:26%;--y:12%"></span>
+    <span class="adot" style="--x:38%;--y:30%"></span><span class="adot" style="--x:71%;--y:18%"></span>
+    <span class="adot" style="--x:84%;--y:32%"></span><span class="adot" style="--x:90%;--y:55%"></span>
+    <span class="adot" style="--x:79%;--y:74%"></span><span class="adot" style="--x:60%;--y:86%"></span>
+    <span class="adot" style="--x:34%;--y:82%"></span><span class="adot" style="--x:15%;--y:68%"></span>
+    <span class="adot" style="--x:8%;--y:45%"></span><span class="adot" style="--x:45%;--y:8%"></span>
+    <span class="adot in" style="--x:52%;--y:46%"></span><span class="adot in" style="--x:57%;--y:53%"></span>
+    <span class="adot in" style="--x:48%;--y:57%"></span><span class="adot in" style="--x:55%;--y:62%"></span>
+    <span class="adot in" style="--x:62%;--y:51%"></span><span class="adot in" style="--x:50%;--y:68%"></span>
+    <span class="adot in" style="--x:66%;--y:62%"></span><span class="adot in" style="--x:58%;--y:41%"></span>
+    <span class="selring"></span>
+    <span class="cross">⌖ SEGMENT LOCKED</span>
+    <span class="rl" style="left:8%;bottom:6%">2.4M PEOPLE → ONE SEGMENT</span>
+  </div>
+
+  <div class="vis v3" id="v3">
+    <div class="crow c1">
+      <span class="nm">META ADS<small>LEAD-GEN · 4 CAMPAIGNS</small></span>
+      <span class="track"><i></i><span class="knob"></span></span>
+      <span class="st"><span class="off">STANDBY</span><span class="on">● LIVE</span></span>
+    </div>
+    <div class="crow c2">
+      <span class="nm">GOOGLE ADS<small>SEARCH · 2 CAMPAIGNS</small></span>
+      <span class="track"><i></i><span class="knob"></span></span>
+      <span class="st"><span class="off">STANDBY</span><span class="on">● LIVE</span></span>
+    </div>
+    <div class="crow c3">
+      <span class="nm">SALES CAMPAIGN<small>CONVERSIONS · OPTIMISED DAILY</small></span>
+      <span class="track"><i></i><span class="knob"></span></span>
+      <span class="st"><span class="off">STANDBY</span><span class="on">● LIVE</span></span>
+    </div>
+    <span class="rl" style="left:8%;bottom:2%">DIGIMARK MEDIA · EXECUTION LOG</span>
+  </div>
+
+  <div class="vis v4" id="v4">
+    <div class="phone">
+      <span class="pnotch"></span>
+      <div class="feed">
+        <div class="post"><i></i><b></b><u></u></div>
+        <div class="post mine"><i></i><b></b><u></u></div>
+        <div class="post"><i></i><b></b><u></u></div>
+        <div class="post"><i></i><b></b><u></u></div>
+        <div class="post"><i></i><b></b><u></u></div>
+      </div>
+      <span class="sticker">⏸ THUMB-STOP · <span id="eyeCount">0</span> IMPR.</span>
+    </div>
+    <span class="rl" style="left:8%;bottom:6%">CREATIVE TESTING · 50+ VARIANTS</span>
+  </div>
+
+  <div class="vis v5" id="v5">
+    <div class="cone"></div><div class="cone-o"></div>
+    <span class="fd" style="--x:20%;--dl:.05"></span><span class="fd" style="--x:32%;--dl:.12"></span>
+    <span class="fd" style="--x:44%;--dl:.02"></span><span class="fd" style="--x:56%;--dl:.18"></span>
+    <span class="fd" style="--x:68%;--dl:.09"></span><span class="fd" style="--x:80%;--dl:.22"></span>
+    <span class="fd" style="--x:26%;--dl:.26"></span><span class="fd" style="--x:62%;--dl:.3"></span>
+    <span class="fd won" style="--x:40%;--dl:.14"></span><span class="fd won" style="--x:50%;--dl:.2"></span>
+    <span class="fd won" style="--x:60%;--dl:.1"></span><span class="fd won" style="--x:46%;--dl:.32"></span>
+    <div class="land">QUALIFIED LEADS LAND<b id="leadCount">0</b></div>
+    <span class="rl" style="left:8%;bottom:6%">LANDING PAGES BUILT: 15+</span>
+  </div>
+
+  <div class="vis v6" id="v6">
+    <div class="zone zn">NEW LEADS</div>
+    <div class="zone zw">CLOSED-WON</div>
+    <span class="card6" style="--ty:0%;--dl:.05">LEAD·01</span>
+    <span class="card6" style="--ty:16%;--dl:.2">LEAD·02</span>
+    <span class="card6" style="--ty:32%;--dl:.35">LEAD·03</span>
+    <span class="card6" style="--ty:48%;--dl:.5">LEAD·04</span>
+    <span class="card6" style="--ty:64%;--dl:.65">LEAD·05</span>
+    <span class="stamp6">DEAL CLOSED ✓</span>
+    <span class="rl" style="left:8%;bottom:2%">PROPSALT LANDBASE · FULL-CYCLE SALES</span>
+  </div>
+
+  <div class="vis v7" id="v7">
+    <svg viewBox="0 0 540 420" preserveAspectRatio="none">
+      <g stroke="rgba(140,160,190,.12)" stroke-width="1">
+        <line x1="40" y1="60" x2="500" y2="60"/><line x1="40" y1="140" x2="500" y2="140"/>
+        <line x1="40" y1="220" x2="500" y2="220"/><line x1="40" y1="300" x2="500" y2="300"/>
+      </g>
+      <polyline id="lnCTR" fill="none" stroke="#34d399" stroke-width="2.6" stroke-linecap="round"
+        points="40,300 120,272 200,246 280,210 360,166 440,122 500,92"
+        stroke-dasharray="620" style="stroke-dashoffset:calc((1 - clamp(0, calc(var(--p,0) * 1.5), 1)) * 620)"/>
+      <polyline id="lnCPL" fill="none" stroke="#ffb454" stroke-width="2.6" stroke-linecap="round"
+        points="40,110 120,148 200,190 280,232 360,272 440,302 500,318"
+        stroke-dasharray="620" style="stroke-dashoffset:calc((1 - clamp(0, calc((var(--p,0) - .18) * 1.5), 1)) * 620)"/>
+    </svg>
+    <span class="anno a1">CTR ↑ · CREATIVE REFINED</span>
+    <span class="anno a2">CPL ↓ · WEEK 4 OPTIMISATION</span>
+    <span class="anno a3">EVERY NUMBER HAS AN OWNER</span>
+    <span class="rl" style="left:8%;bottom:2%">WEEKLY REPORTING RITUAL</span>
+  </div>
+
+  <div class="vis v8" id="v8">
+    <div class="loopwrap">
+      <svg viewBox="0 0 320 320" style="position:absolute;inset:0;width:100%;height:100%">
+        <path id="loopPath" fill="none" stroke="rgba(79,216,224,.75)" stroke-width="2.2" stroke-linecap="round"
+          d="M160,22 A138,138 0 1,1 60,214" stroke-dasharray="870"
+          style="stroke-dashoffset:calc((1 - clamp(0, calc(var(--p,0) * 1.3), 1)) * 870)"/>
+        <path id="arrHead" fill="none" stroke="#ffb454" stroke-width="3" stroke-linecap="round"
+          d="M46,196 L60,216 L82,200" stroke-dasharray="60"
+          style="stroke-dashoffset:calc((1 - clamp(0, calc((var(--p,0) - .72) * 4), 1)) * 60)"/>
+      </svg>
+      <span class="core"><b>compound.</b>LEARN → ADAPT → SCALE</span>
+      <span class="nc" style="--r:0deg;--dl:.3">CHATGPT</span>
+      <span class="nc" style="--r:45deg;--dl:.36">CLAUDE</span>
+      <span class="nc" style="--r:90deg;--dl:.42">GEMINI</span>
+      <span class="nc" style="--r:135deg;--dl:.48">PERPLEXITY</span>
+      <span class="nc" style="--r:180deg;--dl:.54">EMERGENT</span>
+      <span class="nc" style="--r:225deg;--dl:.6">LOVABLE</span>
+      <span class="nc" style="--r:270deg;--dl:.66">STITCH</span>
+      <span class="nc" style="--r:315deg;--dl:.72">REPLIT</span>
+    </div>
+    <span class="rl" style="left:8%;bottom:2%">8 AI TOOLS · ONE OPERATOR</span>
+  </div>
+
+  <div class="vis v9" id="v9">
+    <span class="gc z1"></span><span class="gc z2"></span><span class="gc z3"></span>
+    <span class="fin"></span>
+    <span class="rl" style="left:50%;top:calc(50% + 70px);transform:translateX(-50%);color:var(--cy);letter-spacing:.3em">THE IMPRESSION ARRIVES</span>
+  </div>
+
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero on" id="hero">
+    <p class="type-line"><span id="typeTxt"></span><span class="caret"></span></p>
+    <h1 class="rv" style="--i:1">Harsh<br><em>Dhamija.</em></h1>
+    <p class="roles rv" style="--i:2">AI PERFORMANCE MARKETER · GROWTH MARKETING · PAID MEDIA</p>
+    <p class="sub rv" style="--i:3">I build data-driven campaigns that turn attention into measurable
+    business growth. What follows is not a résumé — it's one ad's journey through everything I do.</p>
+    <div class="cta rv" style="--i:4">
+      <a class="btn cy2" href="#ch1">Follow the impression ↓</a>
+      <a class="btn line" href="#dossier">Skip to résumé</a>
+      <a class="btn solid" href="#contact">Let's connect →</a>
+    </div>
+    <div class="hero-stats rv" style="--i:5">
+      <div><b class="num" data-count="4">0</b><span>META CAMPAIGNS</span></div>
+      <div><b class="num" data-count="2">0</b><span>GOOGLE CAMPAIGNS</span></div>
+      <div><b class="num" data-count="50" data-suffix="+">0</b><span>AD CREATIVES</span></div>
+      <div><b class="num" data-count="15" data-suffix="+">0</b><span>WEBSITE BUILDS</span></div>
+      <div><b class="num" data-count="10" data-suffix="+">0</b><span>COMPETITOR ANALYSES</span></div>
+    </div>
+    <p class="hint">SCROLL<i></i></p>
+  </section>
+
+  <!-- CH 1 · SIGNAL -->
+  <section class="chapter" id="ch1" data-v="1">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">CH.01 — SIGNAL · WHY DO PEOPLE BUY?</p>
+      <h2 class="rv" style="--i:1">It starts with<br><em>one person.</em></h2>
+      <p class="pr rv" style="--i:2">Before dashboards, there are humans. I learned them the direct way —
+      on the front line of <b>Apple's customer process at Teleperformance</b>: thousands of conversations
+      about what people want, fear and finally choose. Every campaign I've run since starts at that signal.</p>
+      <p class="qline rv" style="--i:3">"The customer isn't a segment. The customer is a person with a Tuesday."</p>
+      <div class="ms rv" style="--i:4"><span>SALES PSYCHOLOGY</span><span>CONSUMER BEHAVIOUR</span><span class="amb">1,000s OF CONVERSATIONS</span></div>
+    </div>
+  </section>
+
+  <!-- CH 2 · TARGET -->
+  <section class="chapter" id="ch2" data-v="2">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">CH.02 — TARGET · RESEARCH BEFORE RUPEES</p>
+      <h2 class="rv" style="--i:1">Find the cluster<br>worth <em>chasing.</em></h2>
+      <p class="pr rv" style="--i:2">At <b>Agile Capital Services</b> I turned market noise into strategy:
+      research, benchmarking and reports that told leaders exactly where to aim. Guessing is expensive;
+      segmentation is cheap.</p>
+      <p class="qline rv" style="--i:3">"A campaign aimed at everyone converts no one."</p>
+      <div class="ms rv" style="--i:4"><span>MARKET RESEARCH</span><span>COMPETITOR ANALYSIS</span><span class="amb">10+ ANALYSES FILED</span></div>
+    </div>
+  </section>
+
+  <!-- CH 3 · LAUNCH -->
+  <section class="chapter" id="ch3" data-v="3">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">CH.03 — LAUNCH · THE SWITCHES GO LIVE</p>
+      <h2 class="rv" style="--i:1">Six campaigns,<br>fully <em>hands-on.</em></h2>
+      <p class="pr rv" style="--i:2">At <b>DigiMark Media</b> I built and managed paid campaigns end to end —
+      Meta and Google, lead-gen to sales. Structure, audiences, budgets, and <b>AI-assisted copy</b>
+      written to convert, not just to fill space.</p>
+      <p class="qline rv" style="--i:3">"Launch day isn't the finish. It's the first measurement."</p>
+      <div class="ms rv" style="--i:4"><span>META ADS</span><span>GOOGLE ADS</span><span>CAMPAIGN SETUP</span><span class="amb">6 CAMPAIGNS LIVE</span></div>
+    </div>
+  </section>
+
+  <!-- CH 4 · ATTENTION -->
+  <section class="chapter" id="ch4" data-v="4">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">CH.04 — ATTENTION · THE THUMB-STOP</p>
+      <h2 class="rv" style="--i:1">Fifty ways to<br>earn <em>one second.</em></h2>
+      <p class="pr rv" style="--i:2">Feeds are auctions of attention. I produced <b>50+ ad creatives</b> and
+      20+ social posts — then let the data decide which one deserved to survive. Creative is a system,
+      not a lottery ticket.</p>
+      <p class="qline rv" style="--i:3">"The best creative doesn't shout. It stops."</p>
+      <div class="ms rv" style="--i:4"><span>CREATIVE TESTING</span><span>AI CONTENT WORKFLOWS</span><span class="amb">50+ VARIANTS SHIPPED</span></div>
+    </div>
+  </section>
+
+  <!-- CH 5 · CLICK & LAND -->
+  <section class="chapter" id="ch5" data-v="5">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">CH.05 — CLICK &amp; LAND · THE FUNNEL NARROWS</p>
+      <h2 class="rv" style="--i:1">Built for the<br><em>next</em> click.</h2>
+      <p class="pr rv" style="--i:2">Attention that lands in the wrong place evaporates. I've shipped
+      <b>15+ websites and prototypes</b> — landing pages engineered around one job: move the visitor
+      one honest step closer to yes.</p>
+      <p class="qline rv" style="--i:3">"A landing page is a question with one obvious answer."</p>
+      <div class="ms rv" style="--i:4"><span>LANDING PAGES</span><span>FUNNEL THINKING</span><span class="amb">15+ BUILDS LIVE</span></div>
+    </div>
+  </section>
+
+  <!-- CH 6 · CLOSE -->
+  <section class="chapter" id="ch6" data-v="6">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">CH.06 — CLOSE · LEADS AREN'T REVENUE</p>
+      <h2 class="rv" style="--i:1">Where marketers<br>meet <em>money.</em></h2>
+      <p class="pr rv" style="--i:2">As a <b>Business Development Executive in real estate</b>, I carried leads
+      the whole way — consultation, site visits, negotiation, closure. Most marketers stop at CPL.
+      I know what happens after, and it changes how I build the top of the funnel.</p>
+      <p class="qline rv" style="--i:3">"A lead you can't close is just an expensive name in a sheet."</p>
+      <div class="ms rv" style="--i:4"><span>CRM &amp; PIPELINE</span><span>NEGOTIATION</span><span class="amb">FULL-CYCLE SALES</span></div>
+    </div>
+  </section>
+
+  <!-- CH 7 · LEARN -->
+  <section class="chapter" id="ch7" data-v="7">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">CH.07 — LEARN · THE NUMBERS TALK BACK</p>
+      <h2 class="rv" style="--i:1">Optimisation is<br>a <em>ritual.</em></h2>
+      <p class="pr rv" style="--i:2">CTR up, CPL down, creative refreshed, audiences rotated — campaign
+      reporting isn't paperwork, it's the conversation that compounds. I read dashboards like novels
+      and write the next chapter with data.</p>
+      <p class="qline rv" style="--i:3">"Data doesn't flatter. That's why it works."</p>
+      <div class="ms rv" style="--i:4"><span>CTR ANALYSIS</span><span>CONVERSION TRACKING</span><span>GA4 · REPORTING</span></div>
+    </div>
+  </section>
+
+  <!-- CH 8 · SCALE -->
+  <section class="chapter" id="ch8" data-v="8">
+    <div class="ct">
+      <p class="ck rv" style="--i:0">CH.08 — SCALE · THE LOOP COMPOUNDS</p>
+      <h2 class="rv" style="--i:1">Then do it again,<br><em>faster.</em></h2>
+      <p class="pr rv" style="--i:2">An <b>MBA's strategy</b>, McKinsey-trained discipline and <b>eight AI tools</b>
+      acting as leverage — that's how one marketer ships like a team. Research → launch → learn → scale.
+      The loop is the machine.</p>
+      <p class="qline rv" style="--i:3">"AI doesn't replace the marketer. It replaces the bottlenecks."</p>
+      <div class="ms rv" style="--i:4"><span>MBA · MARKETING</span><span>McKINSEY FORWARD</span><span class="amb">8 AI TOOLS IN STACK</span></div>
+    </div>
+  </section>
+
+  <!-- principles -->
+  <div class="blk" id="principles">
+    <p class="ck2 rv" style="--i:0">CONSTANTS — WHAT NEVER CHANGES</p>
+    <h2 class="rv" style="--i:1">Three laws of<br>my <em>work.</em></h2>
+    <div class="prin">
+      <div class="pri rv" style="--i:2"><p class="pn">LAW 01</p><h3>Data over opinions</h3><p>Taste starts the test; numbers end the argument. If we can't measure it, we first build the way to measure it.</p></div>
+      <div class="pri rv" style="--i:3"><p class="pn">LAW 02</p><h3>The customer is the channel</h3><p>Platforms change. People don't. Understand the person deeply enough and every platform gets easier.</p></div>
+      <div class="pri rv" style="--i:4"><p class="pn">LAW 03</p><h3>Everything is an experiment</h3><p>Small bets, fast loops, honest reads. Even this portfolio was built as one: watch one impression travel.</p></div>
+    </div>
+  </div>
+
+  <!-- dossier -->
+  <div class="blk" id="dossier">
+    <p class="ck2 rv" style="--i:0">THE DOSSIER — FOR READERS IN A HURRY</p>
+    <h2 class="rv" style="--i:1">Everything above,<br><em>on paper.</em></h2>
+
+    <details class="doc rv" style="--i:2" open>
+      <summary>The operator <span class="dm">+</span></summary>
+      <div class="db subject">
+        <img src="../portrait.jpg" alt="Harsh Dhamija">
+        <div>
+          <div class="minirow"><span>NAME</span><b>HARSH DHAMIJA</b></div>
+          <div class="minirow"><span>ROLE</span><b>AI PERFORMANCE MARKETER</b></div>
+          <div class="minirow"><span>BASE</span><b>DELHI NCR, IN</b></div>
+          <div class="minirow"><span>DEGREE</span><b>MBA · INT'L BUSINESS</b></div>
+          <div class="minirow"><span>BRAND</span><b>@theharshdhamija</b></div>
+          <div class="minirow"><span>STATUS</span><b style="color:var(--gn)">OPEN TO WORK ●</b></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="doc rv" style="--i:3">
+      <summary>Experience — 4 roles, one trajectory <span class="dm">+</span></summary>
+      <div class="db">
+        <div class="jrow"><span class="w">APR–JUN 2026</span><div><b class="t">AI Performance Marketing Intern</b><p class="o">DIGIMARK MEDIA</p>
+          <div class="tagrow"><span>4 META CAMPAIGNS</span><span>2 GOOGLE CAMPAIGNS</span><span>50+ CREATIVES</span><span>20+ POSTS</span><span>10+ ANALYSES</span><span>15+ SITE BUILDS</span><span>AI COPY</span></div></div></div>
+        <div class="jrow"><span class="w">BDE</span><div><b class="t">Business Development Executive</b><p class="o">PROPSALT LANDBASE</p>
+          <div class="tagrow"><span>LEAD GEN</span><span>CONSULTATION</span><span>SITE VISITS</span><span>CRM</span><span>NEGOTIATION</span><span>CLOSURE</span></div></div></div>
+        <div class="jrow"><span class="w">INTERN</span><div><b class="t">Marketing &amp; Strategy Intern</b><p class="o">AGILE CAPITAL SERVICES</p>
+          <div class="tagrow"><span>RESEARCH</span><span>COMPETITOR ANALYSIS</span><span>REPORTS</span><span>PRESENTATIONS</span></div></div></div>
+        <div class="jrow"><span class="w">CCE · SALES</span><div><b class="t">Customer Care Executive</b><p class="o">TELEPERFORMANCE · APPLE PROCESS</p>
+          <div class="tagrow"><span>SUPPORT</span><span>CONSULTATION</span><span>SALES ASSISTANCE</span></div></div></div>
+      </div>
+    </details>
+
+    <details class="doc rv" style="--i:4">
+      <summary>Skills &amp; tools <span class="dm">+</span></summary>
+      <div class="db">
+        <p class="o" style="font:600 .54rem var(--mono);letter-spacing:.14em;color:var(--cy);margin-bottom:.4rem">PERFORMANCE · GROWTH · ANALYTICS · AI · WEB</p>
+        <div class="tagrow">
+          <span>META ADS</span><span>GOOGLE ADS</span><span>AUDIENCE TARGETING</span><span>OPTIMISATION</span><span>LEAD GEN</span>
+          <span>GROWTH MARKETING</span><span>FUNNELS</span><span>CUSTOMER JOURNEY</span><span>MARKET RESEARCH</span>
+          <span>CAMPAIGN REPORTING</span><span>CTR ANALYSIS</span><span>CONVERSION TRACKING</span><span>PROMPT ENGINEERING</span>
+          <span>AI WORKFLOWS</span><span>AUTOMATION</span><span>WIX</span><span>LANDING PAGES</span>
+          <span>CHATGPT</span><span>CLAUDE</span><span>GEMINI</span><span>PERPLEXITY</span><span>EMERGENT</span><span>LOVABLE</span><span>STITCH</span><span>REPLIT</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="doc rv" style="--i:5">
+      <summary>Education, certifications &amp; now <span class="dm">+</span></summary>
+      <div class="db">
+        <div class="tagrow" style="margin-bottom:.8rem"><span>MBA — INTERNATIONAL BUSINESS</span><span>McKINSEY.ORG FORWARD</span><span>AI PERFORMANCE MARKETING — DIGIMARK</span></div>
+        <p><b style="color:var(--ink)">Currently:</b> exploring AI applications in performance marketing, building
+        <b style="color:var(--ink)">theharshdhamija</b> around AI × marketing × growth, documenting real campaign
+        learnings. Open to: performance marketing, growth, paid media &amp; AI-marketing roles.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- contact -->
+  <section class="contact" id="contact" data-v="9">
+    <span class="cname rv" style="--i:0">Harsh Dhamija</span>
+    <p class="roles rv" style="--i:1">THE IMPRESSION ARRIVED. YOUR MOVE.</p>
+    <p class="pr rv" style="--i:2" style="margin:0 auto;max-width:46ch">One impression travelled this whole page —
+    that's what I'll do with your media budget. Open to performance &amp; growth marketing roles, on-site or remote.</p>
+    <!-- EDIT: replace with your real email -->
+    <br><a class="mail rv" style="--i:3" href="mailto:harshdhmija4678@gmail.com">harshdhmija4678@gmail.com</a>
+    <div class="meta rv" style="--i:4">
+      <span>LINKEDIN ↗ /in/harsh-dhamija-063897194</span><span>DELHI NCR, INDIA</span><span>REPLIES WITHIN 24H</span>
+    </div>
+    <div class="cta rv" style="--i:5;display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap">
+      <a class="btn cy2" href="mailto:harshdhmija4678@gmail.com">Send the brief →</a>
+      <button class="btn line" id="resumeBtn2">Download résumé ⇩</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>© 2026 HARSH DHAMIJA — IMPRESSION №1</span>
+  <span>EVERY PIXEL MEASURED · EVERY WORD EARNED</span>
+</footer>
+
+<script>
+(() => {
+'use strict';
+/* ═══════ IMPRESSION №1 — scroll documentary engine ═══════ */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v)), lerp=(a,b,t)=>a+(b-a)*t;
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id);
+
+/* typed hero question */
+const Q='WHY DO PEOPLE BUY?';
+(function type(){
+  const el=$('typeTxt');let i=0;
+  if(RM){el.textContent=Q;return}
+  setTimeout(function t(){el.textContent=Q.slice(0,++i);if(i<Q.length)setTimeout(t,42+Math.random()*46)},700);
+})();
+
+/* chapter registry */
+const CHS=[
+ {id:'ch1',v:'v1',no:'01',nm:'SIGNAL'},
+ {id:'ch2',v:'v2',no:'02',nm:'TARGET'},
+ {id:'ch3',v:'v3',no:'03',nm:'LAUNCH'},
+ {id:'ch4',v:'v4',no:'04',nm:'ATTENTION'},
+ {id:'ch5',v:'v5',no:'05',nm:'CLICK & LAND'},
+ {id:'ch6',v:'v6',no:'06',nm:'CLOSE'},
+ {id:'ch7',v:'v7',no:'07',nm:'LEARN'},
+ {id:'ch8',v:'v8',no:'08',nm:'SCALE'},
+ {id:'contact',v:'v9',no:'09',nm:'ARRIVAL'},
+];
+let geo=[],vh=innerHeight,panelEnd=0,docH=0;
+function cache(){
+  vh=innerHeight;docH=document.documentElement.scrollHeight;
+  geo=CHS.map(c=>{
+    const el=$(c.id);
+    return {el,vis:$(c.v),top:el.offsetTop,h:el.offsetHeight,c};
+  });
+  panelEnd=document.querySelector('footer').offsetTop+120;
+  buildRail();
+}
+
+/* rail markers */
+const rail=$('rail');
+function buildRail(){
+  rail.querySelectorAll('.mk').forEach(m=>m.remove());
+  geo.forEach((g,i)=>{
+    const m=document.createElement('div');m.className='mk';
+    m.style.top=(i/(geo.length-1)*100)+'%';
+    m.innerHTML='<span>'+g.c.no+' · '+g.c.nm+'</span>';
+    rail.appendChild(m);
+  });
+}
+
+/* reveal + counters */
+function counters(root){root.querySelectorAll('.num[data-count]').forEach(el=>{
+  if(el.dataset.ok)return;el.dataset.ok='1';
+  const end=+el.dataset.count,suf=el.dataset.suffix||'',t0=performance.now();
+  (function s(n){const k=clamp((n-t0)/1300,0,1);el.textContent=Math.round(end*(1-Math.pow(1-k,3)))+suf;
+    if(k<1)requestAnimationFrame(s)})(t0);});}
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('on');counters(e.target)}
+}),{threshold:0.2});
+document.querySelectorAll('.chapter,.blk,.contact,.hero').forEach(s=>io.observe(s));
+counters(document);
+
+/* résumé */
+const doPrint=()=>{document.querySelectorAll('details.doc').forEach(d=>d.open=true);setTimeout(()=>print(),200)};
+$('resumeBtn').addEventListener('click',doPrint);
+$('resumeBtn2').addEventListener('click',doPrint);
+
+/* smooth scroll state */
+let sm=scrollY,lastEye=-1,lastLeads=-1;
+const eyeEl=$('eyeCount'),leadEl=$('leadCount');
+
+function frame(){
+  sm=lerp(sm,RM?scrollY:scrollY,0.16);          // visibility reads raw-ish anyway
+  const y=scrollY, mid=y+vh*0.5;
+
+  /* progress hairline */
+  $('prog').style.width=clamp(y/(docH-vh)*100,0,100).toFixed(2)+'%';
+
+  /* chapters → visuals */
+  let active=null,best=0.25;
+  for(const g of geo){
+    /* p: 0 as chapter enters bottom → 1 as it leaves top (0.5 = centered) */
+    const p=clamp((y+vh*0.85-g.top)/(g.h+vh*0.35),0,1);
+    g.vis.style.setProperty('--p',p.toFixed(4));
+    const near=1-Math.min(1,Math.abs(p-0.5)*2.2);
+    const o=clamp(near,0,1);
+    g.vis.style.opacity=o.toFixed(3);
+    if(o>best){best=o;active=g}
+    g._p=p;
+  }
+
+  /* live counters inside visuals */
+  const g4=geo[3],g5=geo[4];
+  if(g4){const n=Math.round(Math.pow(g4._p||0,1.4)*12400/100)*100;
+    if(n!==lastEye){lastEye=n;eyeEl.textContent=new Intl.NumberFormat('en-IN').format(n)}}
+  if(g5){const n=Math.round(Math.pow(g5._p||0,1.6)*46);
+    if(n!==lastLeads){lastLeads=n;leadEl.textContent='+'+n+' THIS FLIGHT'}}
+
+  /* HUD chapter readout + rail */
+  if(mid<geo[0].top){$('chapOut').innerHTML='CH 00 — <b>ORIGIN</b>'}
+  else if(active){
+    $('chapOut').innerHTML='CH '+active.c.no+' — <b>'+active.c.nm+'</b>';
+  }
+  const t0=geo[0].top+geo[0].h*0.3, t1=geo[geo.length-1].top+geo[geo.length-1].h*0.8;
+  const rp=clamp((sm+vh*0.5-t0)/(t1-t0),0,1);
+  $('railDot').style.top=(rp*100).toFixed(2)+'%';
+  const mks=rail.querySelectorAll('.mk');
+  mks.forEach((m,i)=>{
+    const seg=(i+0.5)/geo.length;
+    m.classList.toggle('on',Math.abs(rp-seg)<0.55/geo.length||rp>=i/geo.length&&rp<(i+1)/geo.length);
+  });
+
+  requestAnimationFrame(frame);
+}
+
+addEventListener('resize',cache);
+addEventListener('load',cache);
+cache();requestAnimationFrame(frame);
+setTimeout(cache,600); // fonts settle
+
+console.log('%cIMPRESSION №1%c one ad travelled this page. imagine your budget here.\n→ harshdhmija4678@gmail.com',
+ 'background:#4fd8e0;color:#03161a;padding:2px 6px;font-weight:bold','color:#8b95a4');
+})();
+</script>
+</body>
+</html>
