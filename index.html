@@ -124,7 +124,7 @@ h1 em{font-style:italic;font-weight:600;color:var(--red)}
 .w-paper h2 em{color:var(--accent)}.w-paper .go{color:var(--accent)}
 .w-garden h2 em{color:var(--leaf)}.w-garden .go{color:var(--leaf)}
 .w-exp h2 em{color:var(--lab)}.w-exp .go{color:var(--lab)}
-.w-hdx h2 em{color:var(--gold)}.w-hdx .go{color:var(--gold)}
+.w-hdx h2 em{color:#22c55e}.w-hdx .go{color:#22c55e}
 .w-ad{border:2px solid rgba(212,52,37,.7)}
 .w-ad h2 em,.w-ad .go{color:#d43425}.w-ad h2{font-size:1.5rem}
 .w-ad .flag{position:absolute;top:12px;right:12px;background:#d43425;color:#fff;font:600 .52rem var(--mono);letter-spacing:.18em;padding:.5rem .8rem;border-radius:99px;box-shadow:0 8px 22px rgba(212,52,37,.45);animation:flagpulse 2.6s ease-in-out infinite;z-index:2}
@@ -226,6 +226,33 @@ body.leaving .veil{opacity:1;pointer-events:auto}
 @keyframes rotor{to{transform:rotate(360deg)}}
 #startLights{cursor:pointer}
 
+/* ══════════ STARTING GRID / THE PADDOCK ══════════ */
+#paddock{position:relative;z-index:1;padding:4.5rem 1.2rem 3.5rem;border-top:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 46%)}
+.pd-head{text-align:center;max-width:740px;margin:0 auto 2.2rem}
+.pd-head .kicker{color:var(--grn)}
+.pd-head h2{font:900 clamp(1.7rem,4.2vw,2.9rem)/1.08 var(--serif);letter-spacing:-.02em;margin:.5rem 0 .45rem}
+.pd-head h2 em{font-style:italic;font-weight:600;color:var(--grn)}
+.pd-head p{color:#9aa0ad;font-size:.9rem}
+.pd-head p b{color:#f2eee6}
+.bays{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;width:min(1180px,100%);margin:0 auto}
+.bay{position:relative;display:flex;flex-direction:column;gap:.35rem;text-align:left;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--acc,var(--red));border-radius:12px;
+  padding:1rem .95rem .95rem;color:var(--cream);cursor:pointer;transition:transform .35s var(--ease),background .3s,border-color .3s}
+.bay:hover{transform:translateY(-4px);background:rgba(255,255,255,.06);border-color:var(--acc,var(--red))}
+.bay .bn{font:700 .6rem var(--mono);letter-spacing:.2em;color:var(--acc,var(--red))}
+.bay h3{font:700 1.08rem var(--serif);letter-spacing:-.01em}
+.bay p{color:#9aa0ad;font-size:.74rem;line-height:1.5;flex:1}
+.bay .enter{font:600 .55rem var(--mono);letter-spacing:.16em;color:var(--acc,var(--red));margin-top:.35rem}
+.bay .knum{position:absolute;top:.8rem;right:.8rem;width:22px;height:22px;border-radius:6px;border:1px solid rgba(255,255,255,.18);
+  display:grid;place-items:center;font:700 .6rem var(--mono);color:#9aa0ad;background:rgba(255,255,255,.04)}
+.bay.hot{border-color:rgba(225,6,0,.55);background:rgba(225,6,0,.06)}
+.bay .star{position:absolute;top:-.62rem;left:.8rem;background:var(--red);color:#fff;font:600 .5rem var(--mono);letter-spacing:.16em;padding:.25rem .55rem;border-radius:99px}
+.pd-lap{text-align:center;margin-top:1.9rem;font:600 .6rem var(--mono);letter-spacing:.28em;color:#5c6270}
+.pd-lap b{color:var(--red)}
+@media (max-width:980px){.bays{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.bays{grid-template-columns:1fr}}
+
 /* ══════════ RESPONSIVE + RM ══════════ */
 @media (max-width:880px){
   .chip.hidm{display:none}
@@ -279,13 +306,67 @@ body.leaving .veil{opacity:1;pointer-events:auto}
   </figure>
   <p class="kicker">ONE MARKETER · EIGHT WORLDS <span class="off">· SEASON 2 — THE CIRCUIT GATE</span></p>
   <h1>Choose your <em>racing line</em> through my mind.</h1>
-  <p class="sub">Eight editions of the same truth — <b>Harsh Dhamija, AI Performance Marketer</b>.
-    The car below races as you scroll. Worlds are the billboards. <b>First billboard is the campaign</b> — the 90-second pitch.</p>
+  <p class="sub">Eight editions of the same truth — <b>Harsh Dhamija, AI Performance Marketer</b> —
+    each with its own rules of motion. <b>Grab a bay in the paddock below</b> for the quick route,
+    or scroll on and drive the full circuit. Worlds are the billboards.</p>
   <div class="startseq" aria-hidden="true">
     <span class="pods" id="startLights"><span class="pod"></span><span class="pod"></span><span class="pod"></span><span class="pod"></span><span class="pod"></span></span>
     <span class="slmsg" id="slmsg">FORMATION LAP — SCROLL WHEN GREEN</span>
   </div>
   <p id="cue" aria-hidden="true">SCROLL = THROTTLE</p>
+</section>
+
+<!-- ══ STARTING GRID / THE PADDOCK ══ -->
+<section id="paddock">
+  <div class="pd-head">
+    <p class="kicker">THE STARTING GRID · 8 BAYS, 8 WORLDS</p>
+    <h2>In a hurry? <em>Pick a bay.</em> The lap is just below.</h2>
+    <p>One click per world — every bay opens a universe with its own rules of motion.
+      <b>Recruiters: bay №7 is the 90-second pitch.</b> Then, if you like, take the full circuit for a spin.</p>
+  </div>
+  <div class="bays">
+    <a class="bay" style="--acc:#2fa8b0" data-w="imp" href="./impression/harsh-dhamija-impression.html">
+      <span class="bn">BAY №1</span><span class="knum">1</span><h3>The Impression</h3>
+      <p>A documentary in twelve shots — a cyan dot rolls the film and lands as the period after HIRE HIM.</p>
+      <span class="enter">ENTER →</span>
+    </a>
+    <a class="bay" style="--acc:#b3451c" data-w="atlas" href="./atlas/harsh-dhamija-atlas.html">
+      <span class="bn">BAY №2</span><span class="knum">2</span><h3>The Atlas</h3>
+      <p>A chart that inks itself — brigantine, islands, fathoms, a compass that feels your scroll. Print the logbook.</p>
+      <span class="enter">ENTER →</span>
+    </a>
+    <a class="bay" style="--acc:#c2541f" data-w="paper" href="./portfolio/harsh-dhamija-portfolio.html">
+      <span class="bn">BAY №3</span><span class="knum">3</span><h3>The Paper</h3>
+      <p>The Dhamija Times — a real broadsheet you flip page by page. Today's dateline on it is genuine.</p>
+      <span class="enter">ENTER →</span>
+    </a>
+    <a class="bay" style="--acc:#4d7a52" data-w="garden" href="./garden/harsh-dhamija-garden.html">
+      <span class="bn">BAY №4</span><span class="knum">4</span><h3>The Garden</h3>
+      <p>The excavation — dig 30 metres underground to bedrock. Everyone sees the leaves; you hire the roots.</p>
+      <span class="enter">ENTER →</span>
+    </a>
+    <a class="bay" style="--acc:#2f52d8" data-w="exp" href="./experiment/harsh-dhamija-experiment.html">
+      <span class="bn">BAY №5</span><span class="knum">5</span><h3>The Experiment</h3>
+      <p>The page tests itself on you — two A/B rigs and a live significance chamber with real z-test math.</p>
+      <span class="enter">ENTER →</span>
+    </a>
+    <a class="bay" style="--acc:#22c55e" data-w="hdx" href="./exchange/harsh-dhamija-exchange.html">
+      <span class="bn">BAY №6</span><span class="knum">6</span><h3>The Exchange</h3>
+      <p>The hiring floor — post your bids in the order book, the engine matches his asks, the ticket writes your email.</p>
+      <span class="enter">ENTER →</span>
+    </a>
+    <a class="bay hot" style="--acc:#d43425" data-w="ad" href="./ad/harsh-dhamija-ad.html">
+      <span class="star">★ START HERE</span><span class="bn">BAY №7</span><h3>The Ad</h3>
+      <p>The 90-second pitch, the self-aware funnel, and the coupon that actually redeems. The campaign, start to finish.</p>
+      <span class="enter">ENTER →</span>
+    </a>
+    <a class="bay" style="--acc:#e10600" data-w="gp" href="./gp/harsh-dhamija-gp.html">
+      <span class="bn">BAY №8</span><span class="knum">8</span><h3>The Grand Prix</h3>
+      <p>The original night race — start lights, tyre-strategy career stints, pit-wall telemetry, chequered flag.</p>
+      <span class="enter">ENTER →</span>
+    </a>
+  </div>
+  <p class="pd-lap">— OR TAKE THE <b>VICTORY LAP</b> · THE CAR BELOW RIDES YOUR SCROLL —</p>
 </section>
 
 <!-- ══ THE CIRCUIT ══ -->
@@ -432,9 +513,9 @@ body.leaving .veil{opacity:1;pointer-events:auto}
       <span class="key">1</span>
       <div class="top"><span class="no">TURN 3 · №1 · SIGNATURE</span><span class="go">ENTER →</span></div>
       <h2>Impression <em>№1</em></h2>
-      <p>A scroll documentary: one ad's journey from signal to scale — ending as the dot after his name.</p>
+      <p>A documentary in twelve shots — SMPTE slates, typewriter cues, and the dot lands as the period after HIRE HIM.</p>
       <div class="pv"><span class="r"></span><span class="r" style="animation-delay:1.1s"></span><span class="d"></span></div>
-      <div class="tags"><span>8 CHAPTERS</span><span>CINEMATIC</span><span>RECRUITER-READY</span></div>
+      <div class="tags"><span>12 SHOTS</span><span>CINEMATIC</span><span>RECRUITER-READY</span></div>
     </a>
   </div>
   <div class="spot sL" style="left:12%;top:44%;width:min(42%,420px)">
@@ -454,9 +535,9 @@ body.leaving .veil{opacity:1;pointer-events:auto}
       <span class="key">3</span>
       <div class="top"><span class="no">TURN 5 · №3</span><span class="go">ENTER →</span></div>
       <h2>The <em>Paper</em></h2>
-      <p>Refined editorial edition — sections glide into rack-focus. The calm, classic read.</p>
+      <p>The Dhamija Times — a broadsheet you flip page by page: front page, despatches, classifieds. Dateline: today.</p>
       <div class="pv"><span class="bl"></span><span class="bl"></span><span class="bl"></span></div>
-      <div class="tags"><span>EDITORIAL</span><span>RACK-FOCUS</span><span>LIGHT</span></div>
+      <div class="tags"><span>PAGE-FLIP</span><span>BROADSHEET</span><span>LIVE DATELINE</span></div>
     </a>
   </div>
   <div class="spot sR" style="left:46%;top:70%;width:min(42%,420px)">
@@ -464,9 +545,10 @@ body.leaving .veil{opacity:1;pointer-events:auto}
       <span class="key">4</span>
       <div class="top"><span class="no">TURN 6 · №4</span><span class="go">ENTER →</span></div>
       <h2>The <em>Garden</em></h2>
-      <p>A living world: day-night follows your clock, rain falls, and every visitor plants a seed that stays.</p>
-      <div class="pv"><span class="sprig"><i></i></span><span class="sprig"><i></i></span><span class="sprig"><i></i></span></div>
-      <div class="tags"><span>ALIVE</span><span>PERSISTENT</span><span>DAY / NIGHT</span></div>
+      <p>The excavation — scroll digs 30 metres underground: topsoil methods, the 8-tool root mass, four sediment seams, bedrock.</p>
+      <div class="pv"><svg class="spark" viewBox="0 0 200 44" preserveAspectRatio="none">
+        <path d="M100 3 V41 M100 18 C82 24 72 32 66 41 M100 22 C118 28 128 34 134 41 M100 10 C92 12 88 16 86 20" fill="none" stroke="#3e6b3f" stroke-width="2.4"/></svg></div>
+      <div class="tags"><span>EXCAVATION</span><span>30M DOWN</span><span>BEDROCK</span></div>
     </a>
   </div>
   <div class="spot sL" style="left:12%;top:82.67%;width:min(42%,420px)">
@@ -474,21 +556,21 @@ body.leaving .veil{opacity:1;pointer-events:auto}
       <span class="key">5</span>
       <div class="top"><span class="no">TURN 7 · №5</span><span class="go">ENTER →</span></div>
       <h2>The <em>Experiment</em></h2>
-      <p>EXP-047: the site A/B-tests itself on you — live variants, funnel tracking, results dashboard.</p>
+      <p>The page tests itself on you — two A/B rigs, then a significance chamber running real z-test math. No metric invented.</p>
       <div class="pv"><div class="abar"><i class="a"></i><i class="b"></i></div></div>
-      <div class="tags"><span>LIVE A/B</span><span>DASHBOARD</span><span>SIMULATOR</span></div>
+      <div class="tags"><span>LIVE A/B</span><span>Z-TEST</span><span>MONTE CARLO</span></div>
     </a>
   </div>
   <div class="spot sL" style="left:12%;top:89%;width:min(42%,420px)">
     <a class="world w-hdx" data-key="6" data-w="hdx" data-tx="852" data-ty="5560" href="./exchange/harsh-dhamija-exchange.html">
       <span class="key">6</span>
       <div class="top"><span class="no">TURN 8 · №6 · SIDE-QUEST</span><span class="go">ENTER →</span></div>
-      <h2>HDX <em>Exchange</em></h2>
-      <p>The skills go public — a full trading terminal with live candles, ticker tape and market news.</p>
+      <h2>The <em>Exchange</em></h2>
+      <p>The hiring floor — post your bids, the engine stamps his asks MATCHED, the ticket settles by email.</p>
       <div class="pv"><svg class="spark" viewBox="0 0 200 44" preserveAspectRatio="none">
         <polyline points="0,34 20,30 40,33 60,22 80,26 100,16 120,20 140,10 160,14 180,6 200,9"
-          fill="none" stroke="#b8860b" stroke-width="2"/></svg></div>
-      <div class="tags"><span>TERMINAL</span><span>LIVE TICKER</span><span>TRADEABLE</span></div>
+          fill="none" stroke="#22c55e" stroke-width="2"/></svg></div>
+      <div class="tags"><span>ORDER BOOK</span><span>MATCH ENGINE</span><span>SETTLES</span></div>
     </a>
   </div>
 </div>
@@ -547,6 +629,7 @@ function go(href,w){
 }
 addEventListener('pageshow',function(){requestAnimationFrame(function(){document.body.classList.remove('leaving')})});
 document.querySelectorAll('.world').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(a.href,a.dataset.w)}));
+document.querySelectorAll('.bay').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(a.href,a.dataset.w)}));
 addEventListener('keydown',e=>{
   if(e.target && /INPUT|TEXTAREA/.test(e.target.tagName))return;
   const a=document.querySelector('.world[data-key="'+e.key+'"]');
