@@ -19,7 +19,7 @@
   --ink:#191b20; --mut:#5c584e; --faint:#8b8577;
   --ox:#7a1f1f; --rule:rgba(25,27,32,.85); --hair:rgba(25,27,32,.22);
   --disp:'Bebas Neue',sans-serif; --news:'Newsreader',serif;
-  --face:url('../portrait.jpg');
+  --face:url('portrait.jpg');
   --ease:cubic-bezier(.36,.72,.2,1);
   --bookH:82svh;
 }
@@ -284,7 +284,7 @@ body.rm .pin{height:auto;min-height:60vh}
         </div>
         <div style="display:flex;flex-direction:column;min-width:0">
           <figure class="fig">
-            <div class="halftone"><img id="face" src="../portrait.jpg" alt="Harsh Dhamija — staff photo"></div>
+            <div class="halftone"><img id="face" src="portrait.jpg" alt="Harsh Dhamija — staff photo"></div>
             <figcaption>The subject, photographed declining to call impressions "impact". — STAFF PHOTO</figcaption>
           </figure>
           <div class="brief">
@@ -431,7 +431,7 @@ body.rm .pin{height:auto;min-height:60vh}
         <p>On offer: an AI Performance Marketer — MBA, McKinsey-trained, four desks deep, ships like a small team.
           On-site or remote. Delhi NCR · replies within 24 hours.<br>Quote <b>BOX № HD-03</b> in your reply.</p>
         <div class="btx">
-          <a class="btn pri" href="mailto:harshdhmija4678@gmail.com?subject=Re%3A%20Box%20%E2%84%96%20HD-03%20%E2%80%94%20The%20Dhamija%20Times">WRITE TO BOX № HD-03 →</a>
+          <a class="btn pri" href="#mail" data-mail="harshdhmija4678 [at] gmail [dot] com" data-q="?subject=Re%3A%20Box%20%E2%84%96%20HD-03%20%E2%80%94%20The%20Dhamija%20Times">WRITE TO BOX № HD-03 →</a>
           <a class="btn" href="https://www.linkedin.com/in/harsh-dhamija-063897194" target="_blank" rel="noopener">LINKEDIN ↗</a>
         </div>
       </div>
@@ -540,5 +540,17 @@ try{
 }
 })();
 </script>
+<script>(function(){/* mail address never lives in hrefs — built at click time */
+document.addEventListener('click',function(e){
+ if(e.metaKey||e.ctrlKey||e.shiftKey)return;
+ var m=e.target.closest?e.target.closest('[data-mail]'):null;
+ if(!m)return;
+ e.preventDefault();
+ var a=(m.getAttribute('data-mail')||'').replace(/\s*\[at\]\s*/i,'@').replace(/\s*\[dot\]\s*/i,'.');
+ if(a.indexOf('@')<1)return;
+ window.__lastMail=a+(m.getAttribute('data-q')||'');
+ window.location.href='mailto:'+window.__lastMail;
+});
+})();</script>
 </body>
 </html>
