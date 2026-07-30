@@ -22,7 +22,7 @@
   --green:#22c55e; --greend:#0e3d22; --red:#ef4444; --amber:#ffb300;
   --paper:#f4efe2; --paperink:#1d2530;
   --disp:'Archivo Black',sans-serif; --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
-  --face:url('../portrait.jpg');
+  --face:url('portrait.jpg');
   --ease:cubic-bezier(.22,.9,.28,1);
   --scan:linear-gradient(rgba(34,197,94,.035) 1px,transparent 1px);
 }
@@ -456,11 +456,11 @@ footer a{text-decoration:none}footer a:hover{color:var(--green)}
     <div class="wrap">
       <div class="podium rv">
         <span class="est">FINAL LOT OF THE DAY</span>
-        <div class="bellmedal"><img src="../portrait.jpg" alt="Harsh Dhamija — awaiting settlement"></div>
+        <div class="bellmedal"><img src="portrait.jpg" alt="Harsh Dhamija — awaiting settlement"></div>
         <h2>The floor has seen the book.<br><span class="alt">Ring the bell. Settle the trade.</span></h2>
         <p class="where">DHMJ ×1 · SEAT ON YOUR FLOOR<br><b>HARSH DHAMIJA</b> · AI PERFORMANCE MARKETER · DELHI NCR · ON-SITE OR REMOTE</p>
         <div class="fctas">
-          <a class="btn pri" id="bellbtn" href="mailto:harshdhmija4678@gmail.com?subject=SETTLE%20ORDER%3A%20DHMJ%20%C3%971%20%E2%80%94%20a%20seat%20on%20the%20floor">RING THE BELL <span class="bico">🔔</span> SETTLE</a>
+          <a class="btn pri" id="bellbtn" href="#mail" data-mail="harshdhmija4678 [at] gmail [dot] com" data-q="?subject=SETTLE%20ORDER%3A%20DHMJ%20%C3%971%20%E2%80%94%20a%20seat%20on%20the%20floor">RING THE BELL <span class="bico">🔔</span> SETTLE</a>
           <a class="btn" href="https://www.linkedin.com/in/harsh-dhamija-063897194" target="_blank" rel="noopener">LINKEDIN ↗</a>
           <a class="btn" href="../index.html">ALL WORLDS ↺</a>
         </div>
@@ -536,7 +536,9 @@ function refresh(){
     const labels=[...picks].sort((a,b)=>a-b).map(i=>'• '+qa('.bidrow')[i].querySelector('.lbl').textContent);
     const subj=encodeURIComponent('SETTLE ORDER: '+n+' instrument'+(n>1?'s':'')+' — DHMJ (The Exchange)');
     const body=encodeURIComponent('Hi Harsh,\n\nSaw The Exchange (World №6). Posting bids for:\n'+labels.join('\n')+'\n\nLet\'s settle.\n— ');
-    settleEl.href='mailto:harshdhmija4678@gmail.com?subject='+subj+'&body='+body;
+    settleEl.href='#mail';
+    settleEl.setAttribute('data-mail','harshdhmija4678 [at] gmail [dot] com');
+    settleEl.setAttribute('data-q','?subject='+subj+'&body='+body);
     settleEl.classList.remove('disabled');
   }
 }
@@ -564,5 +566,17 @@ refresh();
 addEventListener('keydown',e=>{ if(e.key==='0'||e.key==='Escape') location.href='../index.html'; });
 })();
 </script>
+<script>(function(){/* mail address never lives in hrefs — built at click time */
+document.addEventListener('click',function(e){
+ if(e.metaKey||e.ctrlKey||e.shiftKey)return;
+ var m=e.target.closest?e.target.closest('[data-mail]'):null;
+ if(!m)return;
+ e.preventDefault();
+ var a=(m.getAttribute('data-mail')||'').replace(/\s*\[at\]\s*/i,'@').replace(/\s*\[dot\]\s*/i,'.');
+ if(a.indexOf('@')<1)return;
+ window.__lastMail=a+(m.getAttribute('data-q')||'');
+ window.location.href='mailto:'+window.__lastMail;
+});
+})();</script>
 </body>
 </html>
