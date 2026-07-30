@@ -22,7 +22,7 @@
   --blue:#2f52d8; --blued:#2340b4; --green:#1f9d55; --greend:#14733c; --neon:#7fe0a8;
   --amber:#b8860b; --ambersoft:#ffd68a; --red:#c22f2f;
   --grot:'Space Grotesk',sans-serif; --mono:'Roboto Mono',monospace;
-  --face:url('../portrait.jpg');
+  --face:url('portrait.jpg');
   --ease:cubic-bezier(.22,.9,.28,1);
   --grid:linear-gradient(rgba(17,21,14,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(17,21,14,.05) 1px,transparent 1px);
 }
@@ -480,14 +480,14 @@ footer a{text-decoration:none}footer a:hover{color:var(--blue)}
   <section class="subject" id="subject">
     <div class="wrap">
       <div class="idcard rv">
-        <div class="idface"><img src="../portrait.jpg" alt="Harsh Dhamija — principal investigator"></div>
+        <div class="idface"><img src="portrait.jpg" alt="Harsh Dhamija — principal investigator"></div>
         <span class="role">PRINCIPAL INVESTIGATOR · DELHI NCR</span>
         <h2>You don't hire experiments.<br><span class="alt">You hire the one who runs them honestly.</span></h2>
         <p class="pitch">Harsh Dhamija — AI Performance Marketer. MBA (International Business) + BBA,
           McKinsey.org Forward, AI PM Certified. He will tell you when the data says no —
           <b>especially when the data says no to his own idea.</b> On-site or remote · replies within 24 hours.</p>
         <div class="fctas">
-          <a class="btn blu" href="mailto:harshdhmija4678@gmail.com?subject=Re%3A%20The%20Experiment%20%E2%80%94%20result%20significant">REPORT A SIGNIFICANT RESULT →</a>
+          <a class="btn blu" href="#mail" data-mail="harshdhmija4678 [at] gmail [dot] com" data-q="?subject=Re%3A%20The%20Experiment%20%E2%80%94%20result%20significant">REPORT A SIGNIFICANT RESULT →</a>
           <a class="btn" href="https://www.linkedin.com/in/harsh-dhamija-063897194" target="_blank" rel="noopener">LINKEDIN ↗</a>
           <a class="btn" href="../index.html">ALL WORLDS ↺</a>
         </div>
@@ -676,5 +676,17 @@ drawSim(false);
 addEventListener('keydown',e=>{ if(e.key==='0'||e.key==='Escape') location.href='../index.html'; });
 })();
 </script>
+<script>(function(){/* mail address never lives in hrefs — built at click time */
+document.addEventListener('click',function(e){
+ if(e.metaKey||e.ctrlKey||e.shiftKey)return;
+ var m=e.target.closest?e.target.closest('[data-mail]'):null;
+ if(!m)return;
+ e.preventDefault();
+ var a=(m.getAttribute('data-mail')||'').replace(/\s*\[at\]\s*/i,'@').replace(/\s*\[dot\]\s*/i,'.');
+ if(a.indexOf('@')<1)return;
+ window.__lastMail=a+(m.getAttribute('data-q')||'');
+ window.location.href='mailto:'+window.__lastMail;
+});
+})();</script>
 </body>
 </html>
